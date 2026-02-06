@@ -1,0 +1,84 @@
+.oxigenacao-page {
+    height: calc(100vh - 70px);
+    padding: 30px 40px;
+    box-sizing: border-box;
+    color: #fff;
+    background: #000;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+/* lado esquerdo */
+.oxigenacao-main {
+    margin-top: 70px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+/* título */
+.oxigenacao-main h1 {
+    margin: 0 0 20px 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2AD4FF;
+    letter-spacing: 1px;
+}
+
+/* área do gráfico */
+.oxigenacao-grafico {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* placeholder do gráfico */
+.oxigenacao-grafico p {
+    color: #2AD4FF;
+    opacity: 0.7;
+}
+
+/* valor grande */
+.oxigenacao-valor {
+    margin-top: 20px;
+    font-size: 96px;
+    font-weight: bold;
+    color: #2AD4FF;
+}
+
+/* atualização */
+.oxigenacao-atualizacao {
+    font-size: 14px;
+    color: #ccc;
+    margin-top: 5px;
+}
+
+/* lado direito */
+.oxigenacao-historico {
+    margin-top: 70px;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* título histórico */
+.oxigenacao-historico h2 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+}
+
+/* lista */
+.oxigenacao-historico p {
+    margin: 6px 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* valor da oxigenacao no histórico */
+.oxigenacao-historico span {
+    color: #2AD4FF;
+    font-weight: bold;
+}

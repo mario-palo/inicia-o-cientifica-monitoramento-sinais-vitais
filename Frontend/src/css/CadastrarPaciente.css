@@ -1,0 +1,114 @@
+.cadastro-paciente {
+    max-width: 1100px;
+    margin: 80px auto 40px auto; /* respeita header */
+    padding: 20px;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+}
+
+/* TÍTULO */
+.cadastro-paciente h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #00ff6a;
+}
+
+/* FIELDSET */
+.cadastro-paciente fieldset {
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.02);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+
+    box-sizing: border-box;
+}
+
+
+/* LEGEND */
+.cadastro-paciente legend {
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #2ad4ff;
+}
+
+
+.cadastro-paciente input,
+.cadastro-paciente select,
+.cadastro-paciente textarea {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #0d0d0d;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+
+/* TEXTAREA */
+.cadastro-paciente textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* INPUT DISABLED */
+.cadastro-paciente input:disabled {
+    background: #1a1a1a;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* FOCUS */
+.cadastro-paciente input:focus,
+.cadastro-paciente select:focus,
+.cadastro-paciente textarea:focus {
+    border-color: #00ff6a;
+    box-shadow: 0 0 0 2px rgba(0, 255, 106, 0.2);
+}
+
+/* LABEL (quando existir) */
+.cadastro-paciente label {
+    font-size: 13px;
+    color: #ccc;
+    grid-column: span 2;
+}
+
+/* FILE INPUT */
+.cadastro-paciente input[type="file"] {
+    background: transparent;
+    border: none;
+    padding: 5px 0;
+    color: #ccc;
+}
+
+/* BOTÃO */
+.cadastro-paciente button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #00ff6a, #00c853);
+    color: #000;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* BOTÃO HOVER */
+.cadastro-paciente button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 106, 0.4);
+}
+

@@ -1,0 +1,91 @@
+.cadastro-profissional {
+    max-width: 900px;
+    margin: 80px auto 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+}
+
+
+/* TÍTULO */
+.cadastro-profissional h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #00ff6a;
+}
+
+/* FIELDSET */
+.cadastro-profissional fieldset {
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.02);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+
+    box-sizing: border-box;
+}
+
+
+/* LEGEND */
+.cadastro-profissional legend {
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #2ad4ff;
+}
+
+/* INPUTS */
+.cadastro-profissional input,
+.cadastro-profissional select,
+.cadastro-profissional textarea {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #0d0d0d;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* TEXTAREA */
+.cadastro-profissional textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* FOCUS */
+.cadastro-profissional input:focus,
+.cadastro-profissional select:focus,
+.cadastro-profissional textarea:focus {
+    border-color: #00ff6a;
+    box-shadow: 0 0 0 2px rgba(0, 255, 106, 0.2);
+}
+
+/* BOTÃO */
+.cadastro-profissional button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #00ff6a, #00c853);
+    color: #000;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cadastro-profissional button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 106, 0.4);
+}

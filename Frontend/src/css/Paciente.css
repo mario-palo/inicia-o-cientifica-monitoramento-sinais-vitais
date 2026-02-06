@@ -1,0 +1,239 @@
+/* ===============================
+   BASE
+================================ */
+
+.paciente-page {
+    min-height: calc(100vh - 70px);
+    margin-top: 70px; /* respeita o header */
+    padding: 30px;
+    background: linear-gradient(180deg, #0b0f14, #0e141b);
+    color: #eaeaea;
+    box-sizing: border-box;
+    overflow-y: auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===============================
+   HEADER DO PACIENTE
+================================ */
+
+.paciente-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #1f2937;
+    margin-bottom: 30px;
+}
+
+.paciente-foto {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #111827;
+    border: 2px solid #00ff6a;
+    object-fit: cover;
+}
+
+.paciente-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.paciente-nome {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.paciente-dados-sec {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+/* ===============================
+   GRID DE INFORMAÇÕES
+================================ */
+
+.paciente-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+/* ===============================
+   CARD
+================================ */
+
+.paciente-card {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: 0.2s ease;
+}
+
+.paciente-card:hover {
+    border-color: #00ff6a40;
+}
+
+/* ===============================
+   TITULO DO CARD
+================================ */
+
+.paciente-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #00ff6a;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 8px;
+}
+
+/* ===============================
+   LISTA DE DADOS
+================================ */
+
+.paciente-info {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    row-gap: 10px;
+    column-gap: 10px;
+    font-size: 14px;
+}
+
+.paciente-info span {
+    color: #9ca3af;
+}
+
+.paciente-info p {
+    margin: 0;
+    color: #f3f4f6;
+}
+
+/* ===============================
+   TEXTO LONGO
+================================ */
+
+.paciente-texto {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e5e7eb;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #1f2937;
+}
+
+/* ===============================
+   AÇÕES
+================================ */
+
+.paciente-acoes {
+    margin-top: 30px;
+    display: flex;
+    gap: 16px;
+}
+
+.paciente-acoes button {
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.btn-editar {
+    background: #00ff6a;
+    color: #000;
+}
+
+.btn-editar:hover {
+    background: #00e05d;
+}
+
+.btn-excluir {
+    background: transparent;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+}
+
+.btn-excluir:hover {
+    background: #ff4d4d;
+    color: #000;
+}
+
+/* ===============================
+   SCROLL BONITO
+================================ */
+
+.paciente-page::-webkit-scrollbar {
+    width: 8px;
+}
+
+.paciente-page::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 10px;
+}
+
+.paciente-page::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ===============================
+   MENU DE AÇÕES (☰)
+================================ */
+
+.paciente-menu {
+    position: absolute;
+    top: 90px;
+    right: 30px;
+    z-index: 50;
+}
+
+.menu-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #1f2937;
+    color: #e5e7eb;
+    font-size: 22px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.menu-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.menu-dropdown {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    background: #0b0f14;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.menu-dropdown button {
+    background: transparent;
+    border: none;
+    padding: 14px 18px;
+    color: #e5e7eb;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.menu-dropdown button:hover {
+    background: rgba(0,255,106,0.1);
+    color: #00ff6a;
+}

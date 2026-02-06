@@ -1,0 +1,87 @@
+.Eletrocardiograma-page {
+    height: calc(100vh - 70px);
+    padding: 30px 40px;
+    box-sizing: border-box;
+    background: #000;
+    color: #fff;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+/* ===== LADO ESQUERDO ===== */
+
+.Eletrocardiograma-main {
+    margin-top: 70px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+/* título */
+.Eletrocardiograma-main h1 {
+    margin: 0 0 20px 0;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #00FF00;
+}
+
+/* gráfico */
+.Eletrocardiograma-grafico {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.Eletrocardiograma-grafico p {
+    color: #00FF00;
+    opacity: 0.7;
+}
+
+/* valor BPM */
+.batimento-valor {
+    margin-top: 20px;
+    font-size: 96px;
+    font-weight: bold;
+    color: #00FF00;
+}
+
+/* atualização */
+.batimento-atualizacao {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* ===== LADO DIREITO ===== */
+
+.batimento-historico {
+    padding-left: 30px;
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* título histórico */
+.batimento-historico h2 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+}
+
+/* linhas histórico */
+.batimento-historico p {
+    margin: 6px 0;
+    font-size: 14px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+/* valor BPM no histórico */
+.batimento-historico span {
+    color: #00FF00;
+    font-weight: bold;
+}
