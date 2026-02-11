@@ -1,0 +1,43 @@
+
+.div-toda {
+    height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+}
+
+.acesso {
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.input-codigo {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    color: #ffffff;
+    font-size: 2.5rem;
+    text-align: center;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-codigo:focus {
+    border-bottom-color: #555555;
+}
+
+.input-codigo::placeholder {
+    color: #333;
+}

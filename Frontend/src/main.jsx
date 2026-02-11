@@ -15,6 +15,7 @@ import CadastrarPaciente from './Componentes/Informacoes/CadastrarPaciente.jsx';
 import CadastrarProfissional from './Componentes/Informacoes/CadastrarProfissional.jsx';
 import Paciente from './Componentes/Informacoes/Paciente.jsx';
 import VerPacientes from './Componentes/Informacoes/VerPacientes.jsx';
+import VerificadorDeCodigo from './Componentes/Informacoes/VerificadorDeCodigo.jsx';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
       { path: "ecg", element: <Eletrocardio /> },
       { path: "temperatura", element: <Temperatura /> },
       { path: "oxigenacao", element: <Oxigenacao /> },
-      { path: "historico", element: <Historico /> },
+      { path: "historico", element: <VerificadorDeCodigo><Historico /></VerificadorDeCodigo> },
     ],
   },
 
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <LayoutSemHeader />,
     children: [
-      { path: "paciente", element: <Paciente /> },
+      { path: "paciente", element: <VerificadorDeCodigo><Paciente /></VerificadorDeCodigo> },
       { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
       { path: "cadastrarProfissional", element: <CadastrarProfissional/> },
       { path: "verPacientes", element: <VerPacientes /> },
