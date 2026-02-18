@@ -22,7 +22,7 @@ export default function LayoutHeader() {
     {
       icon: <VscAccount size={18} />,
       label: 'Paciente',
-      onClick: () => navigate('/paciente'),
+      onClick: () => navigate('/paciente/1'),
     },
     {
       icon: <VscSettingsGear size={18} />,

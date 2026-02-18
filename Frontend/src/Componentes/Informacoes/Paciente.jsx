@@ -1,69 +1,41 @@
-import { useState } from "react";
-import "../../css/Paciente.css";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react"
+import "../../css/Paciente.css"
+import { Link, useParams } from "react-router-dom"
+import axios from "axios"
 
 export default function PaginaPaciente() {
+    const [menuAberto, setMenuAberto] = useState(false)
+    const [paciente, setPaciente] = useState(null)
+    const [carregando, setCarregando] = useState(true)
+    const { id } = useParams()
 
-    const [menuAberto, setMenuAberto] = useState(false);
+    useEffect(() => {
+        async function buscarPaciente() {
+            try {
+                const resposta = await axios.get(`http://localhost:8080/pacientes/${id}`)
+                setPaciente(resposta.data)
+                setCarregando(false)
+            } catch (error) {
+                console.error("Erro ao buscar paciente:", error)
+                setCarregando(false)
+            }
+        }
 
-    const paciente = {
-        nome: "João da Silva",
-        nomeSocial: "",
-        sexo: "Masculino",
-        genero: "Masculino",
-        idade: 45,
-        dataNascimento: "1979-05-10",
-        cpf: "123.456.789-00",
-        rg: "12.345.678-9",
-        cartaoSus: "123456789012345",
-        estadoCivil: "Casado",
-        nacionalidade: "Brasileiro",
-        naturalidade: "São Paulo/SP",
+        if (id) {
+            buscarPaciente()
+        }
+    }, [id]);
 
-        nomeMae: "Maria da Silva",
-        nomePai: "José da Silva",
+    if (carregando) {
+        return <div className="loading">Carregando dados do paciente...</div>
+    }
 
-        telefone: "(11) 99999-9999",
-        telefoneSecundario: "(11) 98888-8888",
-        email: "joao@email.com",
-        contatoEmergencia: "Maria da Silva",
-        telefoneEmergencia: "(11) 97777-7777",
-        parentescoEmergencia: "Esposa",
-
-        endereco: {
-            cep: "01000-000",
-            rua: "Rua A",
-            numero: "123",
-            complemento: "Apto 12",
-            bairro: "Centro",
-            cidade: "São Paulo",
-            estado: "SP"
-        },
-
-        tipoSanguineo: "O+",
-        alergias: "Dipirona",
-        doencas: "Hipertensão",
-        medicamentos: "Losartana",
-        deficiencias: "Nenhuma",
-        convenio: "Unimed",
-        numeroCarteirinha: "ABC123456",
-        observacoesMedicas: "Paciente alérgico a dipirona",
-
-        queixaPrincipal: "Dor no peito",
-        historicoClinico: "Dor iniciada há 2 dias",
-        sintomas: "Falta de ar",
-        inicioSintomas: "Há 2 dias",
-        intensidadeDor: 7,
-
-        profissionalResponsavel: "Dr. Carlos Mendes",
-        dataCadastro: "2025-02-10",
-
-        observacoes: "Paciente estável"
-    };
+    if (!paciente) {
+        return <div className="error">Paciente não encontrado.</div>
+    }
 
     return (
         <div className="paciente-page">
-
             <div className="paciente-menu">
                 <button
                     className="menu-btn"
@@ -99,12 +71,12 @@ export default function PaginaPaciente() {
                 <div className="paciente-card">
                     <h3>Identificação</h3>
                     <div className="paciente-info">
-                        <span>Nome social</span><p>{paciente.nomeSocial || "—"}</p>
+                        <span>Nome social</span><p>{paciente.nome_social || "—"}</p>
                         <span>Gênero</span><p>{paciente.genero}</p>
-                        <span>Nascimento</span><p>{paciente.dataNascimento}</p>
+                        <span>Nascimento</span><p>{paciente.data_nascimento}</p>
                         <span>RG</span><p>{paciente.rg}</p>
-                        <span>Cartão SUS</span><p>{paciente.cartaoSus}</p>
-                        <span>Estado civil</span><p>{paciente.estadoCivil}</p>
+                        <span>Cartão SUS</span><p>{paciente.cartao_sus}</p>
+                        <span>Estado civil</span><p>{paciente.estado_civil}</p>
                         <span>Nacionalidade</span><p>{paciente.nacionalidade}</p>
                         <span>Naturalidade</span><p>{paciente.naturalidade}</p>
                     </div>
@@ -114,8 +86,8 @@ export default function PaginaPaciente() {
                 <div className="paciente-card">
                     <h3>Filiação</h3>
                     <div className="paciente-info">
-                        <span>Mãe</span><p>{paciente.nomeMae}</p>
-                        <span>Pai</span><p>{paciente.nomePai}</p>
+                        <span>Mãe</span><p>{paciente.nome_mae}</p>
+                        <span>Pai</span><p>{paciente.nome_pai}</p>
                     </div>
                 </div>
 
@@ -124,10 +96,10 @@ export default function PaginaPaciente() {
                     <h3>Contato</h3>
                     <div className="paciente-info">
                         <span>Telefone</span><p>{paciente.telefone}</p>
-                        <span>Telefone 2</span><p>{paciente.telefoneSecundario}</p>
+                        <span>Telefone 2</span><p>{paciente.telefone2}</p>
                         <span>Email</span><p>{paciente.email}</p>
-                        <span>Emergência</span><p>{paciente.contatoEmergencia}</p>
-                        <span>Parentesco</span><p>{paciente.parentescoEmergencia}</p>
+                        <span>Emergência</span><p>{paciente.contato_emergencia}</p>
+                        <span>Parentesco</span><p>{paciente.parentesco_emergencia}</p>
                     </div>
                 </div>
 
@@ -135,8 +107,7 @@ export default function PaginaPaciente() {
                 <div className="paciente-card">
                     <h3>Endereço</h3>
                     <p className="paciente-texto">
-                        {paciente.endereco.rua}, {paciente.endereco.numero} – {paciente.endereco.bairro}<br />
-                        {paciente.endereco.cidade}/{paciente.endereco.estado} • CEP {paciente.endereco.cep}
+                        {paciente.endereco}
                     </p>
                 </div>
 
@@ -144,23 +115,22 @@ export default function PaginaPaciente() {
                 <div className="paciente-card">
                     <h3>Dados Médicos</h3>
                     <div className="paciente-info">
-                        <span>Tipo sanguíneo</span><p>{paciente.tipoSanguineo}</p>
+                        <span>Tipo sanguíneo</span><p>{paciente.tipo_sanguineo}</p>
                         <span>Convênio</span><p>{paciente.convenio}</p>
-                        <span>Carteirinha</span><p>{paciente.numeroCarteirinha}</p>
+                        <span>Carteirinha</span><p>{paciente.numero_carteirinha}</p>
                     </div>
-                    <p className="paciente-texto">{paciente.observacoesMedicas}</p>
+                    <p className="paciente-texto">{paciente.observacoes_medicas}</p>
                 </div>
 
                 {/* FICHA CLÍNICA */}
                 <div className="paciente-card">
                     <h3>Ficha Clínica</h3>
                     <div className="paciente-info">
-                        <span>Queixa</span><p>{paciente.queixaPrincipal}</p>
+                        <span>Queixa</span><p>{paciente.queixa_principal}</p>
                         <span>Sintomas</span><p>{paciente.sintomas}</p>
-                        <span>Início</span><p>{paciente.inicioSintomas}</p>
-                        <span>Dor</span><p>{paciente.intensidadeDor}/10</p>
+                        <span>Início</span><p>{paciente.inicio_sintomas}</p>
+                        <span>Dor</span><p>{paciente.dor_escala}/10</p>
                     </div>
-                    <p className="paciente-texto">{paciente.historicoClinico}</p>
                 </div>
 
             </div>
@@ -170,7 +140,6 @@ export default function PaginaPaciente() {
                 <button className="btn-editar">Editar Informações</button>
                 <button className="btn-excluir">Excluir Paciente</button>
             </div>
-
         </div>
     );
 }

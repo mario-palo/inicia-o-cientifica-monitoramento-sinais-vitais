@@ -5,12 +5,14 @@ const PacienteController = require('../controllers/PacienteController');
 const authSimples = require('../middlewares/authSimples');
 const permissaoProfissional = require('../middlewares/permissaoProfissional');
 
-router.post(
+/*router.post(
   '/',
   authSimples.auth,
   permissaoProfissional,
   PacienteController.criar
-);
+);*/
+
+router.post('/', PacienteController.criar);
 
 router.put(
   '/:id',
@@ -18,5 +20,9 @@ router.put(
   permissaoProfissional,
   PacienteController.atualizar
 );
+
+router.get('/:id', PacienteController.buscarPorId);
+
+router.get('/', PacienteController.listarTodos);
 
 module.exports = router;

@@ -1,199 +1,108 @@
 import { useState, useEffect } from "react";
 import "../../css/CadastrarPaciente.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CadastrarPaciente() {
-
+    const navigate = useNavigate();
     const [paciente, setPaciente] = useState({
         nome: "",
-        nomeSocial: "",
-        sexo: "",
-        genero: "",
+        genero: "M",
         dataNascimento: "",
-        idade: "",
         cpf: "",
-        rg: "",
         cartaoSus: "",
-        estadoCivil: "",
-        nacionalidade: "",
-        naturalidade: "",
-
         nomeMae: "",
         nomePai: "",
-
         telefone: "",
-        telefoneSecundario: "",
         email: "",
         contatoEmergencia: "",
-        telefoneEmergencia: "",
         parentescoEmergencia: "",
-
-        cep: "",
-        rua: "",
-        numero: "",
-        complemento: "",
-        bairro: "",
-        cidade: "",
-        estado: "",
-
+        leito: "",
         tipoSanguineo: "",
-        alergias: "",
-        doencas: "",
-        medicamentos: "",
-        deficiencias: "",
         convenio: "",
         numeroCarteirinha: "",
-        observacoesMedicas: "",
-
         queixaPrincipal: "",
-        historicoClinico: "",
         sintomas: "",
         inicioSintomas: "",
-        intensidadeDor: "",
-
-        profissionalResponsavel: "",
-        dataCadastro: "",
-
-        observacoes: "",
-        foto: null
+        intensidadeDor: 0,
     });
 
     function handleChange(e) {
         const { name, value } = e.target;
-        setPaciente(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setPaciente(prev => ({ ...prev, [name]: value }));
     }
 
-    function handleFoto(e) {
-        setPaciente(prev => ({
-            ...prev,
-            foto: e.target.files[0]
-        }));
-    }
+    async function salvarPaciente() {
+        try {
+            const token = localStorage.getItem('token');
+            const dadosParaEnviar = {
+                nome: paciente.nome,
+                leito: paciente.leito,
+                genero: paciente.genero,
+                data_nascimento: paciente.dataNascimento,
+                nome_mae: paciente.nomeMae,
+                cpf: paciente.cpf || null,
+                cartao_sus: paciente.cartaoSus || null,
+                nome_pai: paciente.nomePai || null,
+                telefone: paciente.telefone || null,
+                email: paciente.email || null,
+                contato_emergencia: paciente.contatoEmergencia || null,
+                parentesco_emergencia: paciente.parentescoEmergencia || null,
+                tipo_sanguineo: paciente.tipoSanguineo || null,
+                convenio: paciente.convenio || null,
+                numero_carteirinha: paciente.numeroCarteirinha || null,
+                queixa_principal: paciente.queixaPrincipal || null,
+                sintomas: paciente.sintomas || null,
+                inicio_sintomas: paciente.inicioSintomas || null,
+                dor_escala: paciente.intensidadeDor || 0,
+            };
 
-    useEffect(() => {
-        if (!paciente.dataNascimento) return;
+            const response = await axios.post("http://localhost:8080/pacientes", dadosParaEnviar, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-        const nascimento = new Date(paciente.dataNascimento);
-        const hoje = new Date();
-
-        let idade = hoje.getFullYear() - nascimento.getFullYear();
-        const m = hoje.getMonth() - nascimento.getMonth();
-
-        if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
-            idade--;
+            alert("Paciente cadastrado!");
+            navigate(`/paciente/${response.data.id}`);
+        } catch (error) {
+            alert("Erro: " + (error.response?.data?.error || "Verifique os campos obrigatórios"));
         }
-
-        setPaciente(prev => ({
-            ...prev,
-            idade
-        }));
-    }, [paciente.dataNascimento]);
-
-    function salvarPaciente() {
-        console.log("Paciente cadastrado:", paciente);
-        alert("Paciente cadastrado com sucesso!");
     }
 
     return (
         <div className="cadastro-paciente">
-
-            <h2>Cadastrar Paciente</h2>
+            <h2>Novo Cadastro de Paciente</h2>
 
             <fieldset>
-                <legend>Identificação</legend>
-
-                <input name="nome" placeholder="Nome completo" onChange={handleChange} />
-                <input name="nomeSocial" placeholder="Nome social" onChange={handleChange} />
-
-                <select name="sexo" onChange={handleChange}>
-                    <option value="">Sexo</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Feminino">Feminino</option>
+                <legend>Informações Básicas</legend>
+                <input name="nome" placeholder="Nome Completo" onChange={handleChange} required />
+                <input name="leito" placeholder="Número do Leito" onChange={handleChange} required />
+                <select name="genero" onChange={handleChange}>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
                     <option value="Outro">Outro</option>
                 </select>
+                <input type="date" name="dataNascimento" onChange={handleChange} required />
+                <input name="nomeMae" placeholder="Nome da Mãe" onChange={handleChange} required />
+            </fieldset>
 
-                <input name="genero" placeholder="Gênero" onChange={handleChange} />
-                <input type="date" name="dataNascimento" onChange={handleChange} />
-                <input value={paciente.idade} placeholder="Idade" disabled />
-
+            <fieldset>
+                <legend>Documentação e Contato</legend>
                 <input name="cpf" placeholder="CPF" onChange={handleChange} />
-                <input name="rg" placeholder="RG" onChange={handleChange} />
                 <input name="cartaoSus" placeholder="Cartão SUS" onChange={handleChange} />
-
-                <input name="estadoCivil" placeholder="Estado civil" onChange={handleChange} />
-                <input name="nacionalidade" placeholder="Nacionalidade" onChange={handleChange} />
-                <input name="naturalidade" placeholder="Naturalidade (cidade/estado)" onChange={handleChange} />
-
-                <input type="file" accept="image/*" onChange={handleFoto} />
-            </fieldset>
-
-            <fieldset>
-                <legend>Filiação</legend>
-                <input name="nomeMae" placeholder="Nome da mãe" onChange={handleChange} />
-                <input name="nomePai" placeholder="Nome do pai" onChange={handleChange} />
-            </fieldset>
-
-            <fieldset>
-                <legend>Contato</legend>
-                <input name="telefone" placeholder="Telefone principal" onChange={handleChange} />
-                <input name="telefoneSecundario" placeholder="Telefone secundário" onChange={handleChange} />
+                <input name="telefone" placeholder="Telefone" onChange={handleChange} />
                 <input name="email" placeholder="E-mail" onChange={handleChange} />
-
-                <input name="contatoEmergencia" placeholder="Contato de emergência" onChange={handleChange} />
-                <input name="telefoneEmergencia" placeholder="Telefone do contato" onChange={handleChange} />
-                <input name="parentescoEmergencia" placeholder="Grau de parentesco" onChange={handleChange} />
             </fieldset>
 
             <fieldset>
-                <legend>Endereço</legend>
-                <input name="cep" placeholder="CEP" onChange={handleChange} />
-                <input name="rua" placeholder="Rua" onChange={handleChange} />
-                <input name="numero" placeholder="Número" onChange={handleChange} />
-                <input name="complemento" placeholder="Complemento" onChange={handleChange} />
-                <input name="bairro" placeholder="Bairro" onChange={handleChange} />
-                <input name="cidade" placeholder="Cidade" onChange={handleChange} />
-                <input name="estado" placeholder="Estado" onChange={handleChange} />
+                <legend>Ficha Clínica Inicial</legend>
+                <input name="tipoSanguineo" placeholder="Tipo Sanguíneo" onChange={handleChange} />
+                <textarea name="queixaPrincipal" placeholder="Queixa Principal" onChange={handleChange} />
+                <label>Escala de Dor (0 a 10)</label>
+                <input type="range" min="0" max="10" name="intensidadeDor" onChange={handleChange} />
+                <span>{paciente.intensidadeDor}</span>
             </fieldset>
 
-            <fieldset>
-                <legend>Dados Médicos</legend>
-                <input name="tipoSanguineo" placeholder="Tipo sanguíneo" onChange={handleChange} />
-                <input name="convenio" placeholder="Convênio médico" onChange={handleChange} />
-                <input name="numeroCarteirinha" placeholder="Número da carteirinha" onChange={handleChange} />
-
-                <textarea name="alergias" placeholder="Alergias" onChange={handleChange} />
-                <textarea name="doencas" placeholder="Doenças pré-existentes" onChange={handleChange} />
-                <textarea name="medicamentos" placeholder="Medicamentos em uso contínuo" onChange={handleChange} />
-                <textarea name="deficiencias" placeholder="Deficiências" onChange={handleChange} />
-                <textarea name="observacoesMedicas" placeholder="Observações médicas importantes" onChange={handleChange} />
-            </fieldset>
-
-            <fieldset>
-                <legend>Ficha Clínica (Anamnese)</legend>
-                <textarea name="queixaPrincipal" placeholder="Queixa principal" onChange={handleChange} />
-                <textarea name="historicoClinico" placeholder="Histórico da doença atual" onChange={handleChange} />
-                <textarea name="sintomas" placeholder="Sintomas associados" onChange={handleChange} />
-                <input name="inicioSintomas" placeholder="Início dos sintomas" onChange={handleChange} />
-
-                <label>Intensidade da dor (0 a 10)</label>
-                <input type="number" min="0" max="10" name="intensidadeDor" onChange={handleChange} />
-            </fieldset>
-
-            <fieldset>
-                <legend>Informações Administrativas</legend>
-                <input name="profissionalResponsavel" placeholder="Profissional responsável" onChange={handleChange} />
-                <input type="date" name="dataCadastro" onChange={handleChange} />
-            </fieldset>
-
-            <fieldset>
-                <legend>Observações Gerais</legend>
-                <textarea name="observacoes" placeholder="Observações gerais" onChange={handleChange} />
-            </fieldset>
-
-            <button onClick={salvarPaciente}>Salvar Paciente</button>
-
+            <button className="btn-salvar" onClick={salvarPaciente}>Finalizar Cadastro</button>
         </div>
     );
 }

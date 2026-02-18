@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <LayoutSemHeader />,
     children: [
-      { path: "paciente", element: <VerificadorDeCodigo><Paciente /></VerificadorDeCodigo> },
+      { path: "paciente/:id", element: <VerificadorDeCodigo><Paciente /></VerificadorDeCodigo> },
       { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
       { path: "cadastrarProfissional", element: <CadastrarProfissional/> },
       { path: "verPacientes", element: <VerPacientes /> },
