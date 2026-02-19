@@ -22,13 +22,14 @@ module.exports = function(server) {
 
         if (rows.length === 0) {
           ws.send(JSON.stringify({ status: "Paciente não encontrado" }));
+          console.log("Paciente não encontrado")
           return;
         }
 
         const sql = `
           INSERT INTO sinais_vitais 
-          (paciente_id, dispositivo_id, batimento_cardiaco, oxigenacao, temperatura, data_hora_coleta) 
-          VALUES (?, ?, ?, ?, ?, ?)
+          (paciente_id, dispositivo_id, batimento_cardiaco, oxigenacao, temperatura) 
+          VALUES (?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -36,13 +37,13 @@ module.exports = function(server) {
           dados.dispositivo_id,
           dados.batimento_cardiaco,
           dados.oxigenacao,
-          dados.temperatura,
-          dados.data_hora_coleta
+          dados.temperatura        
         ];
 
         await db.execute(sql, values);
 
         ws.send(JSON.stringify({ status: "recebido" }));
+        console.log("cadastrado com sucesso")
 
       } catch (error) {
         console.log("Erro ao processar mensagem:", error.message);

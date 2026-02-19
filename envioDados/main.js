@@ -12,7 +12,6 @@ ws.on('open', () => {
       batimento_cardiaco: 60 + Math.floor(Math.random() * 40),
       oxigenacao: 95 + Math.floor(Math.random() * 5),
       temperatura: Number((36 + Math.random() * 2).toFixed(1)),
-      data_hora_coleta: new Date().toISOString()
     };
 
     ws.send(JSON.stringify(dados));
