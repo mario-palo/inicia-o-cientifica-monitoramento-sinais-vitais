@@ -11,45 +11,45 @@ import {
 } from "recharts";
 
 export default function Temperatura() {
-
     const [temperaturaAtual, setTemperaturaAtual] = useState(null);
     const [ultimaAtualizacao, setUltimaAtualizacao] = useState(null);
     const [historico, setHistorico] = useState([]);
 
-    function receberDado(dado) {
-
-        setTemperaturaAtual(dado.valor);
-        setUltimaAtualizacao(dado.hora);
-
-        setHistorico(prev => [
-            dado,
-            ...prev
-        ].slice(0, 12));
-    }
-
-    // SIMULAÇÃO
     useEffect(() => {
+        const socket = new WebSocket('ws://localhost:8080/ws');
 
-        const intervalo = setInterval(() => {
+        socket.onopen = () => {
+            console.log("Conectado ao servidor (Página Temperatura)");
+            socket.send(JSON.stringify({ tipo: "frontend" }));
+        };
 
-            const agora = new Date();
+        socket.onmessage = (event) => {
+            const dados = JSON.parse(event.data);
 
-            const dadoSimulado = {
-                id: Date.now(),
-                valor: (37 + Math.random() * 2).toFixed(1),
-                data: agora.toLocaleDateString("pt-BR"),
-                hora: agora.toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })
-            };
+            if (dados.temperatura !== undefined) {
+                const agora = new Date();
+                
+                const novoDado = {
+                    id: Date.now(),
+                    valor: dados.temperatura,
+                    data: agora.toLocaleDateString("pt-BR"),
+                    hora: agora.toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    })
+                };
 
-            receberDado(dadoSimulado);
+                setTemperaturaAtual(novoDado.valor);
+                setUltimaAtualizacao(novoDado.hora);
 
-        }, 3000);
+                setHistorico(prev => [novoDado, ...prev].slice(0, 12));
+            }
+        };
 
-        return () => clearInterval(intervalo);
+        socket.onerror = (error) => console.error("Erro no WebSocket Temperatura:", error);
 
+        return () => socket.close();
     }, []);
 
     const dadosGrafico = historico
@@ -63,11 +63,9 @@ export default function Temperatura() {
 
     return (
         <div className="temperatura-page">
-
             <div className="temperatura-main">
                 <h1>TEMPERATURA</h1>
 
-                {/* GRÁFICO */}
                 <div className="temperatura-grafico">
                     <ResponsiveContainer width="100%" height={240}>
                         <LineChart data={dadosGrafico}>
@@ -79,9 +77,10 @@ export default function Temperatura() {
                                 }}
                             />
                             <YAxis
-                                domain={[33, 40]}
-                                tickCount={8}
-                                allowDecimals={false} />
+                                domain={[33, 42]}
+                                tickCount={10}
+                                allowDecimals={true} 
+                            />
                                 
                             <Tooltip
                                 labelFormatter={(label) => {
@@ -95,8 +94,9 @@ export default function Temperatura() {
                                 type="monotone"
                                 dataKey="temperatura"
                                 stroke="#ff9f0a"
-                                strokeWidth={2}
-                                dot={false}
+                                strokeWidth={3}
+                                dot={{ r: 4, fill: "#ff9f0a" }} 
+                                isAnimationActive={false}
                             />
                         </LineChart>
                     </ResponsiveContainer>
@@ -119,17 +119,16 @@ export default function Temperatura() {
                 <h2>ÚLTIMAS MEDIÇÕES</h2>
 
                 {historico.length === 0 && (
-                    <p>Nenhum dado recebido ainda</p>
+                    <p>Aguardando dados do sensor...</p>
                 )}
 
-                {historico.map((item, index) => (
-                    <p key={index}>
+                {historico.map((item) => (
+                    <p key={item.id}>
                         {item.data} - {item.hora}
                         <span> {item.valor}°C</span>
                     </p>
                 ))}
             </div>
-
         </div>
     );
 }

@@ -11,45 +11,45 @@ import {
 } from "recharts";
 
 export default function Oxigenacao() {
-
     const [oxigenacaoAtual, setOxigenacaoAtual] = useState(null);
     const [ultimaAtualizacao, setUltimaAtualizacao] = useState(null);
     const [historico, setHistorico] = useState([]);
 
-    function receberDado(dado) {
-
-        setOxigenacaoAtual(dado.valor);
-        setUltimaAtualizacao(dado.hora);
-
-        setHistorico(prev => [
-            dado,
-            ...prev
-        ].slice(0, 12));
-    }
-
-    // SIMULAÇÃO
     useEffect(() => {
+        const socket = new WebSocket('ws://localhost:8080/ws');
 
-        const intervalo = setInterval(() => {
+        socket.onopen = () => {
+            console.log("Conectado ao servidor (Módulo Oxigenação)");
+            socket.send(JSON.stringify({ tipo: "frontend" }));
+        };
 
-            const agora = new Date();
+        socket.onmessage = (event) => {
+            const dados = JSON.parse(event.data);
 
-            const dadoSimulado = {
-                id: Date.now(),
-                valor: Math.floor(97 + Math.random() * 3),
-                data: agora.toLocaleDateString("pt-BR"),
-                hora: agora.toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })
-            };
+            if (dados.oxigenacao !== undefined) {
+                const agora = new Date();
+                
+                const novoDado = {
+                    id: Date.now(),
+                    valor: dados.oxigenacao,
+                    data: agora.toLocaleDateString("pt-BR"),
+                    hora: agora.toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    })
+                };
 
-            receberDado(dadoSimulado);
+                setOxigenacaoAtual(novoDado.valor);
+                setUltimaAtualizacao(novoDado.hora);
 
-        }, 3000);
+                setHistorico(prev => [novoDado, ...prev].slice(0, 12));
+            }
+        };
 
-        return () => clearInterval(intervalo);
+        socket.onerror = (error) => console.error("Erro no WebSocket Oxigenação:", error);
 
+        return () => socket.close();
     }, []);
 
     const dadosGrafico = historico
@@ -63,43 +63,38 @@ export default function Oxigenacao() {
 
     return (
         <div className="oxigenacao-page">
-
             <div className="oxigenacao-main">
                 <h1>OXIGENAÇÃO (SpO₂)</h1>
 
-                {/* GRÁFICO */}
                 <div className="oxigenacao-grafico">
                     <ResponsiveContainer width="100%" height={240}>
                         <LineChart data={dadosGrafico}>
                             <XAxis
                                 dataKey="id"
-                                interval="preserveStartEnd"
                                 tickFormatter={(id) => {
                                     const item = dadosGrafico.find(d => d.id === id);
                                     return item ? item.hora : "";
                                 }}
                             />
-
                             <YAxis
-                                domain={[90, 100]}
-                                tickCount={10}
+                                domain={[85, 100]} 
+                                tickCount={8}
                                 allowDecimals={false}
                             />
-
                             <Tooltip
                                 labelFormatter={(label) => {
                                     const item = dadosGrafico.find(d => d.id === label);
                                     return item ? `Hora: ${item.hora}` : "";
                                 }}
-                                formatter={(value) => [`${value}%`, "SpO₂"]}
+                                formatter={(value) => [`${value}%`, "Saturação"]}
                             />
-
                             <Line
                                 type="monotone"
                                 dataKey="spo2"
                                 stroke="#00bcd4"
-                                strokeWidth={2}
-                                dot={false}
+                                strokeWidth={3}
+                                dot={{ r: 4, fill: "#00bcd4" }}
+                                isAnimationActive={false} 
                             />
                         </LineChart>
                     </ResponsiveContainer>
@@ -122,17 +117,18 @@ export default function Oxigenacao() {
                 <h2>ÚLTIMAS MEDIÇÕES</h2>
 
                 {historico.length === 0 && (
-                    <p>Nenhum dado recebido ainda</p>
+                    <p>Aguardando sinal do oxímetro...</p>
                 )}
 
-                {historico.map((item, index) => (
-                    <p key={index}>
+                {historico.map((item) => (
+                    <p key={item.id} className="historico-item">
                         {item.data} - {item.hora}
-                        <span> {item.valor}%</span>
+                        <span style={{ color: item.valor < 92 ? '#ff4d4d' : '#00bcd4' }}> 
+                            {item.valor}%
+                        </span>
                     </p>
                 ))}
             </div>
-
         </div>
     );
 }
