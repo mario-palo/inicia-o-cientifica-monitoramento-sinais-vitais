@@ -7,23 +7,23 @@ function validarObrigatorios(dados) {
 
 module.exports = {
   async criar(req, res) {
-  try {
-    if (!validarObrigatorios(req.body)) {
-      return res.status(400).json({ error: "Campos obrigatórios ausentes" });
+    try {
+      if (!validarObrigatorios(req.body)) {
+        return res.status(400).json({ error: "Campos obrigatórios ausentes" });
+      }
+
+      const id = await Paciente.criar({
+        ...req.body,
+        criado_por: req.usuario ? req.usuario.id : 1
+      });
+
+      return res.status(201).json({ id, message: "Paciente cadastrado com sucesso" });
+
+    } catch (error) {
+      console.error("Erro no Controller:", error);
+      return res.status(500).json({ error: "Erro ao cadastrar paciente" });
     }
-
-    const id = await Paciente.criar({
-      ...req.body,
-      criado_por: req.usuario ? req.usuario.id : 1 
-    });
-
-    return res.status(201).json({ id, message: "Paciente cadastrado com sucesso" });
-    
-  } catch (error) {
-    console.error("Erro no Controller:", error);
-    return res.status(500).json({ error: "Erro ao cadastrar paciente" });
   }
-}
 
   /*async criar(req, res) {
     try {
@@ -44,13 +44,18 @@ module.exports = {
   async atualizar(req, res) {
     try {
       const { id } = req.params;
+
+      console.log(`Atualizando paciente ${id}:`, req.body);
+
       if (!validarObrigatorios(req.body)) {
         return res.status(400).json({ error: "Campos obrigatórios ausentes" });
       }
+
       await Paciente.atualizar(id, req.body);
+
       return res.json({ message: "Paciente atualizado com sucesso" });
     } catch (error) {
-      console.error(error);
+      console.error("Erro no Controller ao atualizar:", error);
       return res.status(500).json({ error: "Erro ao atualizar paciente" });
     }
   },
@@ -74,6 +79,17 @@ module.exports = {
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Erro ao listar pacientes" });
+    }
+  },
+
+  async excluir(req, res) {
+    try {
+      const { id } = req.params;
+      await Paciente.deletar(id);
+      return res.json({ message: "Paciente removido com sucesso!" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Erro ao excluir paciente" });
     }
   }
 };

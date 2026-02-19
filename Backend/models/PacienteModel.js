@@ -1,14 +1,17 @@
 const db = require('../database/banco');
 
 module.exports = {
-  // BUSCAR UM PACIENTE ESPECÍFICO
   async buscarPorId(id) {
     const sql = 'SELECT * FROM pacientes WHERE id = ?';
     const [rows] = await db.execute(sql, [id]);
-    return rows[0]; // Retorna o primeiro (e único) paciente ou undefined
+    return rows[0];
   },
 
-  // LISTAR TODOS (Útil para sua página de listagem)
+  async deletar(id) {
+    const sql = 'DELETE FROM pacientes WHERE id = ?';
+    await db.execute(sql, [id]);
+  },
+
   async listarTodos() {
     const sql = 'SELECT id, nome, leito, cpf FROM pacientes ORDER BY nome ASC';
     const [rows] = await db.execute(sql);
@@ -67,6 +70,7 @@ module.exports = {
       dados.queixa_principal || null, dados.sintomas || null, dados.inicio_sintomas || null, dados.dor_escala ?? null,
       id
     ];
+
 
     await db.execute(sql, values);
   }

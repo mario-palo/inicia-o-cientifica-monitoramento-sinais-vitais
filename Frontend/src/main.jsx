@@ -16,6 +16,7 @@ import CadastrarProfissional from './Componentes/Informacoes/CadastrarProfission
 import Paciente from './Componentes/Informacoes/Paciente.jsx';
 import VerPacientes from './Componentes/Informacoes/VerPacientes.jsx';
 import VerificadorDeCodigo from './Componentes/Informacoes/VerificadorDeCodigo.jsx';
+import EditarPaciente from './Componentes/Informacoes/EditarPaciente.jsx';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
       { path: "cadastrarProfissional", element: <CadastrarProfissional/> },
       { path: "verPacientes", element: <VerPacientes /> },
+      { path: "editarPaciente/:id", element: <EditarPaciente /> },
     ],
   }
 ]);

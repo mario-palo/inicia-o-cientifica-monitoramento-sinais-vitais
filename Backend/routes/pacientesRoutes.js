@@ -14,15 +14,20 @@ const permissaoProfissional = require('../middlewares/permissaoProfissional');
 
 router.post('/', PacienteController.criar);
 
+/*
 router.put(
   '/:id',
   authSimples.auth,
   permissaoProfissional,
   PacienteController.atualizar
-);
+);*/
+
+router.put('/:id', PacienteController.atualizar)
 
 router.get('/:id', PacienteController.buscarPorId);
 
 router.get('/', PacienteController.listarTodos);
+
+router.delete('/:id', PacienteController.excluir);
 
 module.exports = router;

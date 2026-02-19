@@ -34,6 +34,43 @@ export default function PaginaPaciente() {
         return <div className="error">Paciente não encontrado.</div>
     }
 
+    const excluirPaciente = async () => {
+        console.log("ID capturado para exclusão:", id);
+
+        if (!id || id === "undefined") {
+            alert("Erro: O ID do paciente não foi carregado corretamente.");
+            return;
+        }
+        const confirmar = window.confirm("Tem certeza que deseja excluir este prontuário? Esta ação não pode ser desfeita.");
+
+        if (confirmar) {
+            try {
+                await axios.delete(`http://localhost:8080/pacientes/${id}`);
+                alert("Paciente excluído com sucesso!");
+                navigate('/verPacientes');
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao excluir o paciente.");
+            }
+        }
+    };
+
+    const calcularIdade = (dataNascimento) => {
+        if (!dataNascimento) return "N/A";
+
+        const hoje = new Date();
+        const nascimento = new Date(dataNascimento);
+
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        const mes = hoje.getMonth() - nascimento.getMonth();
+
+        if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+            idade--;
+        }
+
+        return idade;
+    };
+
     return (
         <div className="paciente-page">
             <div className="paciente-menu">
@@ -53,21 +90,18 @@ export default function PaginaPaciente() {
                 )}
             </div>
 
-            {/* HEADER */}
             <header className="paciente-header">
                 <div className="paciente-foto" />
                 <div className="paciente-header-info">
                     <h2 className="paciente-nome">{paciente.nome}</h2>
                     <span className="paciente-dados-sec">
-                        {paciente.sexo} • {paciente.idade} anos • CPF {paciente.cpf}
+                        {calcularIdade(paciente.data_nascimento)} anos • CPF {paciente.cpf}
                     </span>
                 </div>
             </header>
 
-            {/* GRID */}
             <div className="paciente-grid">
 
-                {/* IDENTIFICAÇÃO */}
                 <div className="paciente-card">
                     <h3>Identificação</h3>
                     <div className="paciente-info">
@@ -82,7 +116,6 @@ export default function PaginaPaciente() {
                     </div>
                 </div>
 
-                {/* FILIAÇÃO */}
                 <div className="paciente-card">
                     <h3>Filiação</h3>
                     <div className="paciente-info">
@@ -91,7 +124,6 @@ export default function PaginaPaciente() {
                     </div>
                 </div>
 
-                {/* CONTATO */}
                 <div className="paciente-card">
                     <h3>Contato</h3>
                     <div className="paciente-info">
@@ -103,7 +135,6 @@ export default function PaginaPaciente() {
                     </div>
                 </div>
 
-                {/* ENDEREÇO */}
                 <div className="paciente-card">
                     <h3>Endereço</h3>
                     <p className="paciente-texto">
@@ -111,7 +142,6 @@ export default function PaginaPaciente() {
                     </p>
                 </div>
 
-                {/* DADOS MÉDICOS */}
                 <div className="paciente-card">
                     <h3>Dados Médicos</h3>
                     <div className="paciente-info">
@@ -122,7 +152,6 @@ export default function PaginaPaciente() {
                     <p className="paciente-texto">{paciente.observacoes_medicas}</p>
                 </div>
 
-                {/* FICHA CLÍNICA */}
                 <div className="paciente-card">
                     <h3>Ficha Clínica</h3>
                     <div className="paciente-info">
@@ -135,10 +164,17 @@ export default function PaginaPaciente() {
 
             </div>
 
-            {/* AÇÕES */}
             <div className="paciente-acoes">
-                <button className="btn-editar">Editar Informações</button>
-                <button className="btn-excluir">Excluir Paciente</button>
+                <Link to={`/editarPaciente/${paciente.id}`}>
+                    <button className="btn-editar">Editar Informações</button>
+                </Link>
+                <button
+                    onClick={excluirPaciente}
+                    className="btn-excluir"
+                    title="Excluir prontuário permanentemente"
+                >
+                    Excluir Paciente
+                </button>
             </div>
         </div>
     );
