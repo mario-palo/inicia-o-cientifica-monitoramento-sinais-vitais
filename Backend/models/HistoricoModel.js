@@ -2,22 +2,21 @@ const db = require('../database/banco');
 
 module.exports = {
     async listarTemperatura(){
-        const sql = "select temperatura from sinais_vitais order by data_hora_coleta asc"
+        const sql = "select temperatura, data_hora_coleta from sinais_vitais order by data_hora_coleta desc"
         const [result] = await db.query(sql)
-        return result[0]
+        return result
     },
 
     async listarBatimentos(){
-        const sql = "select batimento_cardiaco from sinais_vitais order by data_hora_coleta asc"
+        const sql = "select batimento_cardiaco, data_hora_coleta from sinais_vitais order by data_hora_coleta desc"
         const [result] = await db.query(sql)
-        return result[0]
+        return result
 
     },
 
     async listarOxigenacao(){
-        const sql = "select oxigenacao from sinais_vitais order by data_hora_coleta asc"
+        const sql = "select oxigenacao, data_hora_coleta from sinais_vitais order by data_hora_coleta desc"
         const [result] = await db.query(sql)
-        return result[0]
-
+        return result
     }
 }

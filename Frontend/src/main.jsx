@@ -17,6 +17,7 @@ import Paciente from './Componentes/Informacoes/Paciente.jsx';
 import VerPacientes from './Componentes/Informacoes/VerPacientes.jsx';
 import VerificadorDeCodigo from './Componentes/Informacoes/VerificadorDeCodigo.jsx';
 import EditarPaciente from './Componentes/Informacoes/EditarPaciente.jsx';
+import historicoLoader from "./Loaders/historicoLoader";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
       { path: "ecg", element: <Eletrocardio /> },
       { path: "temperatura", element: <Temperatura /> },
       { path: "oxigenacao", element: <Oxigenacao /> },
-      { path: "historico", element: <VerificadorDeCodigo><Historico /></VerificadorDeCodigo> },
+      { path: "historico", loader:historicoLoader, element: <VerificadorDeCodigo><Historico /></VerificadorDeCodigo> },
     ],
   },
 

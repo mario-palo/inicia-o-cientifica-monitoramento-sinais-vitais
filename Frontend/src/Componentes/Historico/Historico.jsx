@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+/*import { useState, useMemo } from "react";
 import {
     ResponsiveContainer,
     LineChart,
@@ -44,11 +44,16 @@ function gerarDados(periodo, tipo) {
                 ? 60 + Math.random() * 20
                 : null
     }));
-}
+}*/
+
+import { useLoaderData } from "react-router-dom";
 
 export default function HistoricoSinais() {
 
-    const [indiceSinal, setIndiceSinal] = useState(0);
+    const dados = useLoaderData()
+    console.log(dados)
+
+    /*const [indiceSinal, setIndiceSinal] = useState(0);
     const [periodo, setPeriodo] = useState("24h");
 
     const sinalAtual = SINAIS[indiceSinal];
@@ -64,10 +69,11 @@ export default function HistoricoSinais() {
 
     function proximo() {
         setIndiceSinal(prev => (prev === SINAIS.length - 1 ? 0 : prev + 1));
-    }
+    }*/
 
     return (
-        <section className="historico">
+        <></>
+       /*<section className="historico">
 
             <header className="historico-header">
                 <button className="historico-nav" onClick={anterior}>◀</button>
@@ -115,6 +121,6 @@ export default function HistoricoSinais() {
                 )}
             </div>
 
-        </section>
+        </section>*/
     );
 }
