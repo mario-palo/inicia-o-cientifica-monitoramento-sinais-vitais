@@ -1,5 +1,5 @@
 create database if not exists monitoramento;
-
+use monitoramento;
 CREATE TABLE usuarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
@@ -9,12 +9,25 @@ CREATE TABLE usuarios (
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS sinais_vitais;
+
 CREATE TABLE sinais_vitais (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  ambient DECIMAL(5,2) NOT NULL,
-  objectTemp DECIMAL(5,2) NOT NULL,
-  timestamp DATETIME NOT NULL,
-  PRIMARY KEY (id)
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+
+  paciente_id INT NOT NULL,
+  dispositivo_id VARCHAR(50) NOT NULL,
+
+  batimento_cardiaco SMALLINT UNSIGNED NOT NULL,
+  oxigenacao TINYINT UNSIGNED NOT NULL,
+  temperatura DECIMAL(4,1) NOT NULL,
+
+  data_hora_coleta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+    ON DELETE CASCADE,
+
 );
 
 CREATE TABLE pacientes (
