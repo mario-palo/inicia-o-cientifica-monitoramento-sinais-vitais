@@ -7,3 +7,5 @@ export default async function historicoLoader() {
 
     return response.json();
 };
+
+// Fazer o Historico por parametro

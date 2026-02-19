@@ -146,7 +146,6 @@ export default function Principal() {
                 </div>
             </Link>
 
-            {/* CARD OXIGENAÇÃO */}
             <Link to="/oxigenacao">
                 <div className="spo2">
                     <div className="titulo-spo2">SPO2</div>
