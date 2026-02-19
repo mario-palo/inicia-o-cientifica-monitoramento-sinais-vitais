@@ -20,7 +20,7 @@ export default function Principal() {
     const [tempPreview, setTempPreview] = useState([]);
     const [spo2Preview, setSpo2Preview] = useState([]);
 
-    useEffect(() => {
+    /*useEffect(() => {
 
         let x = 0;
 
@@ -76,7 +76,23 @@ export default function Principal() {
 
         return () => clearInterval(intervalo);
 
-    }, []);
+    }, []);*/
+
+    useEffect(() => {
+
+        const socket = new WebSocket('ws://localhost:8080/ws')
+        socket.onopen = () => {
+            console.log("Conectado ao servidor")
+            socket.send(JSON.stringify({ tipo: "frontend" }))
+        }
+        
+        socket.onmessage = (event) => {
+            const dados = JSON.parse(event.data)
+            console.log(dados)
+        }
+
+        return () => socket.close()
+    }, [])
 
     const dadosTemp = tempPreview.map(p => ({
         id: p.id,

@@ -1,9 +1,9 @@
 const WebSocket = require("ws");
 const db = require('../database/banco');
 
-module.exports = function(server) {
+module.exports = function (server) {
 
-  const wss = new WebSocket.Server({ 
+  const wss = new WebSocket.Server({
     server,
     path: "/ws"
   });
@@ -12,6 +12,16 @@ module.exports = function(server) {
     console.log("Dispositivo conectado via WebSocket");
 
     ws.on('message', async (message) => {
+      const dados = JSON.parse(message)
+      if (dados.tipo) {
+        ws.tipo = dados.tipo
+        console.log("tipo conectado: ", ws.tipo)
+        return
+      }
+    })
+
+    ws.on('message', async (message) => {
+
       try {
         const dados = JSON.parse(message);
 
@@ -37,13 +47,19 @@ module.exports = function(server) {
           dados.dispositivo_id,
           dados.batimento_cardiaco,
           dados.oxigenacao,
-          dados.temperatura        
+          dados.temperatura
         ];
 
         await db.execute(sql, values);
 
         ws.send(JSON.stringify({ status: "recebido" }));
         console.log("cadastrado com sucesso")
+
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN && client.tipo == "frontend") {
+            client.send(JSON.stringify(dados));
+          }
+        });
 
       } catch (error) {
         console.log("Erro ao processar mensagem:", error.message);
