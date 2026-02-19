@@ -11,7 +11,6 @@ import {
 } from "recharts";
 
 export default function Principal() {
-
     const [bpm, setBpm] = useState(null);
     const [temperatura, setTemperatura] = useState(null);
     const [spo2, setSpo2] = useState(null);
@@ -20,79 +19,63 @@ export default function Principal() {
     const [tempPreview, setTempPreview] = useState([]);
     const [spo2Preview, setSpo2Preview] = useState([]);
 
-    /*useEffect(() => {
-
-        let x = 0;
-
-        const intervaloECG = setInterval(() => {
-            x += 1;
-
-            const valor =
-                Math.sin(x * 0.15) * 0.15 +
-                Math.random() * 0.02 +
-                (x % 40 === 0 ? 1.2 : 0);
-
-            setEcgPreview(prev =>
-                [...prev, { x, value: valor }].slice(-120)
-            );
-
-        }, 40);
-
-        return () => clearInterval(intervaloECG);
-
-    }, []);
-
     useEffect(() => {
+        const socket = new WebSocket('ws://localhost:8080/ws');
 
-        const intervalo = setInterval(() => {
-
-            const agora = new Date();
-
-            const tempSim = Number((36 + Math.random() * 2.5).toFixed(1));
-            const spo2Sim = Math.floor(95 + Math.random() * 5);
-            const bpmSim = Math.floor(70 + Math.random() * 30);
-
-            setBpm(bpmSim);
-            setTemperatura(tempSim);
-            setSpo2(spo2Sim);
-
-            const pontoBase = {
-                id: Date.now(),
-                hora: agora.toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })
-            };
-
-            setTempPreview(prev =>
-                [...prev, { ...pontoBase, valor: tempSim }].slice(-12)
-            );
-
-            setSpo2Preview(prev =>
-                [...prev, { ...pontoBase, valor: spo2Sim }].slice(-12)
-            );
-
-        }, 2000);
-
-        return () => clearInterval(intervalo);
-
-    }, []);*/
-
-    useEffect(() => {
-
-        const socket = new WebSocket('ws://localhost:8080/ws')
         socket.onopen = () => {
-            console.log("Conectado ao servidor")
-            socket.send(JSON.stringify({ tipo: "frontend" }))
-        }
-        
-        socket.onmessage = (event) => {
-            const dados = JSON.parse(event.data)
-            console.log(dados)
-        }
+            console.log("Conectado ao servidor de sinais vitais");
+            socket.send(JSON.stringify({ tipo: "frontend" }));
+        };
 
-        return () => socket.close()
-    }, [])
+        socket.onmessage = (event) => {
+            try {
+                const dados = JSON.parse(event.data);
+                
+                const agora = new Date();
+                const pontoBase = {
+                    id: Date.now(),
+                    hora: agora.toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    })
+                };
+
+                if (dados.batimento_cardiaco !== undefined) setBpm(dados.batimento_cardiaco);
+                if (dados.temperatura !== undefined) setTemperatura(dados.temperatura);
+                if (dados.oxigenacao !== undefined) setSpo2(dados.oxigenacao);
+
+                if (dados.temperatura !== undefined) {
+                    setTempPreview(prev => 
+                        [...prev, { ...pontoBase, valor: dados.temperatura }].slice(-12)
+                    );
+                }
+
+                if (dados.oxigenacao !== undefined) {
+                    setSpo2Preview(prev => 
+                        [...prev, { ...pontoBase, valor: dados.oxigenacao }].slice(-12)
+                    );
+                }
+
+                if (dados.ecg_valor !== undefined) {
+                    setEcgPreview(prev => 
+                        [...prev, { id: pontoBase.id, value: dados.ecg_valor }].slice(-40)
+                    );
+                }
+
+            } catch (error) {
+                console.error("Erro ao processar dados do socket:", error);
+            }
+        };
+
+        socket.onerror = (error) => {
+            console.error("Erro na conexão WebSocket:", error);
+        };
+
+        return () => {
+            socket.close();
+        };
+    }, []);
 
     const dadosTemp = tempPreview.map(p => ({
         id: p.id,
@@ -112,11 +95,11 @@ export default function Principal() {
             <Link to="/ecg">
                 <div className="ecg">
                     <div className="titulo-ecg">ECG</div>
-
                     <div className="grafico-ecg">
                         <ResponsiveContainer width="100%" height={80}>
                             <LineChart data={ecgPreview}>
                                 <Line
+                                    type="monotone"
                                     dataKey="value"
                                     stroke="#00ff6a"
                                     strokeWidth={2}
@@ -141,18 +124,11 @@ export default function Principal() {
             <Link to="/temperatura">
                 <div className="temp">
                     <div className="titulo-temp">TEMP</div>
-
                     <div className="grafico-temp">
                         <ResponsiveContainer width="100%" height={80}>
                             <LineChart data={dadosTemp}>
-                                <XAxis
-                                    dataKey="id"
-                                    hide
-                                />
-                                <YAxis
-                                    domain={[33, 40]}
-                                    tickCount={8}
-                                />
+                                <XAxis dataKey="id" hide />
+                                <YAxis domain={[33, 42]} hide />
                                 <Line
                                     type="monotone"
                                     dataKey="temperatura"
@@ -164,28 +140,21 @@ export default function Principal() {
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
-
                     <div className="temp-valor">
                         {temperatura !== null ? `${temperatura}°C` : "--"}
                     </div>
                 </div>
             </Link>
 
+            {/* CARD OXIGENAÇÃO */}
             <Link to="/oxigenacao">
                 <div className="spo2">
                     <div className="titulo-spo2">SPO2</div>
-
                     <div className="grafico-spo2">
                         <ResponsiveContainer width="100%" height={80}>
                             <LineChart data={dadosSpo2}>
-                                <XAxis
-                                    dataKey="id"
-                                    hide
-                                />
-                                <YAxis
-                                    domain={[94, 100]}
-                                    tickCount={6}
-                                />
+                                <XAxis dataKey="id" hide />
+                                <YAxis domain={[80, 100]} hide />
                                 <Line
                                     type="monotone"
                                     dataKey="spo2"
@@ -197,7 +166,6 @@ export default function Principal() {
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
-
                     <div className="spo2-valor">
                         {spo2 !== null ? `${spo2}%` : "--"}
                     </div>
