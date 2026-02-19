@@ -7,6 +7,7 @@ const tempRoutes = require("../routes/temperaturaRoutes");
 const authRoutes = require('../routes/authRoutes');
 const usuarioRoutes = require('../routes/usuariosRoutes');
 const pacienteRoutes = require('../routes/pacientesRoutes');
+const historicoRoutes = require('../routes/historicoRoutes')
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use('/pacientes', pacienteRoutes);
 app.use('/usuarios', usuarioRoutes);
 app.use('/auth', authRoutes);
 app.use('/temperatura', tempRoutes);
+app.use('/historico', historicoRoutes);
+
 
 // 🔹 Criar servidor HTTP
 const server = http.createServer(app);
