@@ -9,26 +9,7 @@ CREATE TABLE usuarios (
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS sinais_vitais;
 
-CREATE TABLE sinais_vitais (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-
-  paciente_id INT NOT NULL,
-  dispositivo_id VARCHAR(50) NOT NULL,
-
-  batimento_cardiaco SMALLINT UNSIGNED NOT NULL,
-  oxigenacao TINYINT UNSIGNED NOT NULL,
-  temperatura DECIMAL(4,1) NOT NULL,
-
-  data_hora_coleta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
-    ON DELETE CASCADE,
-
-);
 
 CREATE TABLE pacientes (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,4 +65,25 @@ CREATE TABLE pacientes (
 
   -- Relacionamento
   FOREIGN KEY (criado_por) REFERENCES usuarios(id)
+);
+
+DROP TABLE IF EXISTS sinais_vitais;
+
+CREATE TABLE sinais_vitais (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+
+  paciente_id INT NOT NULL,
+  dispositivo_id VARCHAR(50) NOT NULL,
+
+  batimento_cardiaco SMALLINT UNSIGNED NOT NULL,
+  oxigenacao TINYINT UNSIGNED NOT NULL,
+  temperatura DECIMAL(4,1) NOT NULL,
+
+  data_hora_coleta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+    ON DELETE CASCADE
+
 );
