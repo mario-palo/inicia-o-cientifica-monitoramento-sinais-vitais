@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/Principal.css";
+import UserSelector from "../UserSelector.jsx"
 
 import {
     LineChart,
@@ -30,7 +31,7 @@ export default function Principal() {
         socket.onmessage = (event) => {
             try {
                 const dados = JSON.parse(event.data);
-                
+
                 const agora = new Date();
                 const pontoBase = {
                     id: Date.now(),
@@ -46,19 +47,19 @@ export default function Principal() {
                 if (dados.oxigenacao !== undefined) setSpo2(dados.oxigenacao);
 
                 if (dados.temperatura !== undefined) {
-                    setTempPreview(prev => 
+                    setTempPreview(prev =>
                         [...prev, { ...pontoBase, valor: dados.temperatura }].slice(-12)
                     );
                 }
 
                 if (dados.oxigenacao !== undefined) {
-                    setSpo2Preview(prev => 
+                    setSpo2Preview(prev =>
                         [...prev, { ...pontoBase, valor: dados.oxigenacao }].slice(-12)
                     );
                 }
 
                 if (dados.ecg_valor !== undefined) {
-                    setEcgPreview(prev => 
+                    setEcgPreview(prev =>
                         [...prev, { id: pontoBase.id, value: dados.ecg_valor }].slice(-40)
                     );
                 }
@@ -77,6 +78,18 @@ export default function Principal() {
         };
     }, []);
 
+const [usuarioAtivo, setUsuarioAtivo] = useState(localStorage.getItem("selected_user_name"));
+
+const handleUserSelect = (u) => {
+    localStorage.setItem("selected_user_id", u.id);
+    localStorage.setItem("selected_user_name", u.nome);
+    
+    setUsuarioAtivo(u.nome); 
+};
+
+if (!usuarioAtivo) {
+    return <UserSelector onUserSelect={handleUserSelect} />;
+}
     const dadosTemp = tempPreview.map(p => ({
         id: p.id,
         hora: p.hora,

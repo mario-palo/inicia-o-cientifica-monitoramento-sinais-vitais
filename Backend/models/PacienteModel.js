@@ -18,6 +18,15 @@ module.exports = {
     return rows;
   },
 
+  async listarPorUsuario(userId) {
+    const [rows] = await db.query(`
+        SELECT * FROM sinais_vitais 
+        WHERE usuario_id = ? 
+        ORDER BY timestamp DESC
+    `, [userId]);
+    return rows;
+  },
+
   async criar(dados) {
     const sql = `
       INSERT INTO pacientes (

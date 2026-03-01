@@ -1,126 +1,132 @@
-/*import { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useLoaderData } from "react-router-dom";
 import {
     ResponsiveContainer,
     LineChart,
     Line,
     XAxis,
     YAxis,
-    Tooltip
+    Tooltip,
+    CartesianGrid
 } from "recharts";
 
 import "../../css/Historico.css";
 
 const PERIODOS = {
-    "1h":  { label: "1 hora", pontos: 12, intervaloLabel: "min" },
-    "6h":  { label: "6 horas", pontos: 18, intervaloLabel: "min" },
-    "12h": { label: "12 horas", pontos: 24, intervaloLabel: "min" },
-    "24h": { label: "24 horas", pontos: 24, intervaloLabel: "h" },
-    "7d":  { label: "7 dias", pontos: 14, intervaloLabel: "d" },
-    "30d": { label: "30 dias", pontos: 15, intervaloLabel: "d" }
+    "1h":  { label: "1h" },
+    "6h":  { label: "6h" },
+    "24h": { label: "24h" },
+    "7d":  { label: "7d" },
+    "30d": { label: "30d" }
 };
 
-
 const SINAIS = [
-    { id: "oxigenacao", nome: "Oxigenação", cor: "#00c8ff", unidade: "%" },
-    { id: "temperatura", nome: "Temperatura", cor: "#ff9f0a", unidade: "°C" },
-    { id: "batimentos", nome: "Batimentos Cardíacos", cor: "#00ff6a", unidade: "bpm" },
-    { id: "ecg", nome: "Eletrocardiograma", cor: "#00ff6a", unidade: "" }
+    { id: "temperatura", nome: "Temperatura", cor: "#ff9f0a", unidade: "°C", min: 35, max: 40 },
+    { id: "oxigenacao", nome: "Oxigenação", cor: "#00c8ff", unidade: "%", min: 90, max: 100 },
+    { id: "batimentos", nome: "Batimentos", cor: "#ff4b5c", unidade: "bpm", min: 40, max: 180 },
 ];
 
-function gerarDados(periodo, tipo) {
-    const { pontos, intervaloLabel } = PERIODOS[periodo];
-
-    return Array.from({ length: pontos }).map((_, i) => ({
-        tempo:
-            intervaloLabel === "h" ? `${i}h` :
-            intervaloLabel === "d" ? `Dia ${i + 1}` :
-            `${i * 5}min`,
-        valor:
-            tipo === "temperatura"
-                ? 36 + Math.random()
-                : tipo === "oxigenacao"
-                ? 95 + Math.random() * 3
-                : tipo === "batimentos"
-                ? 60 + Math.random() * 20
-                : null
-    }));
-}*/
-
-import { useLoaderData } from "react-router-dom";
-
 export default function HistoricoSinais() {
-
-    const dados = useLoaderData()
-    console.log(dados)
-
-    /*const [indiceSinal, setIndiceSinal] = useState(0);
-    const [periodo, setPeriodo] = useState("24h");
+    // Pegando os dados do SQL vindos do Loader
+    const dadosBrutos = useLoaderData() || [];
+    
+    const [indiceSinal, setIndiceSinal] = useState(0);
+    const [periodoSel, setPeriodoSel] = useState("24h");
 
     const sinalAtual = SINAIS[indiceSinal];
 
-    const dados = useMemo(
-        () => gerarDados(periodo, sinalAtual.id),
-        [periodo, sinalAtual.id]
-    );
+    // Lógica para mapear e filtrar os dados do Backend
+    const dadosFiltrados = useMemo(() => {
+        if (!Array.isArray(dadosBrutos)) return [];
 
-    function anterior() {
-        setIndiceSinal(prev => (prev === 0 ? SINAIS.length - 1 : prev - 1));
-    }
+        return dadosBrutos.map(ponto => ({
+            // Altere 'ponto.hora' ou 'ponto.valor' para o nome exato da coluna no seu SQL
+            tempo: ponto.hora || ponto.data || "---", 
+            valor: ponto[sinalAtual.id] || ponto.valor 
+        }));
+    }, [dadosBrutos, sinalAtual]);
 
-    function proximo() {
-        setIndiceSinal(prev => (prev === SINAIS.length - 1 ? 0 : prev + 1));
-    }*/
+    const proximoSinal = () => setIndiceSinal((prev) => (prev + 1) % SINAIS.length);
+    const anteriorSinal = () => setIndiceSinal((prev) => (prev - 1 + SINAIS.length) % SINAIS.length);
+
+    // Valor mais recente para exibir no topo do card
+    const valorAtual = dadosFiltrados.length > 0 
+        ? dadosFiltrados[dadosFiltrados.length - 1].valor 
+        : "--";
 
     return (
-        <></>
-       /*<section className="historico">
-
-            <header className="historico-header">
-                <button className="historico-nav" onClick={anterior}>◀</button>
-                <h2 className="historico-titulo">{sinalAtual.nome}</h2>
-                <button className="historico-nav" onClick={proximo}>▶</button>
-            </header>
-
-            <div className="historico-periodos">
+        <div className="historico-container">
+            {/* Seletor de Período Superior */}
+            <div className="periodo-selector">
                 {Object.entries(PERIODOS).map(([key, p]) => (
-                    <button
+                    <button 
                         key={key}
-                        className={`historico-periodo-btn ${
-                            periodo === key ? "ativo" : ""
-                        }`}
-                        onClick={() => setPeriodo(key)}
+                        className={periodoSel === key ? "active" : ""}
+                        onClick={() => setPeriodoSel(key)}
                     >
                         {p.label}
                     </button>
                 ))}
             </div>
 
-            <div className="historico-grafico-wrapper">
-                <ResponsiveContainer width="100%" height={320}>
-                    <LineChart data={dados} className="historico-grafico">
-                        <XAxis dataKey="tempo" />
-                        <YAxis />
-                        <Tooltip />
+            {/* Card Carrossel */}
+            <div className="historico-card">
+                <header className="card-header">
+                    <button onClick={anteriorSinal} className="nav-btn">❮</button>
+                    <div className="card-info">
+                        <h3>{sinalAtual.nome}</h3>
+                        <p className="valor-atual">
+                            {valorAtual} 
+                            <span>{sinalAtual.unidade}</span>
+                        </p>
+                    </div>
+                    <button onClick={proximoSinal} className="nav-btn">❯</button>
+                </header>
 
-                        {sinalAtual.id !== "ecg" && (
+                <div className="grafico-area">
+                    <ResponsiveContainer width="100%" height={250}>
+                        {/* Se não houver dados, o gráfico não quebra */}
+                        <LineChart data={dadosFiltrados}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#444" />
+                            <XAxis 
+                                dataKey="tempo" 
+                                stroke="#888" 
+                                fontSize={12} 
+                                tickLine={false} 
+                                axisLine={false} 
+                            />
+                            <YAxis 
+                                hide 
+                                domain={[sinalAtual.min - 2, sinalAtual.max + 2]} 
+                            />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: "#222", border: "none", borderRadius: "8px", color: "#fff" }}
+                                itemStyle={{ color: sinalAtual.cor }}
+                            />
                             <Line
                                 type="monotone"
                                 dataKey="valor"
                                 stroke={sinalAtual.cor}
-                                strokeWidth={2}
-                                dot={false}
+                                strokeWidth={3}
+                                dot={false} // Mantendo limpo para muitos dados
+                                activeDot={{ r: 6 }}
+                                isAnimationActive={true}
+                                animationDuration={500}
                             />
-                        )}
-                    </LineChart>
-                </ResponsiveContainer>
-
-                {sinalAtual.id === "ecg" && (
-                    <span className="historico-ecg-info">
-                        ECG exibido como forma de onda do período selecionado
-                    </span>
-                )}
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
             </div>
 
-        </section>*/
+            {/* Botões de Ação */}
+            <div className="acoes-historico">
+                <button className="btn-export csv" onClick={() => console.log("Dados CSV:", dadosBrutos)}>
+                    📥 Exportar Planilha (CSV)
+                </button>
+                <button className="btn-export pdf" onClick={() => window.print()}>
+                    📄 Gerar Relatório PDF
+                </button>
+            </div>
+        </div>
     );
 }
