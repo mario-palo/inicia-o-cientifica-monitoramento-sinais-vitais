@@ -6,8 +6,7 @@ export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Busca os pacientes cadastrados no banco
-        fetch("http://localhost:8080/usuarios") // Mantenha o endpoint atual ou mude para /pacientes se preferir
+        fetch("http://localhost:8080/pacientes") 
             .then(res => res.json())
             .then(data => {
                 setPacientes(data);
@@ -37,14 +36,12 @@ export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
                                 title={`Monitorar ${p.nome}`}
                             >
                                 <div className="user-avatar">
-                                    {/* Proteção caso o nome venha vazio ou nulo */}
                                     {p.nome ? p.nome[0].toUpperCase() : "?"}
                                 </div>
                                 <span className="user-name">{p.nome}</span>
                             </button>
                         ))}
 
-                        {/* Botão de Novo Cadastro */}
                         <button 
                             className="user-button add-button" 
                             onClick={onNavigateToRegister}

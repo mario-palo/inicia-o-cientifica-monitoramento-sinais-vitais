@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/Principal.css";
-import UserSelector from "../UserSelector.jsx"
+import UserSelector from "../UserSelector.jsx";
+import CadastroPaciente from "../Informacoes/CadastrarPaciente.jsx";
+import { useOutletContext } from "react-router-dom";
 
 import {
     LineChart,
@@ -12,6 +14,11 @@ import {
 } from "recharts";
 
 export default function Principal() {
+
+    const { usuarioAtivo, setUsuarioAtivo } = useOutletContext();
+
+    const [mostrarCadastro, setMostrarCadastro] = useState(false);
+
     const [bpm, setBpm] = useState(null);
     const [temperatura, setTemperatura] = useState(null);
     const [spo2, setSpo2] = useState(null);
@@ -20,39 +27,74 @@ export default function Principal() {
     const [tempPreview, setTempPreview] = useState([]);
     const [spo2Preview, setSpo2Preview] = useState([]);
 
+
+    const handleUserSelect = (u) => {
+        localStorage.setItem("selected_user_id", String(u.id));
+        localStorage.setItem("selected_user_name", u.nome);
+
+        setUsuarioAtivo({
+            id: Number(u.id),
+            nome: u.nome
+        });
+    };
+
+    const handleRegisterSuccess = (novoPaciente) => {
+        localStorage.setItem("selected_user_id", novoPaciente.id);
+        localStorage.setItem("selected_user_name", novoPaciente.nome);
+
+        setUsuarioAtivo(novoPaciente);
+        setMostrarCadastro(false);
+    };
+
+    const trocarPaciente = () => {
+        localStorage.removeItem("selected_user_id");
+        localStorage.removeItem("selected_user_name");
+
+        setUsuarioAtivo(null);
+    };
+
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8080/ws');
+        if (usuarioAtivo === null) return;
+
+        const socket = new WebSocket("ws://localhost:8080/ws");
 
         socket.onopen = () => {
-            console.log("Conectado ao servidor de sinais vitais");
-            socket.send(JSON.stringify({ tipo: "frontend" }));
+            console.log("Conectado ao servidor");
+
+            socket.send(JSON.stringify({
+                tipo: "frontend",
+                pacienteId: usuarioAtivo.id
+            }));
         };
 
         socket.onmessage = (event) => {
             try {
                 const dados = JSON.parse(event.data);
 
+                if (dados.pacienteId && dados.pacienteId !== usuarioAtivo.id) {
+                    return;
+                }
+
                 const agora = new Date();
                 const pontoBase = {
                     id: Date.now(),
-                    hora: agora.toLocaleTimeString("pt-BR", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit"
-                    })
+                    hora: agora.toLocaleTimeString("pt-BR")
                 };
 
-                if (dados.batimento_cardiaco !== undefined) setBpm(dados.batimento_cardiaco);
-                if (dados.temperatura !== undefined) setTemperatura(dados.temperatura);
-                if (dados.oxigenacao !== undefined) setSpo2(dados.oxigenacao);
+                if (dados.batimento_cardiaco !== undefined)
+                    setBpm(dados.batimento_cardiaco);
 
                 if (dados.temperatura !== undefined) {
+                    setTemperatura(dados.temperatura);
+
                     setTempPreview(prev =>
                         [...prev, { ...pontoBase, valor: dados.temperatura }].slice(-12)
                     );
                 }
 
                 if (dados.oxigenacao !== undefined) {
+                    setSpo2(dados.oxigenacao);
+
                     setSpo2Preview(prev =>
                         [...prev, { ...pontoBase, valor: dados.oxigenacao }].slice(-12)
                     );
@@ -65,31 +107,31 @@ export default function Principal() {
                 }
 
             } catch (error) {
-                console.error("Erro ao processar dados do socket:", error);
+                console.error("Erro ao processar dados:", error);
             }
         };
 
         socket.onerror = (error) => {
-            console.error("Erro na conexão WebSocket:", error);
+            console.error("Erro no WebSocket:", error);
         };
 
-        return () => {
-            socket.close();
-        };
-    }, []);
+        return () => socket.close();
 
-const [usuarioAtivo, setUsuarioAtivo] = useState(localStorage.getItem("selected_user_name"));
+    }, [usuarioAtivo]);
 
-const handleUserSelect = (u) => {
-    localStorage.setItem("selected_user_id", u.id);
-    localStorage.setItem("selected_user_name", u.nome);
-    
-    setUsuarioAtivo(u.nome); 
-};
 
-if (!usuarioAtivo) {
-    return <UserSelector onUserSelect={handleUserSelect} />;
-}
+    if (!usuarioAtivo?.id) {
+        return mostrarCadastro ? (
+            <CadastroPaciente onRegister={handleRegisterSuccess} />
+        ) : (
+            <UserSelector
+                onUserSelect={handleUserSelect}
+                onNavigateToRegister={() => setMostrarCadastro(true)}
+            />
+        );
+    }
+
+
     const dadosTemp = tempPreview.map(p => ({
         id: p.id,
         hora: p.hora,
@@ -125,14 +167,12 @@ if (!usuarioAtivo) {
                 </div>
             </Link>
 
-            <Link to="/ecg">
-                <div className="bpm">
-                    <div className="titulo-bpm">BPM</div>
-                    <div className="grafico-bpm">
-                        {bpm ?? "--"}
-                    </div>
+            <div className="bpm">
+                <div className="titulo-bpm">BPM</div>
+                <div className="grafico-bpm">
+                    {bpm ?? "--"}
                 </div>
-            </Link>
+            </div>
 
             <Link to="/temperatura">
                 <div className="temp">

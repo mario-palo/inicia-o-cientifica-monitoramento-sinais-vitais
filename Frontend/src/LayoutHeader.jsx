@@ -3,10 +3,20 @@ import Dock from "./Componentes/Base/Dock"
 import Header from "./Componentes/Base/Header";
 import { VscHome, VscArchive, VscAccount, VscSettingsGear } from "react-icons/vsc"
 import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
 export default function LayoutHeader() {
 
   const navigate = useNavigate();
+
+  const [usuarioAtivo, setUsuarioAtivo] = useState(() => {
+    const id = localStorage.getItem("selected_user_id");
+    const nome = localStorage.getItem("selected_user_name");
+
+    if (!id) return null;
+
+    return { id: Number(id), nome };
+  });
 
   const items = [
     {
@@ -31,14 +41,12 @@ export default function LayoutHeader() {
     },
   ];
 
-
   return (
     <div>
-      <Header />
+      <Header paciente={usuarioAtivo} />
       <Dock items={items} />
-      <div>
-        <Outlet />
-      </div>
+
+      <Outlet context={{ usuarioAtivo, setUsuarioAtivo }} />
     </div>
   )
 }
