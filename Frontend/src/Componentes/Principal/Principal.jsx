@@ -27,6 +27,15 @@ export default function Principal() {
     const [tempPreview, setTempPreview] = useState([]);
     const [spo2Preview, setSpo2Preview] = useState([]);
 
+    useEffect(() => {
+        // Sempre que a página sofrer um reload (F5)
+        localStorage.removeItem("selected_user_id");
+        localStorage.removeItem("selected_user_name");
+
+        // Força o estado do utilizador ativo para nulo
+        setUsuarioAtivo(null);
+    }, []); // [] garante que só executa no carregamento da página
+
 
     const handleUserSelect = (u) => {
         localStorage.setItem("selected_user_id", String(u.id));
@@ -63,15 +72,18 @@ export default function Principal() {
 
             socket.send(JSON.stringify({
                 tipo: "frontend",
-                pacienteId: usuarioAtivo.id
+                paciente_id: usuarioAtivo.id
             }));
         };
 
         socket.onmessage = (event) => {
+            console.log("📨 FRONT RECEBEU:", event.data);
             try {
                 const dados = JSON.parse(event.data);
 
-                if (dados.pacienteId && dados.pacienteId !== usuarioAtivo.id) {
+                const idRecebido = dados.paciente_id || dados.pacienteId;
+
+                if (idRecebido && Number(idRecebido) !== Number(usuarioAtivo.id)) {
                     return;
                 }
 
