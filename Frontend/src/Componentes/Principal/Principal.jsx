@@ -28,13 +28,11 @@ export default function Principal() {
     const [spo2Preview, setSpo2Preview] = useState([]);
 
     useEffect(() => {
-        // Sempre que a página sofrer um reload (F5)
         localStorage.removeItem("selected_user_id");
         localStorage.removeItem("selected_user_name");
 
-        // Força o estado do utilizador ativo para nulo
         setUsuarioAtivo(null);
-    }, []); // [] garante que só executa no carregamento da página
+    }, []);
 
 
     const handleUserSelect = (u) => {
