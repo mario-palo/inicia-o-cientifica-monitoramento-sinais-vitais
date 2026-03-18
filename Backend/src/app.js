@@ -5,21 +5,20 @@ const http = require("http");
 
 const tempRoutes = require("../routes/temperaturaRoutes");
 const authRoutes = require('../routes/authRoutes');
-const usuarioRoutes = require('../routes/usuariosRoutes');
 const pacienteRoutes = require('../routes/pacientesRoutes');
 const historicoRoutes = require('../routes/historicoRoutes')
+const verificacaoRoutes = require('../routes/verificacaoRoutes')
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/pacientes', pacienteRoutes);
-app.use('/usuarios', usuarioRoutes);
 app.use('/auth', authRoutes);
 app.use('/temperatura', tempRoutes);
 app.use('/historico', historicoRoutes);
-
+app.use('/verificacao', verificacaoRoutes)
+app.use('/pacientes', pacienteRoutes);
 
 // 🔹 Criar servidor HTTP
 const server = http.createServer(app);
