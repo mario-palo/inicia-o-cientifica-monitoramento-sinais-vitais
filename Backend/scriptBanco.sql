@@ -1,3 +1,5 @@
+drop database monitoramento;
+
 create database if not exists monitoramento;
 use monitoramento;
 CREATE TABLE usuarios (
@@ -8,6 +10,8 @@ CREATE TABLE usuarios (
   tipo ENUM('MEDICO', 'ENFERMEIRO') NOT NULL,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TABLE IF EXISTS sinais_vitais;
 
 CREATE TABLE pacientes (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -65,8 +69,6 @@ CREATE TABLE pacientes (
   FOREIGN KEY (criado_por) REFERENCES usuarios(id)
 );
 
-DROP TABLE IF EXISTS sinais_vitais;
-
 CREATE TABLE sinais_vitais (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 
@@ -82,6 +84,37 @@ CREATE TABLE sinais_vitais (
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
-    ON DELETE CASCADE
-
+    ON DELETE CASCADE);
+    
+INSERT INTO usuarios (
+  nome,
+  email,
+  senha,
+  tipo
+) VALUES (
+  'Dr. Carlos Silva',
+  'carlos@hospital.com',
+  '$2b$10$hashficticioapenasexemplo',
+  'MEDICO'
 );
+INSERT INTO pacientes (
+  nome,
+  leito,
+  genero,
+  data_nascimento,
+  nome_mae,
+  criado_por
+) VALUES (
+  'João da Silva',
+  'UTI-01',
+  'M',
+  '1990-05-15',
+  'Maria da Silva',
+  1
+);
+
+select * from pacientes;
+
+
+
+
