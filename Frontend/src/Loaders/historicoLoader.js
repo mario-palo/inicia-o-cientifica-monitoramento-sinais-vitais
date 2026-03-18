@@ -1,23 +1,40 @@
 export default async function historicoLoader() {
     const userId = localStorage.getItem("selected_user_id");
 
-    // Se não tiver ID, retorna vazio em vez de tentar o fetch
     if (!userId) {
         console.warn("Loader: Nenhum userId encontrado no localStorage");
         return []; 
     }
 
+    // Criar um intervalo padrão (últimas 24 horas) para a primeira carga
+    const agora = new Date();
+    const ontem = new Date();
+    ontem.setHours(ontem.getHours() - 24);
+
+    // Formatar data: o datetime-local do HTML usa "T", o SQL do seu amigo quer " " (espaço)
+    const formatarParaSQL = (data) => data.toISOString().slice(0, 19).replace('T', ' ');
+    
+    const inicio = formatarParaSQL(ontem);
+    const fim = formatarParaSQL(agora);
+
     try {
-        const response = await fetch(`http://localhost:8080/historico/geral?userId=${userId}`);
+        // AJUSTE NA URL: /geral/:idPaciente?inicio=...&fim=...
+        const url = `http://localhost:8080/historico/geral/${userId}?inicio=${inicio}&fim=${fim}`;
+        console.log("Buscando histórico na URL:", url);
+
+        const response = await fetch(url);
         
         if (!response.ok) {
             console.error(`Erro na API: Status ${response.status}`);
-            return []; // Retorna array vazio em vez de dar throw
+            return []; 
         }
         
-        return await response.json();
+        const dados = await response.json();
+        console.log("Dados recebidos do histórico:", dados.length, "pontos");
+        return dados;
+
     } catch (error) {
         console.error("Erro de conexão com o servidor:", error);
-        return []; // Retorna vazio para o componente não quebrar
+        return []; 
     }
 }

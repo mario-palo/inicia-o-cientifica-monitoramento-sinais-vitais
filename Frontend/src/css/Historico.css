@@ -121,3 +121,21 @@
     width: 100% !important;
     height: 100% !important;
 }
+
+.btn-filtrar {
+    background-color: #00ff6a;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-end; /* Alinha com a parte de baixo dos inputs */
+    margin-bottom: 5px;
+    transition: 0.2s;
+}
+
+.btn-filtrar:hover {
+    background-color: #00cc55;
+    transform: scale(1.05);
+}

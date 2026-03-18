@@ -76,30 +76,78 @@ export default function CadastrarPaciente() {
                 <legend>Informações Básicas</legend>
                 <input name="nome" placeholder="Nome Completo" onChange={handleChange} required />
                 <input name="leito" placeholder="Número do Leito" onChange={handleChange} required />
-                <select name="genero" onChange={handleChange}>
+
+                <select name="genero" onChange={handleChange} required>
+                    <option value="">Selecione o Gênero</option>
                     <option value="M">Masculino</option>
                     <option value="F">Feminino</option>
-                    <option value="Outro">Outro</option>
+                    <option value="O">Outro</option>
                 </select>
+
                 <input type="date" name="dataNascimento" onChange={handleChange} required />
                 <input name="nomeMae" placeholder="Nome da Mãe" onChange={handleChange} required />
+                <input name="nomePai" placeholder="Nome do Pai" onChange={handleChange} />
+            </fieldset>
+
+            <fieldset>
+                <legend>Dados Sociais e Origem</legend>
+                <input name="estadoCivil" placeholder="Estado Civil" onChange={handleChange} />
+                <input name="nacionalidade" placeholder="Nacionalidade" onChange={handleChange} />
+                <input name="naturalidade" placeholder="Naturalidade" onChange={handleChange} />
             </fieldset>
 
             <fieldset>
                 <legend>Documentação e Contato</legend>
                 <input name="cpf" placeholder="CPF" onChange={handleChange} />
                 <input name="cartaoSus" placeholder="Cartão SUS" onChange={handleChange} />
-                <input name="telefone" placeholder="Telefone" onChange={handleChange} />
-                <input name="email" placeholder="E-mail" onChange={handleChange} />
+                <input name="telefone" placeholder="Telefone Principal" onChange={handleChange} />
+                <input name="telefone2" placeholder="Telefone Secundário" onChange={handleChange} />
+                <input name="email" type="email" placeholder="E-mail" onChange={handleChange} />
+                <textarea name="endereco" placeholder="Endereço Completo" onChange={handleChange} />
+            </fieldset>
+
+            <fieldset>
+                <legend>Contatos de Emergência</legend>
+                <input name="contatoEmergencia" placeholder="Nome do Contato de Emergência" onChange={handleChange} />
+                <input name="parentescoEmergencia" placeholder="Parentesco (Ex: Filho, Cônjuge)" onChange={handleChange} />
+            </fieldset>
+
+            <fieldset>
+                <legend>Convênio e Saúde</legend>
+                <select name="tipoSanguineo" onChange={handleChange}>
+                    <option value="">Tipo Sanguíneo</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <input name="convenio" placeholder="Nome do Convênio" onChange={handleChange} />
+                <input name="numeroCarteirinha" placeholder="Nº da Carteirinha" onChange={handleChange} />
             </fieldset>
 
             <fieldset>
                 <legend>Ficha Clínica Inicial</legend>
-                <input name="tipoSanguineo" placeholder="Tipo Sanguíneo" onChange={handleChange} />
                 <textarea name="queixaPrincipal" placeholder="Queixa Principal" onChange={handleChange} />
-                <label>Escala de Dor (0 a 10)</label>
-                <input type="range" min="0" max="10" name="intensidadeDor" onChange={handleChange} />
-                <span>{paciente.intensidadeDor}</span>
+                <textarea name="sintomas" placeholder="Sintomas Detalhados" onChange={handleChange} />
+
+                <label>Início dos Sintomas:</label>
+                <input type="date" name="inicioSintomas" onChange={handleChange} />
+
+                <div className="full-width escala-dor-container">
+                    <label>Escala de Dor (0 a 10): <strong>{paciente.intensidadeDor || 0}</strong></label>
+                    <input
+                        type="range"
+                        min="0"
+                        max="10"
+                        name="intensidadeDor"
+                        value={paciente.intensidadeDor || 0}
+                        onChange={handleChange}
+                    />
+                </div>
             </fieldset>
 
             <button className="btn-salvar" onClick={salvarPaciente}>Finalizar Cadastro</button>

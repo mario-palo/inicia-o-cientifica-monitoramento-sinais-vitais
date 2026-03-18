@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { useLoaderData, useRevalidator } from "react-router-dom"; 
 import {
     ResponsiveContainer,
     AreaChart,
@@ -20,7 +20,12 @@ const SINAIS = [
 
 export default function HistoricoSinais() {
     const dadosBrutos = useLoaderData() || [];
+    const [dadosState, setDadosState] = useState(dadosBrutos);
     const [indiceSinal, setIndiceSinal] = useState(0);
+
+    useEffect(() => {
+        setDadosState(dadosBrutos);
+    }, [dadosBrutos]);
 
     const [dataInicio, setDataInicio] = useState(() => {
         const d = new Date();
@@ -31,28 +36,58 @@ export default function HistoricoSinais() {
 
     const sinalAtual = SINAIS[indiceSinal];
 
+    const filtrarHistorico = async () => {
+        const userId = localStorage.getItem("selected_user_id");
+        if (!userId) return;
+
+        const inicioFormatado = dataInicio.replace("T", " ");
+        const fimFormatado = dataFim.replace("T", " ");
+
+        const rotasPorSinal = {
+            temperatura: "temperatura",
+            oxigenacao: "oxigenacao",
+            batimentos: "batimentos_cardiacos"
+        };
+
+        const endpoint = rotasPorSinal[sinalAtual.id];
+
+        try {
+            const url = `http://localhost:8080/historico/${endpoint}/${userId}?inicio=${inicioFormatado}&fim=${fimFormatado}`;
+            const response = await fetch(url);
+            const dadosSinalUnico = await response.json();
+
+            const dadosNormalizados = dadosSinalUnico.map(p => ({
+                hora: p.data_hora_coleta,
+                [sinalAtual.id]: p.temperatura || p.batimento_cardiaco || p.oxigenacao
+            }));
+
+            setDadosState(dadosNormalizados);
+        } catch (error) {
+            console.error("Erro ao buscar intervalo específico:", error);
+        }
+    };
+
     const dadosFiltrados = useMemo(() => {
-        if (!Array.isArray(dadosBrutos) || dadosBrutos.length === 0) return [];
+        if (!Array.isArray(dadosState) || dadosState.length === 0) return [];
 
-        const inicioTS = new Date(dataInicio).getTime();
-        const fimTS = new Date(dataFim).getTime();
-
-        return dadosBrutos
+        return dadosState
             .map(ponto => ({
                 ...ponto,
                 timestamp: new Date(ponto.hora).getTime(),
                 valor: ponto[sinalAtual.id] !== undefined ? Number(ponto[sinalAtual.id]) : 0,
             }))
-            .filter(ponto => ponto.timestamp >= inicioTS && ponto.timestamp <= fimTS)
             .sort((a, b) => a.timestamp - b.timestamp);
-    }, [dadosBrutos, sinalAtual, dataInicio, dataFim]);
+    }, [dadosState, sinalAtual]);
+
+    useEffect(() => {
+        filtrarHistorico();
+    }, [indiceSinal]);
 
     const proximoSinal = () => setIndiceSinal((prev) => (prev + 1) % SINAIS.length);
     const anteriorSinal = () => setIndiceSinal((prev) => (prev - 1 + SINAIS.length) % SINAIS.length);
 
     return (
         <div className="historico-page">
-
             <div className="historico-container-full">
                 <header className="historico-header">
                     <div className="sinal-navigation">
@@ -78,6 +113,9 @@ export default function HistoricoSinais() {
                             <label>Fim</label>
                             <input type="datetime-local" value={dataFim} onChange={(e) => setDataFim(e.target.value)} />
                         </div>
+                        <button onClick={filtrarHistorico} className="btn-filtrar">
+                            Buscar
+                        </button>
                     </div>
                 </header>
 

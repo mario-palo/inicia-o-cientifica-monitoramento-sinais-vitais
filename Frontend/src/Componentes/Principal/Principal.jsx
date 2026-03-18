@@ -75,9 +75,10 @@ export default function Principal() {
         };
 
         socket.onmessage = (event) => {
-            console.log("📨 FRONT RECEBEU:", event.data);
             try {
                 const dados = JSON.parse(event.data);
+                console.log("ID que chegou do banco:", dados.paciente_id);
+                console.log("ID do paciente que eu selecionei:", usuarioAtivo.id);
 
                 const idRecebido = dados.paciente_id || dados.pacienteId;
 
