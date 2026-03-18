@@ -3,13 +3,28 @@ const historico = require('../models/HistoricoModel');
 module.exports = {
 
     async enviarBatimentos(req, res) {
-        const dados = await historico.listarBatimentos(req.params.idPaciente)
-        res.status(200).json(dados)
+        const {inicio, fim} = req.query
+        if(inicio && fim){
+            const dados = await historico.listarBatimentosIntervalo(req.params.idPaciente, inicio, fim)
+            return res.status(200).json(dados)
+        } else{
+            const dados = await historico.listarBatimentos(req.params.idPaciente)
+            return res.status(200).json(dados)
+        }
+        
     }, 
 
+
     async enviarOxigenacao(req, res) {
-        const dados = await historico.listarOxigenacao(req.params.idPaciente)
-        res.status(200).json(dados)
+        const {inicio, fim} = req.query
+        if (inicio && fim){
+            const dados = await historico.listarOxigenacaoIntervalo(req.params.idPaciente, inicio, fim)
+            return res.status(200).json(dados)
+        } else{
+            const dados = await historico.listarOxigenacao(req.params.idPaciente)
+            return res.status(200).json(dados)
+        }
+        
     },
 
     async enviarGeral(req, res) {
@@ -18,7 +33,15 @@ module.exports = {
     },
 
     async enviarTemperatura(req, res) {
-        const dados = await historico.listarTemperatura(req.params.idPaciente)
-        res.status(200).json(dados)
+        const {inicio, fim} = req.query
+        if (inicio && fim){
+            const dados = await historico.listarTempIntervalo(req.params.idPaciente, inicio, fim)
+            return res.status(200).json(dados)
+        } else {
+            const dados = await historico.listarTemperatura(req.params.idPaciente)
+            return res.status(200).json(dados)
+        }
+        
+        
     },
 }

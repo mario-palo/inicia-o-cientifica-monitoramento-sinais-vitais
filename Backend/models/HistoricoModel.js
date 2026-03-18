@@ -11,6 +11,20 @@ module.exports = {
         }
         
     },
+    async listarTempIntervalo(id, inicio, fim){
+        try{
+        const sql = `SELECT temperatura, data_hora_coleta
+                    FROM sinais_vitais
+                    WHERE paciente_id = ?
+                    AND data_hora_coleta BETWEEN ? AND ?
+                    ORDER BY data_hora_coleta DESC;`
+        const [result] = await db.query(sql, [id, inicio, fim])
+        return result
+
+    } catch(error){
+        console.log(error)
+    }
+    },
 
     async listarBatimentos(id){
         try{
@@ -23,6 +37,22 @@ module.exports = {
        
 
     },
+     async listarBatimentosIntervalo(id, inicio, fim){
+        try{
+        const sql = `SELECT batimento_cardiaco, data_hora_coleta
+                    FROM sinais_vitais
+                    WHERE paciente_id = ?
+                    AND data_hora_coleta BETWEEN ? AND ?
+                    ORDER BY data_hora_coleta DESC;`
+        const [result] = await db.query(sql, [id, inicio, fim])
+        return result
+
+    } catch(error){
+        console.log(error)
+    }
+    },
+
+    
 
     async listarOxigenacao(id){
         try{
@@ -33,6 +63,21 @@ module.exports = {
         console.log(error)
     }
     }, 
+
+     async listarOxigenacaoIntervalo(id, inicio, fim){
+        try{
+        const sql = `SELECT oxigenacao, data_hora_coleta
+                    FROM sinais_vitais
+                    WHERE paciente_id = ?
+                    AND data_hora_coleta BETWEEN ? AND ?
+                    ORDER BY data_hora_coleta DESC;`
+        const [result] = await db.query(sql, [id, inicio, fim])
+        return result
+
+    } catch(error){
+        console.log(error)
+    }
+    },
 
     async listarGeral(id){
 
