@@ -78,6 +78,7 @@ CREATE TABLE sinais_vitais (
   batimento_cardiaco SMALLINT UNSIGNED NOT NULL,
   oxigenacao TINYINT UNSIGNED NOT NULL,
   temperatura DECIMAL(4,1) NOT NULL,
+  ecg int not null,
 
   data_hora_coleta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

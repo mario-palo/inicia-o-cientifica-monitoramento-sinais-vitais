@@ -13,6 +13,12 @@ module.exports = {
     `;
     const [result] = await db.execute(sql, [nome, email, senha, tipo]);
     return result.insertId;
+  }, 
+
+  async login(email, senha){
+    const sql = "select id from usuarios where email = ? and senha = ?"
+    const result = await db.query(sql, [email, senha])
+    return result
   }
     
     

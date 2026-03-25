@@ -79,6 +79,31 @@ module.exports = {
     }
     },
 
+    async listarECG(id){
+        try{
+        const sql = `select ecg, data_hora_coleta from sinais_vitais where paciente_id = ?  order by data_hora_coleta desc`
+        const [result] = await db.query(sql, [id])
+        return result
+    } catch(error){
+        console.log(error)
+    }
+    }, 
+
+     async listarECGIntervalo(id, inicio, fim){
+        try{
+        const sql = `SELECT ecg, data_hora_coleta
+                    FROM sinais_vitais
+                    WHERE paciente_id = ?
+                    AND data_hora_coleta BETWEEN ? AND ?
+                    ORDER BY data_hora_coleta DESC;`
+        const [result] = await db.query(sql, [id, inicio, fim])
+        return result
+
+    } catch(error){
+        console.log(error)
+    }
+    },
+
     async listarGeral(id){
 
          try {

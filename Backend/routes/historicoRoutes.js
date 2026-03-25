@@ -11,5 +11,7 @@ router.get('/oxigenacao/:idPaciente', historicoController.enviarOxigenacao);
 
 router.get('/geral/:idPaciente', historicoController.enviarGeral);
 
+router.get("/ecg/:idPaciente", historicoController.enviarECG)
+
 
 module.exports = router;

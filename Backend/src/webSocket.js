@@ -32,8 +32,8 @@ module.exports = function (server) {
             return;
           }
 
-          const sql = `INSERT INTO sinais_vitais (paciente_id, dispositivo_id, batimento_cardiaco, oxigenacao, temperatura) VALUES (?, ?, ?, ?, ?)`;
-          const values = [dados.paciente_id, dados.dispositivo_id, dados.batimento_cardiaco, dados.oxigenacao, dados.temperatura];
+          const sql = `INSERT INTO sinais_vitais (paciente_id, dispositivo_id, batimento_cardiaco, oxigenacao, temperatura, ecg) VALUES (?, ?, ?, ?, ?, ?)`;
+          const values = [dados.paciente_id, dados.dispositivo_id, dados.batimento_cardiaco, dados.oxigenacao, dados.temperatura, dados.ecg_valor];
           await db.execute(sql, values);
 
           wss.clients.forEach((client) => {

@@ -27,6 +27,17 @@ module.exports = {
         
     },
 
+    async enviarECG(req, res){
+        const {inicio, fim} = req.query
+        if (inicio && fim){
+            const dados = await historico.listarECGIntervalo(req.params.idPaciente, inicio, fim)
+            return res.status(200).json(dados)
+        } else{
+            const dados = await historico.listarECG(req.params.idPaciente)
+            return res.status(200).json(dados)
+        }
+    },
+
     async enviarGeral(req, res) {
        const dados = await historico.listarGeral(req.params.idPaciente)
        res.status(200).json(dados)
