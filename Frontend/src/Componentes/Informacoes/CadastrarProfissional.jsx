@@ -1,14 +1,16 @@
 import { useState } from "react";
 import "../../css/CadastrarProfissional.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // 1. Importe o useNavigate
 
 export default function CadastrarProfissional() {
+    const navigate = useNavigate(); // 2. Inicialize o hook
 
     const [profissional, setProfissional] = useState({
         nome: "",
-        tipo: "", // Médico, Enfermeiro, Técnico etc
+        tipo: "",
         email: "",
-        senha:""
+        senha: ""
     });
 
     function handleChange(e) {
@@ -19,44 +21,43 @@ export default function CadastrarProfissional() {
         }));
     }
 
-   async function salvarProfissional() {
-        if(profissional.nome && profissional.tipo && profissional.email && profissional.senha){
-             try{
-            const resposta = await axios.post(
-                "http://localhost:8080/auth/register",
-                {   
-                    nome: profissional.nome,
-                    tipo: profissional.tipo,
-                    email: profissional.email,
-                    senha: profissional.senha
-                }
-            );
+    async function salvarProfissional() {
+        if (profissional.nome && profissional.tipo && profissional.email && profissional.senha) {
+            try {
+                const resposta = await axios.post(
+                    "http://localhost:8080/auth/register",
+                    {
+                        nome: profissional.nome,
+                        tipo: profissional.tipo,
+                        email: profissional.email,
+                        senha: profissional.senha
+                    }
+                );
 
-            // exemplo de resposta do backend
-            if(resposta.data.erro === "Email já cadastrado"){
-                alert("email ja cadastrado")
+                if (resposta.data.erro === "Email já cadastrado") {
+                    alert("E-mail já cadastrado");
+                    return; // Interrompe a execução
+                }
+
+                if (resposta.data.mensagem === "Usuário criado com sucesso") {
+                    navigate(-1); 
+                } else {
+                    alert("Erro ao criar usuário");
+                }
             }
-            if (resposta.data.mensagem === "Usuário criado com sucesso") {
-                alert("usuario criado com succeso")
-            } else {
-                alert("erro ao criar usuário")
+            catch (erro) {
+                console.log(erro);
+                alert("Erro de conexão com o servidor");
             }
-        } 
-        catch(erro){
-            console.log(erro)
-        }
         } else {
-            alert("dados faltantes")
+            alert("Dados faltantes");
         }
-       
     }
 
     return (
         <div className="cadastro-profissional">
-
             <h2>Cadastrar Profissional</h2>
 
-            {/* IDENTIFICAÇÃO */}
             <fieldset>
                 <legend>Identificação</legend>
 
@@ -70,7 +71,7 @@ export default function CadastrarProfissional() {
                     <option value="Medico">Médico</option>
                     <option value="Enfermeiro">Enfermeiro</option>
                 </select>
-                 <input
+                <input
                     name="email"
                     placeholder="E-mail"
                     onChange={handleChange}
@@ -78,18 +79,16 @@ export default function CadastrarProfissional() {
 
                 <input
                     name="senha"
+                    type="password" // Mudei para password por segurança
                     placeholder="Senha"
                     onChange={handleChange}
                 />
-
             </fieldset>
-
-
 
             <button onClick={salvarProfissional}>
                 Salvar Profissional
             </button>
-
+            
         </div>
     );
 }

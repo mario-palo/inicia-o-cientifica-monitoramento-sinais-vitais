@@ -3,87 +3,120 @@
     width: 100vw;
     background-color: #000;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    align-items: center;
     font-family: 'Inter', sans-serif;
+    color: #fff;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
 }
 
 .acesso {
-    color: #ffffff;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 40px;
-    opacity: 0.8;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #fff;
 }
 
-/* container dos inputs */
+.subtexto {
+    font-size: 0.85rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
 label {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    color: #888;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
     margin-bottom: 25px;
+    width: 100%;
 }
 
-/* inputs */
 .input-codigo {
     background: transparent;
     border: none;
-    border-bottom: 2px solid #ffffff;
-    color: #ffffff;
-    font-size: 2rem;
-    text-align: center;
-    width: 220px;
+    border-bottom: 1px solid #333;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 10px 0;
+    width: 100%;
     outline: none;
     transition: all 0.3s ease;
-    margin-top: 8px;
+    text-align: left;
 }
 
 .input-codigo:focus {
-    border-bottom-color: #888;
-    transform: scale(1.05);
+    border-bottom-color: #fff;
 }
 
 .input-codigo::placeholder {
-    color: #333;
+    color: #222;
 }
 
-/* botão */
 .buttonEnviar {
-    margin-top: 20px;
-    padding: 10px 30px;
-    background: transparent;
-    border: 1px solid #ffffff;
-    color: #ffffff;
-    font-size: 0.8rem;
+    background: #fff;
+    border: 1px solid #fff;
+    color: #000;
+    padding: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
 .buttonEnviar:hover {
-    background-color: #ffffff;
-    color: #000;
-    transform: scale(1.05);
+    background: transparent;
+    color: #fff;
 }
 
-.buttonEnviar:active {
-    transform: scale(0.98);
+.divisor {
+    margin: 30px 0;
+    border: 0;
+    border-top: 1px solid #222;
+    width: 100%;
 }
 
-/* erro */
+.texto-cadastro {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.buttonCadastrarProf {
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.buttonCadastrarProf:hover {
+    border-color: #fff;
+}
+
 .erro {
     color: #ff4d4d;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    text-align: center;
     margin-top: 15px;
-    letter-spacing: 1px;
-    opacity: 0.9;
 }

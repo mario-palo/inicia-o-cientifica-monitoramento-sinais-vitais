@@ -25,23 +25,35 @@ const router = createBrowserRouter([
     path: "/",
     element: <LayoutHeader />,
     children: [
-      { path: "/", element: <Principal /> },
+      { index: true, element: <Principal /> },
       { path: "ecg", element: <Eletrocardio /> },
       { path: "temperatura", element: <Temperatura /> },
       { path: "oxigenacao", element: <Oxigenacao /> },
-      { path: "historico", loader: historicoLoader, element: <VerificadorDeCodigo><Historico /></VerificadorDeCodigo> },
+      { 
+        path: "historico", 
+        loader: historicoLoader, 
+        element: <VerificadorDeCodigo><Historico /></VerificadorDeCodigo> 
+      },
     ],
   },
-
   {
     path: "/",
     element: <LayoutSemHeader />,
     children: [
-      { path: "paciente/:id", element: <VerificadorDeCodigo><Paciente /></VerificadorDeCodigo> },
-      { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
+      { 
+        path: "paciente/:id", 
+        element: <VerificadorDeCodigo><Paciente /></VerificadorDeCodigo> 
+      },
+      { 
+        path: "editarPaciente/:id", 
+        element: <VerificadorDeCodigo><EditarPaciente /></VerificadorDeCodigo> 
+      },
+      { 
+        path: "verPacientes", 
+        element: <VerificadorDeCodigo><VerPacientes /></VerificadorDeCodigo> 
+      },
       { path: "cadastrarProfissional", element: <CadastrarProfissional /> },
-      { path: "verPacientes", element: <VerPacientes /> },
-      { path: "editarPaciente/:id", element: <EditarPaciente /> },
+      { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
       { path: "config", element: <Configuracoes /> }
     ],
   }

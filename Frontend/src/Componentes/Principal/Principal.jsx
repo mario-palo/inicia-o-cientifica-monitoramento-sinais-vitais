@@ -181,12 +181,14 @@ export default function Principal() {
                 </div>
             </Link>
 
+<Link to="/ecg">
             <div className="bpm">
                 <div className="titulo-bpm">BPM</div>
                 <div className="grafico-bpm">
                     {bpm ?? "--"}
                 </div>
             </div>
+</Link>
 
             <Link to="/temperatura">
                 <div className="temp">
