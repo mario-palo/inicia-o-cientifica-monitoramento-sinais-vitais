@@ -10,12 +10,13 @@
     top: 0;
     left: 0;
     right: 0;
-    padding: 0 20px;
+    padding: 0 40px; /* Aumentei um pouco o respiro lateral */
     box-sizing: border-box;
     margin: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background-color: #080808; /* Importante ter fundo para não ficar transparente */
+    z-index: 1000; /* Garante que fique acima de tudo */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
-
 .header-esquerda {
   display: flex;
   align-items: center;

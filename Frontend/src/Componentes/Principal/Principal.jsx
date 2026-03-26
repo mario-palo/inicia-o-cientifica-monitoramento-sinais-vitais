@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "../../css/Principal.css";
 import UserSelector from "../UserSelector.jsx";
@@ -26,14 +26,14 @@ export default function Principal() {
     const [ecgPreview, setEcgPreview] = useState([]);
     const [tempPreview, setTempPreview] = useState([]);
     const [spo2Preview, setSpo2Preview] = useState([]);
+    
+    // Mudança: isPaused e isPausedRef para o WebSocket enxergar a mudança
+    const [isPaused, setIsPaused] = useState(false);
+    const isPausedRef = useRef(isPaused);
 
     useEffect(() => {
-        localStorage.removeItem("selected_user_id");
-        localStorage.removeItem("selected_user_name");
-
-        setUsuarioAtivo(null);
-    }, []);
-
+        isPausedRef.current = isPaused;
+    }, [isPaused]);
 
     const handleUserSelect = (u) => {
         localStorage.setItem("selected_user_id", String(u.id));
@@ -53,13 +53,6 @@ export default function Principal() {
         setMostrarCadastro(false);
     };
 
-    const trocarPaciente = () => {
-        localStorage.removeItem("selected_user_id");
-        localStorage.removeItem("selected_user_name");
-
-        setUsuarioAtivo(null);
-    };
-
     useEffect(() => {
         if (usuarioAtivo === null) return;
 
@@ -76,9 +69,10 @@ export default function Principal() {
 
         socket.onmessage = (event) => {
             try {
+                // Mudança: Verificação do pause usando a Ref
+                if (isPausedRef.current) return;
+
                 const dados = JSON.parse(event.data);
-                console.log("ID que chegou do banco:", dados.paciente_id);
-                console.log("ID do paciente que eu selecionei:", usuarioAtivo.id);
 
                 const idRecebido = dados.paciente_id || dados.pacienteId;
 
@@ -157,6 +151,15 @@ export default function Principal() {
 
     return (
         <div className="container-principal">
+
+            <div className="controles-flutuantes">
+                <button 
+                    className={`btn-pause ${isPaused ? 'pausado' : ''}`} 
+                    onClick={() => setIsPaused(!isPaused)}
+                >
+                    {isPaused ? "▶" : "⏸"}
+                </button>
+            </div>
 
             <Link to="/ecg">
                 <div className="ecg">

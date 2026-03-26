@@ -1,0 +1,145 @@
+.config-page {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #080808;
+    padding: 120px 20px 40px 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.config-container {
+    width: 100%;
+    max-width: 800px;
+    background: #121212;
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid #1f1f1f;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.config-header h1 {
+    color: #fff;
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+}
+
+.config-header p {
+    color: #666;
+    margin: 0;
+}
+
+.config-section h2 {
+    color: #888;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1f1f1f;
+    padding-bottom: 10px;
+}
+
+/* Card de Perfil */
+.perfil-card {
+    display: flex;
+    align-items: center;
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 18px;
+    gap: 20px;
+    border: 1px solid #252525;
+}
+
+.perfil-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff5f6d, #ffc371); /* Gradiente similar ao da imagem */
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.perfil-info {
+    flex: 1;
+}
+
+.perfil-info h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.perfil-info p {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Botões */
+.btn-trocar {
+    background: #222;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-trocar:hover {
+    background: #333;
+    border-color: #444;
+}
+
+.config-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.item-text h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.item-text p {
+    margin: 5px 0 0 0;
+    color: #555;
+    font-size: 0.85rem;
+}
+
+.btn-danger {
+    background: transparent;
+    color: #ff4444;
+    border: 1px solid #ff444433;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-danger:hover {
+    background: #ff4444;
+    color: #000;
+}
+
+.btn-voltar {
+    width: 100%;
+    padding: 15px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}

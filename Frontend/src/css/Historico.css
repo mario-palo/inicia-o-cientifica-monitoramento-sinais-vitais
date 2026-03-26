@@ -2,10 +2,12 @@
     width: 100%;
     min-height: 100vh;
     background-color: #080808;
-    padding: 110px 20px 40px 20px;
+    padding: 110px 20px 40px 20px; /* 110px é suficiente para descer do header de 70px */
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     box-sizing: border-box;
+    overflow-x: hidden; /* Evita scroll lateral por erro de cálculo */
 }
 
 .historico-container-full {
@@ -16,44 +18,78 @@
     padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px; 
     border: 1px solid #1f1f1f;
-    min-height: 750px;
     box-sizing: border-box;
-    position: relative;
 }
+
+/* Header: Título e Filtros */
 .historico-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Mudado para center para alinhar botões e filtros */
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 10px;
-    position: relative; 
-    z-index: 10;   
-    background: #121212; 
+    gap: 20px;
+    width: 100%;
+}
+/* Lado Esquerdo: Botão < | Temperatura | Botão > */
+.sinal-navigation {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre as setas e o bloco de texto */
 }
 
+.sinal-info-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sinal-info-main h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.display-valor {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.display-valor .numero {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.display-valor .unidade {
+    font-size: 1.2rem;
+    color: #777;
+    font-weight: 600;
+}
+
+/* Lado Direito: Filtros de Data */
 .date-picker-group {
     display: flex;
-    gap: 15px;
+    align-items: flex-end;
+    gap: 12px;
     background: #1a1a1a;
-    padding: 15px;
+    padding: 12px 18px;
     border-radius: 18px;
     border: 1px solid #252525;
-    position: relative;
-    z-index: 11;
 }
 
 .input-field {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
 
 .input-field label {
-    font-size: 0.75rem;
-    color: #777;
+    font-size: 0.65rem;
+    color: #888;
     text-transform: uppercase;
     font-weight: bold;
 }
@@ -62,80 +98,221 @@
     background: #000;
     border: 1px solid #333;
     color: #fff;
-    padding: 8px;
+    padding: 8px 12px;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 0.85rem;
     outline: none;
 }
 
 .input-field input:focus {
-    border-color: #555;
+    border-color: #00ff6a;
+}
+
+/* Botão de Busca */
+.btn-filtrar {
+    background-color: #00ff6a;
+    color: #000;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 40px; /* Definido altura fixa para alinhar com os inputs */
+}
+
+.btn-filtrar:hover {
+    background-color: #00cc55;
+    transform: translateY(-2px);
 }
 
 .grafico-wrapper {
-    flex: 1;
     width: 100%;
+    height: 450px; 
     background: #0a0a0a;
     border-radius: 20px;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #181818;
     position: relative;
-    overflow: hidden;
-    z-index: 1;  
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 }
 
-/* Ajustes de tipografia e botões */
-.display-valor .numero { font-size: 3rem; font-weight: 800; }
-.nav-btn-large { 
-    background: #1f1f1f; width: 45px; height: 45px; 
-    border-radius: 12px; border: 1px solid #333; color: #fff; cursor: pointer;
-    position: relative;
-    z-index: 12;
-}
-
+/* Footer e Ações */
 .historico-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    z-index: 10;
-}
-
-.amostras-label { color: #555; font-size: 0.9rem; }
-
-.acoes { display: flex; gap: 10px; }
-.btn-action {
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-}
-.btn-action.primary { background: #fff; color: #000; }
-.btn-action.secondary { background: #1f1f1f; color: #fff; border: 1px solid #333; }
-
-.recharts-responsive-container {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
 }
 
 .btn-filtrar {
     background-color: #00ff6a;
     color: #000;
     border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
-    align-self: flex-end; /* Alinha com a parte de baixo dos inputs */
-    margin-bottom: 5px;
+    height: 38px;
+}
+
+.amostras-label {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.acoes {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-action {
+    padding: 12px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
     transition: 0.2s;
 }
 
-.btn-filtrar:hover {
-    background-color: #00cc55;
-    transform: scale(1.05);
+.btn-action.primary {
+    background: #fff;
+    color: #000;
+}
+
+.btn-action.primary:hover {
+    background: #e0e0e0;
+}
+
+.btn-action.secondary {
+    background: #1f1f1f;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+.btn-action.secondary:hover {
+    background: #2a2a2a;
+}
+
+.nav-btn-large {
+    background: #1f1f1f;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-btn-large:hover {
+    background: #252525;
+    border-color: #444;
+}
+
+/* Ajuste específico para Recharts */
+.recharts-responsive-container {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Container que abraça o gráfico e a lista */
+.conteudo-visual {
+    display: flex;
+    gap: 20px;
+    flex: 1; /* Ocupa o espaço entre header e footer */
+    min-height: 450px;
+}
+
+/* Ajuste no wrapper do gráfico para não ocupar tudo sozinho */
+.grafico-wrapper {
+    flex: 3; /* Proporção maior para o gráfico */
+    background: #0a0a0a;
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #181818;
+    position: relative;
+}
+
+/* Estilo da Lista Lateral */
+.lista-medicoes-lateral {
+    flex: 1; /* Proporção menor para a lista */
+    background: #0a0a0a;
+    border-radius: 20px;
+    border: 1px solid #181818;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px; /* Mesma altura que o gráfico geralmente tem */
+}
+
+.lista-header {
+    padding: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #888;
+    border-bottom: 1px solid #181818;
+    text-align: center;
+}
+
+.lista-scroll {
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px;
+}
+
+/* Custom Scrollbar para combinar com o tema dark */
+.lista-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.lista-scroll::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.item-medicao {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #151515;
+    font-size: 0.85rem;
+}
+
+.item-data {
+    color: #666;
+}
+
+.item-valor {
+    font-weight: bold;
+}
+
+.btn-carregar-mais {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed #333;
+    color: #888;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-carregar-mais:hover {
+    border-color: #555;
+    color: #fff;
+    background: #111;
+}
+
+/* Responsividade: em telas pequenas, a lista vai para baixo do gráfico */
+@media (max-width: 900px) {
+    .conteudo-visual {
+        flex-direction: column;
+    }
 }
