@@ -1,25 +1,14 @@
 import { useState } from "react";
 import "../../css/CadastrarProfissional.css";
+import axios from "axios";
 
 export default function CadastrarProfissional() {
 
     const [profissional, setProfissional] = useState({
         nome: "",
-        sexo: "",
-        dataNascimento: "",
-        cpf: "",
-        rg: "",
-
         tipo: "", // Médico, Enfermeiro, Técnico etc
-        registroConselho: "", // CRM, COREN...
-        ufRegistro: "",
-        especialidade: "",
-
-        telefone: "",
         email: "",
-
-        turno: "",
-        observacoes: ""
+        senha:""
     });
 
     function handleChange(e) {
@@ -30,9 +19,36 @@ export default function CadastrarProfissional() {
         }));
     }
 
-    function salvarProfissional() {
-        console.log("Profissional cadastrado:", profissional);
-        alert("Profissional cadastrado com sucesso!");
+   async function salvarProfissional() {
+        if(profissional.nome && profissional.tipo && profissional.email && profissional.senha){
+             try{
+            const resposta = await axios.post(
+                "http://localhost:8080/auth/register",
+                {   
+                    nome: profissional.nome,
+                    tipo: profissional.tipo,
+                    email: profissional.email,
+                    senha: profissional.senha
+                }
+            );
+
+            // exemplo de resposta do backend
+            if(resposta.data.erro === "Email já cadastrado"){
+                alert("email ja cadastrado")
+            }
+            if (resposta.data.mensagem === "Usuário criado com sucesso") {
+                alert("usuario criado com succeso")
+            } else {
+                alert("erro ao criar usuário")
+            }
+        } 
+        catch(erro){
+            console.log(erro)
+        }
+        } else {
+            alert("dados faltantes")
+        }
+       
     }
 
     return (
@@ -49,99 +65,26 @@ export default function CadastrarProfissional() {
                     placeholder="Nome completo"
                     onChange={handleChange}
                 />
-
-                <select name="sexo" onChange={handleChange}>
-                    <option value="">Sexo</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Feminino">Feminino</option>
-                    <option value="Outro">Outro</option>
-                </select>
-
-                <input
-                    type="date"
-                    name="dataNascimento"
-                    onChange={handleChange}
-                />
-
-                <input
-                    name="cpf"
-                    placeholder="CPF"
-                    onChange={handleChange}
-                />
-
-                <input
-                    name="rg"
-                    placeholder="RG"
-                    onChange={handleChange}
-                />
-            </fieldset>
-
-            {/* DADOS PROFISSIONAIS */}
-            <fieldset>
-                <legend>Dados Profissionais</legend>
-
                 <select name="tipo" onChange={handleChange}>
                     <option value="">Tipo de profissional</option>
                     <option value="Medico">Médico</option>
                     <option value="Enfermeiro">Enfermeiro</option>
-                    <option value="Tecnico">Técnico</option>
-                    <option value="Outro">Outro</option>
                 </select>
-
-                <input
-                    name="registroConselho"
-                    placeholder="Registro profissional (CRM / COREN)"
-                    onChange={handleChange}
-                />
-
-                <input
-                    name="ufRegistro"
-                    placeholder="UF do registro"
-                    onChange={handleChange}
-                />
-
-                <input
-                    name="especialidade"
-                    placeholder="Especialidade"
-                    onChange={handleChange}
-                />
-            </fieldset>
-
-            {/* CONTATO */}
-            <fieldset>
-                <legend>Contato</legend>
-
-                <input
-                    name="telefone"
-                    placeholder="Telefone"
-                    onChange={handleChange}
-                />
-
-                <input
+                 <input
                     name="email"
                     placeholder="E-mail"
                     onChange={handleChange}
                 />
-            </fieldset>
 
-            {/* INFORMAÇÕES INTERNAS */}
-            <fieldset>
-                <legend>Informações Internas</legend>
-
-                <select name="turno" onChange={handleChange}>
-                    <option value="">Turno</option>
-                    <option value="Manhã">Manhã</option>
-                    <option value="Tarde">Tarde</option>
-                    <option value="Noite">Noite</option>
-                    <option value="Integral">Integral</option>
-                </select>
-
-                <textarea
-                    name="observacoes"
-                    placeholder="Observações internas"
+                <input
+                    name="senha"
+                    placeholder="Senha"
                     onChange={handleChange}
                 />
+
             </fieldset>
+
+
 
             <button onClick={salvarProfissional}>
                 Salvar Profissional

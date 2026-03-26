@@ -5,6 +5,6 @@ const authController = require('../controllers/authController');
 
 // cadastro
 router.post('/register', authController.registrar);
-router.get('/login', authController.login)
+router.post('/login', authController.login)
 
 module.exports = router;

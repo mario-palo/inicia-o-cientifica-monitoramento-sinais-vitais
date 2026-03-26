@@ -11,7 +11,7 @@ module.exports = {
     const user = await CriarModel.BuscarCadastro(email)
 
     if (user[0]) {
-      return res.status(400).json({ erro: "Email já cadastrado" });
+      return res.json({ erro: "Email já cadastrado" });
     }
 
 
@@ -32,7 +32,7 @@ module.exports = {
     const result = await CriarModel.login(email, senha)
 
     if(result[0].length == 0){
-      return res.status(404).json({ erro: "Usuário não encontrado" })
+      return res.json({ autorizacao: false })
     }
 
     res.status(200).json({
