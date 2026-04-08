@@ -6,7 +6,7 @@ import axios from "axios";
 export default function PaginaPaciente() {
     const [menuAberto, setMenuAberto] = useState(false);
     const [paciente, setPaciente] = useState(null);
-    const [carregando, setCarregando] = useState(true); // Começa como true para evitar mensagens de erro precoces
+    const [carregando, setCarregando] = useState(true);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -14,14 +14,13 @@ export default function PaginaPaciente() {
         async function buscarPaciente() {
             try {
                 setCarregando(true);
-                // Busca os dados do paciente pelo ID da URL
+
                 const resposta = await axios.get(`http://localhost:8080/pacientes/${id}`);
                 setPaciente(resposta.data);
             } catch (error) {
                 console.error("Erro ao buscar paciente:", error);
                 setPaciente(null);
             } finally {
-                // SÓ FINALIZA o carregamento após a resposta (sucesso ou erro)
                 setCarregando(false);
             }
         }
@@ -31,9 +30,6 @@ export default function PaginaPaciente() {
         }
     }, [id]);
 
-    // LÓGICA DE RENDERIZAÇÃO CRÍTICA:
-    
-    // 1º Enquanto o axios não responde, mostra apenas o carregamento
     if (carregando) {
         return (
             <div className="loading-container">
@@ -43,7 +39,6 @@ export default function PaginaPaciente() {
         );
     }
 
-    // 2º Se terminou de carregar e não encontrou o paciente, mostra o erro
     if (!paciente) {
         return (
             <div className="error-container">
@@ -55,8 +50,6 @@ export default function PaginaPaciente() {
             </div>
         );
     }
-
-    // 3º Se chegou aqui, o paciente existe e os dados estão prontos
     const excluirPaciente = async () => {
         const confirmar = window.confirm("Tem certeza que deseja excluir este prontuário? Esta ação não pode ser desfeita.");
 
@@ -64,7 +57,7 @@ export default function PaginaPaciente() {
             try {
                 await axios.delete(`http://localhost:8080/pacientes/${id}`);
                 alert("Paciente excluído com sucesso!");
-                navigate('/'); // Volta para a tela principal (UserSelector)
+                navigate('/');
             } catch (error) {
                 console.error(error);
                 alert("Erro ao excluir o paciente.");
