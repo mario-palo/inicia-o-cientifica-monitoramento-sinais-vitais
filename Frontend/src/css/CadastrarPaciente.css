@@ -1,144 +1,236 @@
-.cadastro-paciente {
-    max-width: 1100px;
-    margin: 80px auto 40px auto;
-    padding: 20px;
-    color: #fff;
-    font-family: system-ui, sans-serif;
-}
 
-.cadastro-paciente h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 28px;
-    color: #00ff6a;
-}
-
-.cadastro-paciente fieldset {
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 30px;
-    background: rgba(255, 255, 255, 0.02);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 15px;
+* {
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #1f2937 #06090c;
 }
 
-.cadastro-paciente legend {
-    padding: 0 10px;
-    font-weight: bold;
-    font-size: 16px;
-    color: #2ad4ff;
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
-.cadastro-paciente input,
-.cadastro-paciente select,
-.cadastro-paciente textarea {
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background: #0d0d0d;
-    color: #fff;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-    outline: none;
+::-webkit-scrollbar-track {
+    background: #06090c;
 }
 
-.cadastro-paciente textarea,
-.cadastro-paciente .full-width {
-    grid-column: 1 / -1;
-}
-
-.cadastro-paciente textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.cadastro-paciente input:disabled {
-    background: #1a1a1a;
-    color: #aaa;
-    cursor: not-allowed;
-}
-
-.cadastro-paciente input:focus,
-.cadastro-paciente select:focus,
-.cadastro-paciente textarea:focus {
-    border-color: #00ff6a;
-    box-shadow: 0 0 0 2px rgba(0, 255, 106, 0.2);
-}
-
-.cadastro-paciente label {
-    font-size: 13px;
-    color: #ccc;
-    margin-top: 10px;
-    display: block;
-}
-
-.cadastro-paciente input[type="range"] {
-    cursor: pointer;
-}
-
-.cadastro-paciente button {
-    width: 100%;
-    padding: 15px;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    font-size: 16px;
-    font-weight: bold;
+::-webkit-scrollbar-thumb {
+    background: #1f2937;
     border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(135deg, #00ff6a, #00c853);
-    color: #000;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.cadastro-paciente button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 255, 106, 0.4);
+::-webkit-scrollbar-thumb:hover {
+    background: #00ff6a;
 }
 
-.full-width {
-    grid-column: 1 / -1;
+.cadastro-screen {
+    min-height: 100vh;
+    background-color: #06090c;
+    padding: 80px 40px 40px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
 }
 
-.escala-dor-container {
+.cadastro-content {
+    width: 100%;
+    max-width: 1100px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 10px 0;
+    gap: 25px;
+    padding-bottom: 120px;
 }
 
-.escala-dor-container label {
-    margin-top: 0;
-    font-size: 14px;
-    color: #2ad4ff;
+.cadastro-header {
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 15px;
 }
 
-.escala-dor-container label strong {
+.cadastro-header h1 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin: 5px 0 0 0;
+    letter-spacing: -1px;
+}
+
+.badge-system {
+    font-size: 9px;
+    font-weight: 900;
     color: #00ff6a;
-    font-size: 18px;
-    margin-left: 5px;
+    background: rgba(0, 255, 106, 0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+    width: fit-content;
+    letter-spacing: 2px;
 }
 
-.cadastro-paciente input[type="range"] {
-    appearance: none;
-    -webkit-appearance: none;
-    height: 8px;
-    background: #333;
-    border-radius: 5px;
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.cadastro-section {
+    background: #000;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width { grid-column: 1 / -1; }
+
+.cadastro-section legend {
+    padding: 0 0 15px 0;
+    font-weight: 800;
+    font-size: 10px;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.input-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.input-group.triple { grid-template-columns: repeat(3, 1fr); }
+
+input, select, textarea {
+    background: #0a0f14;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #00ff6a;
+    background: #0d141b;
+    box-shadow: 0 0 15px rgba(0, 255, 106, 0.05);
+}
+
+.clinical-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: none;
+    line-height: 1.5;
+}
+
+.clinica-footer {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: #0a0f14;
+    padding: 15px;
+    border-radius: 10px;
+    align-items: center;
+    margin-top: 5px;
+    border: 1px solid #1f2937;
+}
+
+.date-input label, .dor-label span {
+    font-size: 9px;
+    font-weight: 900;
+    color: #4b5563;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.dor-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dor-label strong {
+    color: #00ff6a;
+    font-size: 14px;
+}
+
+.btn-finalizar {
+    background: #fff;
+    color: #000;
     border: none;
-    padding: 0;
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    transition: 0.3s;
 }
 
-.cadastro-paciente input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
+.btn-finalizar:hover {
     background: #00ff6a;
+    transform: translateY(-2px);
+}
+
+.side-menu-container {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    z-index: 100;
+}
+
+.menu-toggle-btn {
+    background: #0a0f14;
+    border: 1px solid #1f2937;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 255, 106, 0.5);
+}
+
+.floating-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: #000;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    width: 200px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    overflow: hidden;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.menu-item:hover, .menu-item.active {
+    background: rgba(0, 255, 106, 0.05);
+    color: #00ff6a;
 }

@@ -1,49 +1,105 @@
 .header-app {
     width: 100%;
-    height: 70px; 
+    height: 75px; 
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #fff;
-    font-family: system-ui, sans-serif;
+    font-family: 'Inter', sans-serif;
     position: fixed; 
     top: 0;
     left: 0;
-    right: 0;
     padding: 0 40px; 
     box-sizing: border-box;
-    margin: 0;
-    background-color: #080808; 
+    background-color: rgba(6, 9, 12, 0.7); 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     z-index: 1000; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .header-esquerda {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #00ff6a;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ff6a;
+    animation: pulse-status 2s infinite;
+}
+
+.label-header {
+    display: block;
+    font-size: 9px;
+    font-weight: 900;
+    color: #4b5563;
+    letter-spacing: 1.5px;
+    margin-bottom: 2px;
 }
 
 .nome-paciente {
-  font-size: 1.4rem;
-  font-weight: 600;
-  white-space: nowrap; 
+    font-size: 1.2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.5px;
 }
 
 .header-direita {
-  display: flex;
-  align-items: center;
-  gap: 25px; 
+    display: flex;
+    align-items: center;
+    gap: 30px; 
+}
+
+.icon-header {
+    color: #4b5563;
+}
+
+.icon-header.neon-text {
+    color: #00ff6a;
 }
 
 .leito {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #dddddd;
-  white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.divisor-header {
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .hora {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #ffffff;
-  white-space: nowrap;
+    font-size: 1.3rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-variant-numeric: tabular-nums; 
+}
+
+@keyframes pulse-status {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+    .header-app {
+        padding: 0 20px;
+    }
+    .leito-wrapper, .divisor-header {
+        display: none;
+    }
 }

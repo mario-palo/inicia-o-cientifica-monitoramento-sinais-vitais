@@ -1,11 +1,12 @@
 import { useState } from "react";
-import "../../css/CadastrarProfissional.css";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { ShieldPlus, Users, UserPlus, Menu, X, Save, Fingerprint, Mail, Lock, UserCog } from "lucide-react";
+import "../../css/CadastrarProfissional.css";
 
 export default function CadastrarProfissional() {
     const navigate = useNavigate();
-
+    const [menuAberto, setMenuAberto] = useState(false);
     const [profissional, setProfissional] = useState({
         nome: "",
         tipo: "",
@@ -13,82 +14,120 @@ export default function CadastrarProfissional() {
         senha: ""
     });
 
-    function handleChange(e) {
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setProfissional(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    }
+        setProfissional(prev => ({ ...prev, [name]: value }));
+    };
 
-    async function salvarProfissional() {
-        if (profissional.nome && profissional.tipo && profissional.email && profissional.senha) {
-            try {
-                const resposta = await axios.post(
-                    "http://localhost:8080/auth/register",
-                    {
-                        nome: profissional.nome,
-                        tipo: profissional.tipo,
-                        email: profissional.email,
-                        senha: profissional.senha
-                    }
-                );
+    const salvarProfissional = async () => {
+        const { nome, tipo, email, senha } = profissional;
 
-                if (resposta.data.erro === "Email já cadastrado") {
-                    alert("E-mail já cadastrado");
-                    return;
-                }
-
-                if (resposta.data.mensagem === "Usuário criado com sucesso") {
-                    navigate(-1); 
-                } else {
-                    alert("Erro ao criar usuário");
-                }
-            }
-            catch (erro) {
-                console.log(erro);
-                alert("Erro de conexão com o servidor");
-            }
-        } else {
-            alert("Dados faltantes");
+        if (!nome || !tipo || !email || !senha) {
+            return alert("Por favor, preencha todos os campos.");
         }
-    }
+
+        try {
+            const { data } = await axios.post("http://localhost:8080/auth/register", {
+                nome, tipo, email, senha
+            });
+
+            if (data.erro === "Email já cadastrado") {
+                return alert("Este e-mail já está em uso.");
+            }
+
+            if (data.mensagem === "Usuário criado com sucesso") {
+                alert("Acesso profissional liberado!");
+                navigate(-1); 
+            } else {
+                alert("Erro ao criar credenciais.");
+            }
+        } catch (erro) {
+            alert(erro.response?.data?.error || "Erro de conexão com o servidor de autenticação");
+        }
+    };
 
     return (
-        <div className="cadastro-profissional">
-            <h2>Cadastrar Profissional</h2>
+        <div className="cadastro-screen">
+            <div className="side-menu-container">
+                <button className="menu-toggle-btn" onClick={() => setMenuAberto(!menuAberto)}>
+                    {menuAberto ? <X size={24} /> : <Menu size={24} />}
+                </button>
+                {menuAberto && (
+                    <div className="floating-menu">
+                        <Link to="/verPacientes" className="menu-item">
+                            <Users size={18} />
+                            <span>Ver Pacientes</span>
+                        </Link>
+                        <Link to="/cadastrarPaciente" className="menu-item">
+                            <UserPlus size={18} />
+                            <span>Cadastrar Paciente</span>
+                        </Link>
+                        <Link to="/cadastrarProfissional" className="menu-item active">
+                            <ShieldPlus size={18} />
+                            <span>Cadastrar Profissional</span>
+                        </Link>
+                    </div>
+                )}
+            </div>
 
-            <fieldset>
-                <legend>Identificação</legend>
+            <div className="cadastro-content narrow">
+                <header className="cadastro-header">
+                    <div className="badge-system">ACESSO RESTRITO</div>
+                    <h1>GERENCIAMENTO DE PROFISSIONAIS</h1>
+                </header>
 
-                <input
-                    name="nome"
-                    placeholder="Nome completo"
-                    onChange={handleChange}
-                />
-                <select name="tipo" onChange={handleChange}>
-                    <option value="">Tipo de profissional</option>
-                    <option value="Medico">Médico</option>
-                    <option value="Enfermeiro">Enfermeiro</option>
-                </select>
-                <input
-                    name="email"
-                    placeholder="E-mail"
-                    onChange={handleChange}
-                />
+                <div className="form-container-pro">
+                    <fieldset className="cadastro-section">
+                        <legend><Fingerprint size={16} /> CREDENCIAIS DE SEGURANÇA</legend>
+                        
+                        <div className="pro-input-wrapper">
+                            <UserCog className="input-icon" size={18} />
+                            <input
+                                name="nome"
+                                placeholder="NOME COMPLETO DO PROFISSIONAL"
+                                onChange={handleChange}
+                                value={profissional.nome}
+                            />
+                        </div>
 
-                <input
-                    name="senha"
-                    type="password"
-                    placeholder="Senha"
-                    onChange={handleChange}
-                />
-            </fieldset>
+                        <div className="pro-input-wrapper">
+                            <ShieldPlus className="input-icon" size={18} />
+                            <select name="tipo" onChange={handleChange} value={profissional.tipo}>
+                                <option value="">TIPO DE ATUAÇÃO</option>
+                                <option value="Medico">MÉDICO(A)</option>
+                                <option value="Enfermeiro">ENFERMEIRO(A)</option>
+                                <option value="Tecnico">TÉCNICO(A) DE ENFERMAGEM</option>
+                            </select>
+                        </div>
 
-            <button onClick={salvarProfissional}>
-                Salvar Profissional
-            </button>
-            
+                        <div className="pro-input-wrapper">
+                            <Mail className="input-icon" size={18} />
+                            <input
+                                name="email"
+                                type="email"
+                                placeholder="E-MAIL CORPORATIVO"
+                                onChange={handleChange}
+                                value={profissional.email}
+                            />
+                        </div>
+
+                        <div className="pro-input-wrapper">
+                            <Lock className="input-icon" size={18} />
+                            <input
+                                name="senha"
+                                type="password"
+                                placeholder="SENHA DE ACESSO"
+                                onChange={handleChange}
+                                value={profissional.senha}
+                            />
+                        </div>
+                    </fieldset>
+
+                    <button className="btn-finalizar pro" onClick={salvarProfissional}>
+                        <Save size={18} /> VALIDAR E CADASTRAR ACESSO
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

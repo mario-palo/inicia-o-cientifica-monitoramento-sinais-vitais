@@ -1,22 +1,15 @@
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color: white;       
-  background-color: black; 
-  
+  color: white;
+  background-color: black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  background-color: black;
-  color: white;
-  
   min-width: 320px;
   min-height: 100vh;
 }
@@ -24,7 +17,9 @@ body {
 a {
   color: #7aa0ff;
   text-decoration: none;
+  transition: color 0.25s;
 }
+
 a:hover {
   color: #a7beff;
 }
@@ -37,9 +32,11 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
+  color: inherit;
   cursor: pointer;
   transition: 0.25s;
 }
+
 button:hover {
   border-color: #7aa0ff;
 }

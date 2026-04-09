@@ -1,65 +1,38 @@
-import { useState, useEffect } from "react";
-import "../../css/Paciente.css";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { User, Calendar, Fingerprint, Phone, Heart, MapPin, Edit3, Trash2, Activity, AlertCircle, Menu, X, Users, UserPlus, ShieldPlus } from "lucide-react";
+import "../../css/Paciente.css";
 
 export default function PaginaPaciente() {
-    const [menuAberto, setMenuAberto] = useState(false);
     const [paciente, setPaciente] = useState(null);
     const [carregando, setCarregando] = useState(true);
+    const [menuAberto, setMenuAberto] = useState(false);
     const { id } = useParams();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        async function buscarPaciente() {
-            try {
-                setCarregando(true);
-
-                const resposta = await axios.get(`http://localhost:8080/pacientes/${id}`);
-                setPaciente(resposta.data);
-            } catch (error) {
-                console.error("Erro ao buscar paciente:", error);
-                setPaciente(null);
-            } finally {
-                setCarregando(false);
-            }
-        }
-
-        if (id) {
-            buscarPaciente();
+    const buscarPaciente = useCallback(async () => {
+        try {
+            setCarregando(true);
+            const { data } = await axios.get(`http://localhost:8080/pacientes/${id}`);
+            setPaciente(data);
+        } catch (error) {
+            setPaciente(null);
+        } finally {
+            setCarregando(false);
         }
     }, [id]);
 
-    if (carregando) {
-        return (
-            <div className="loading-container">
-                <div className="spinner"></div>
-                <p>Carregando dados do monitoramento...</p>
-            </div>
-        );
-    }
+    useEffect(() => {
+        if (id) buscarPaciente();
+    }, [id, buscarPaciente]);
 
-    if (!paciente) {
-        return (
-            <div className="error-container">
-                <h2>Ops! Paciente não encontrado.</h2>
-                <p>O prontuário solicitado não existe ou foi removido.</p>
-                <button onClick={() => navigate('/')} className="btn-voltar">
-                    Voltar para Início
-                </button>
-            </div>
-        );
-    }
     const excluirPaciente = async () => {
-        const confirmar = window.confirm("Tem certeza que deseja excluir este prontuário? Esta ação não pode ser desfeita.");
-
-        if (confirmar) {
+        if (window.confirm("Tem certeza que deseja excluir este prontuário? Esta ação não pode ser desfeita.")) {
             try {
                 await axios.delete(`http://localhost:8080/pacientes/${id}`);
-                alert("Paciente excluído com sucesso!");
                 navigate('/');
             } catch (error) {
-                console.error(error);
                 alert("Erro ao excluir o paciente.");
             }
         }
@@ -67,106 +40,131 @@ export default function PaginaPaciente() {
 
     const calcularIdade = (dataNascimento) => {
         if (!dataNascimento) return "N/A";
-        const hoje = new Date();
         const nascimento = new Date(dataNascimento);
+        const hoje = new Date();
         let idade = hoje.getFullYear() - nascimento.getFullYear();
-        const mes = hoje.getMonth() - nascimento.getMonth();
-        if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-            idade--;
-        }
+        const m = hoje.getMonth() - nascimento.getMonth();
+        if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) idade--;
         return idade;
     };
 
-    return (
-        <div className="paciente-page">
-            <div className="paciente-menu">
-                <button
-                    className="menu-btn"
-                    onClick={() => setMenuAberto(!menuAberto)}
-                >
-                    ☰
-                </button>
+    if (carregando) {
+        return (
+            <div className="status-container">
+                <div className="loader"></div>
+                <p>Sincronizando prontuário...</p>
+            </div>
+        );
+    }
 
+    if (!paciente) {
+        return (
+            <div className="status-container">
+                <AlertCircle size={48} color="#ef4444" />
+                <h2>PRONTUÁRIO NÃO LOCALIZADO</h2>
+                <button onClick={() => navigate('/')} className="btn-action primary">VOLTAR AO INÍCIO</button>
+            </div>
+        );
+    }
+
+    return (
+        <div className="paciente-screen">
+            <div className="side-menu-container">
+                <button className="menu-toggle-btn" onClick={() => setMenuAberto(!menuAberto)}>
+                    {menuAberto ? <X size={24} /> : <Menu size={24} />}
+                </button>
+                
                 {menuAberto && (
-                    <div className="menu-dropdown">
-                        <Link to="/verPacientes"><button>Ver pacientes</button></Link>
-                        <Link to="/cadastrarPaciente"><button>Cadastrar Paciente</button></Link>
-                        <Link to="/cadastrarProfissional"><button>Cadastrar profissional</button></Link>
+                    <div className="floating-menu">
+                        <Link to="/verPacientes" className="menu-item">
+                            <Users size={18} />
+                            <span>Ver Pacientes</span>
+                        </Link>
+                        <Link to="/cadastrarPaciente" className="menu-item">
+                            <UserPlus size={18} />
+                            <span>Cadastrar Paciente</span>
+                        </Link>
+                        <Link to="/cadastrarProfissional" className="menu-item">
+                            <ShieldPlus size={18} />
+                            <span>Cadastrar Profissional</span>
+                        </Link>
                     </div>
                 )}
             </div>
 
-            <header className="paciente-header">
-                <div className="paciente-foto" />
-                <div className="paciente-header-info">
-                    <h2 className="paciente-nome">{paciente.nome}</h2>
-                    <span className="paciente-dados-sec">
-                        {calcularIdade(paciente.data_nascimento)} anos • CPF {paciente.cpf}
-                    </span>
-                </div>
-            </header>
-
-            <div className="paciente-grid">
-                <div className="paciente-card">
-                    <h3>Identificação</h3>
-                    <div className="paciente-info">
-                        <span>Nome social</span><p>{paciente.nome_social || "—"}</p>
-                        <span>Gênero</span><p>{paciente.genero === 'M' ? 'Masculino' : paciente.genero === 'F' ? 'Feminino' : 'Outro'}</p>
-                        <span>Nascimento</span><p>{paciente.data_nascimento}</p>
-                        <span>CPF</span><p>{paciente.cpf || "—"}</p>
-                        <span>Cartão SUS</span><p>{paciente.cartao_sus || "—"}</p>
-                        <span>Estado civil</span><p>{paciente.estado_civil || "—"}</p>
-                        <span>Nacionalidade</span><p>{paciente.nacionalidade || "—"}</p>
-                        <span>Naturalidade</span><p>{paciente.naturalidade || "—"}</p>
+            <div className="paciente-content">
+                <header className="paciente-hero">
+                    <div className="hero-avatar">
+                        <User size={50} strokeWidth={1} />
                     </div>
-                </div>
-
-                <div className="paciente-card">
-                    <h3>Filiação</h3>
-                    <div className="paciente-info">
-                        <span>Mãe</span><p>{paciente.nome_mae}</p>
-                        <span>Pai</span><p>{paciente.nome_pai || "—"}</p>
+                    <div className="hero-details">
+                        <div className="badge-status">PRONTUÁRIO ATIVO</div>
+                        <h1>{paciente.nome.toUpperCase()}</h1>
+                        <div className="hero-meta">
+                            <span><Calendar size={14} /> {calcularIdade(paciente.data_nascimento)} ANOS</span>
+                            <span><Fingerprint size={14} /> CPF: {paciente.cpf || "NÃO INFORMADO"}</span>
+                        </div>
                     </div>
+                </header>
+
+                <div className="info-grid">
+                    <section className="info-card">
+                        <div className="card-header"><Activity size={16} /> IDENTIFICAÇÃO BIOMÉTRICA</div>
+                        <div className="card-body">
+                            <div className="data-row"><span>GÊNERO</span><p>{paciente.genero === 'M' ? 'MASCULINO' : 'FEMININO'}</p></div>
+                            <div className="data-row"><span>NASCIMENTO</span><p>{new Date(paciente.data_nascimento).toLocaleDateString('pt-BR')}</p></div>
+                            <div className="data-row"><span>CARTÃO SUS</span><p>{paciente.cartao_sus || "—"}</p></div>
+                            <div className="data-row"><span>ESTADO CIVIL</span><p>{paciente.estado_civil || "—"}</p></div>
+                        </div>
+                    </section>
+
+                    <section className="info-card destaque">
+                        <div className="card-header"><Heart size={16} /> RESUMO CLÍNICO</div>
+                        <div className="card-body">
+                            <div className="clinical-item">
+                                <span>QUEIXA PRINCIPAL</span>
+                                <p>{paciente.queixa_principal || "NENHUMA QUEIXA REGISTRADA."}</p>
+                            </div>
+                            <div className="pain-scale">
+                                <span>NÍVEL DE DOR</span>
+                                <div className="pain-bar">
+                                    <div className={`pain-fill ${paciente.dor_escala > 7 ? 'critical' : ''}`} style={{ width: `${paciente.dor_escala * 10}%` }}></div>
+                                </div>
+                                <p>{paciente.dor_escala}/10</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="info-card">
+                        <div className="card-header"><Phone size={16} /> FILIAÇÃO E CONTATO</div>
+                        <div className="card-body">
+                            <div className="data-row"><span>MÃE</span><p>{paciente.nome_mae.toUpperCase()}</p></div>
+                            <div className="data-row"><span>TELEFONE</span><p>{paciente.telefone || "—"}</p></div>
+                            <div className="data-row"><span>EMERGÊNCIA</span><p>{paciente.contato_emergencia}</p></div>
+                        </div>
+                    </section>
+
+                    <section className="info-card">
+                        <div className="card-header"><MapPin size={16} /> LOCALIZAÇÃO</div>
+                        <div className="card-body">
+                            <div className="clinical-item">
+                                <span>ENDEREÇO RESIDENCIAL</span>
+                                <p>{paciente.endereco?.toUpperCase() || "NÃO CADASTRADO."}</p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
-                <div className="paciente-card">
-                    <h3>Contato</h3>
-                    <div className="paciente-info">
-                        <span>Telefone</span><p>{paciente.telefone || "—"}</p>
-                        <span>Email</span><p>{paciente.email || "—"}</p>
-                        <span>Emergência</span><p>{paciente.contato_emergencia || "—"}</p>
-                        <span>Parentesco</span><p>{paciente.parentesco_emergencia || "—"}</p>
-                    </div>
-                </div>
-
-                <div className="paciente-card">
-                    <h3>Endereço</h3>
-                    <p className="paciente-texto">{paciente.endereco || "Não cadastrado."}</p>
-                </div>
-
-                <div className="paciente-card">
-                    <h3>Ficha Clínica</h3>
-                    <div className="paciente-info">
-                        <span>Queixa</span><p>{paciente.queixa_principal || "—"}</p>
-                        <span>Sintomas</span><p>{paciente.sintomas || "—"}</p>
-                        <span>Dor Escala</span>
-                        <p style={{ color: paciente.dor_escala > 7 ? "red" : "inherit", fontWeight: "bold" }}>
-                            {paciente.dor_escala}/10
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div className="paciente-acoes">
-                <Link to={`/editarPaciente/${paciente.id}`}>
-                    <button className="btn-editar">Editar Informações</button>
-                </Link>
-                <button
-                    onClick={excluirPaciente}
-                    className="btn-excluir"
-                >
-                    Excluir Paciente
-                </button>
+                <footer className="footer-actions">
+                    <button onClick={excluirPaciente} className="btn-action danger">
+                        <Trash2 size={16} /> EXCLUIR PRONTUÁRIO
+                    </button>
+                    <Link to={`/editarPaciente/${paciente.id}`}>
+                        <button className="btn-action primary">
+                            <Edit3 size={16} /> EDITAR INFORMAÇÕES
+                        </button>
+                    </Link>
+                </footer>
             </div>
         </div>
     );

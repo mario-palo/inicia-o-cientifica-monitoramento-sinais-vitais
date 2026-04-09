@@ -1,12 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 
 import LayoutHeader from "./LayoutHeader.jsx";
 import LayoutSemHeader from "./LayoutSemHeader.jsx";
 import Principal from "./Componentes/Principal/Principal.jsx";
-
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Temperatura from './Componentes/Principal/Temperatura.jsx';
 import Eletrocardio from './Componentes/Principal/Eletrocardiograma.jsx';
 import Oxigenacao from './Componentes/Principal/Oxigenacao.jsx';
@@ -17,8 +16,8 @@ import Paciente from './Componentes/Informacoes/Paciente.jsx';
 import VerPacientes from './Componentes/Informacoes/VerPacientes.jsx';
 import VerificadorDeCodigo from './Componentes/Informacoes/VerificadorDeCodigo.jsx';
 import EditarPaciente from './Componentes/Informacoes/EditarPaciente.jsx';
-import historicoLoader from "./Loaders/historicoLoader";
 import Configuracoes from './Componentes/Configurações/Configuracoes.jsx';
+import historicoLoader from "./Loaders/historicoLoader";
 
 const router = createBrowserRouter([
   {
@@ -62,5 +61,5 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </StrictMode>
 );

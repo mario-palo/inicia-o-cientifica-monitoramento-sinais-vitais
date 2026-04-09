@@ -1,89 +1,125 @@
-
 .oxigenacao-page {
     height: calc(100vh - 70px);
-    padding: 30px 40px;
+    padding: 40px;
     box-sizing: border-box;
     color: #fff;
-    background: #000;
+    background: #06090c;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2.5fr 1fr;
     gap: 40px;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow: hidden;
 }
 
 .oxigenacao-main {
-    margin-top: 70px;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-}
-
-.oxigenacao-main h1 {
-    margin: 0 0 20px 0;
-    font-size: 22px;
-    font-weight: bold;
-    color: #2AD4FF;
-    letter-spacing: 1px;
-}
-
-.oxigenacao-grafico {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: #0a0a0a; 
-    border-radius: 8px;
-    padding: 10px;
-}
-
-.oxigenacao-grafico p {
-    color: #2AD4FF;
-    opacity: 0.7;
-}
-
-.oxigenacao-valor {
-    margin-top: 20px;
-    font-size: 96px;
-    font-weight: bold;
-    color: #2AD4FF;
-}
-
-.oxigenacao-valor span.unidade {
-    font-size: 24px;
-    color: #666;
-    margin-left: 10px;
-}
-
-.oxigenacao-atualizacao {
-    font-size: 14px;
-    color: #ccc;
-    margin-top: 5px;
-}
-
-.oxigenacao-historico {
-    margin-top: 70px;
-    padding-left: 30px;
-    border-left: 1px solid #222; 
     display: flex;
     flex-direction: column;
 }
 
-.oxigenacao-historico h2 {
-    margin: 0 0 20px 0;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: right;
-    color: #fff;
+.oxi-vitals-titulo {
+    margin: 0 0 25px 0;
+    font-size: 14px;
+    font-weight: 800;
+    color: #2ad4ff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.oxi-vitals-grafico-area {
+    background: #000;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #1f2937;
+    position: relative;
+    background-image: 
+        linear-gradient(rgba(42, 212, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 212, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.oxi-vitals-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    padding: 20px 0;
+}
+
+.oxi-vitals-valor-display {
+    font-size: 110px;
+    font-weight: 900;
+    color: #2ad4ff;
+    line-height: 1;
+    letter-spacing: -4px;
+    transition: color 0.3s ease;
+}
+
+.oxi-vitals-valor-display.critico {
+    color: #ff4d4d;
+    text-shadow: 0 0 30px rgba(255, 77, 77, 0.4);
+}
+
+.oxi-vitals-valor-display .unidade {
+    font-size: 20px;
+    color: #4b5563;
+    letter-spacing: 2px;
+    margin-left: 10px;
+}
+
+.oxi-vitals-update-tag {
+    font-size: 12px;
+    color: #6b7280;
+    letter-spacing: 1px;
     text-transform: uppercase;
 }
 
-.oxigenacao-historico p {
-    margin: 0;
-    padding: 12px 0; 
-    font-size: 14px;
+.oxi-vitals-sidebar {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    border: 1px solid #1f2937;
+    padding: 24px;
     display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #111;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.oxigenacao-historico span {
-    color: #2AD4FF;
-    font-weight: bold;
+.oxi-vitals-sidebar h2 {
+    margin: 0 0 20px 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
+
+.oxi-vitals-list {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 8px;
+}
+
+.oxi-vitals-item {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.oxi-vitals-item:last-child { border: none; }
+
+.oxi-vitals-item .valor-num {
+    color: #2ad4ff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.oxi-vitals-item .time-label {
+    color: #4b5563;
+    font-size: 12px;
+}
+
+.oxi-vitals-list::-webkit-scrollbar { width: 4px; }
+.oxi-vitals-list::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }

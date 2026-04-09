@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
     LineChart,
     Line,
@@ -19,37 +19,44 @@ export default function Eletrocardiograma() {
         const socket = new WebSocket('ws://localhost:8080/ws');
 
         socket.onopen = () => {
-            console.log("Conectado ao ECG");
             socket.send(JSON.stringify({ tipo: "frontend" }));
         };
 
         socket.onmessage = (event) => {
-            const dados = JSON.parse(event.data);
+            try {
+                const dados = JSON.parse(event.data);
 
-            if (dados.batimento_cardiaco !== undefined) {
-                const agora = new Date();
-                const novoDado = {
-                    id: Date.now(),
-                    valor: dados.batimento_cardiaco,
-                    data: agora.toLocaleDateString("pt-BR"),
-                    hora: agora.toLocaleTimeString("pt-BR", {
+                if (dados.batimento_cardiaco !== undefined) {
+                    const agora = new Date();
+                    const horaFormatada = agora.toLocaleTimeString("pt-BR", {
                         hour: "2-digit",
                         minute: "2-digit",
                         second: "2-digit"
-                    })
-                };
+                    });
 
-                setBatimentoAtual(novoDado.valor);
-                setUltimaAtualizacao(novoDado.hora);
-                setHistorico(prev => [novoDado, ...prev].slice(0, 20));
+                    const novoDado = {
+                        id: Date.now(),
+                        valor: dados.batimento_cardiaco,
+                        hora: horaFormatada
+                    };
+
+                    setBatimentoAtual(novoDado.valor);
+                    setUltimaAtualizacao(novoDado.hora);
+                    setHistorico(prev => [novoDado, ...prev].slice(0, 20));
+                }
+            } catch (e) {
+                return;
             }
         };
 
-        socket.onerror = (error) => console.error("Erro WebSocket ECG:", error);
-        return () => socket.close();
+        return () => {
+            if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) {
+                socket.close();
+            }
+        };
     }, []);
 
-    const dadosGrafico = [...historico].reverse();
+    const dadosGrafico = useMemo(() => [...historico].reverse(), [historico]);
 
     return (
         <div className="ecg-page">
@@ -63,29 +70,32 @@ export default function Eletrocardiograma() {
                             <XAxis 
                                 dataKey="hora" 
                                 stroke="#666" 
-                                fontSize={12}
+                                fontSize={10}
                                 tickLine={false}
+                                axisLine={false}
+                                interval="preserveStartEnd"
                             />
                             <YAxis 
-                                domain={['dataMin - 10', 'dataMax + 10']} 
+                                domain={['dataMin - 5', 'dataMax + 5']} 
                                 stroke="#666" 
                                 fontSize={12}
                                 tickLine={false}
+                                axisLine={false}
                                 allowDecimals={false}
                             />
                             <Tooltip 
-                                contentStyle={{ backgroundColor: '#111', border: '1px solid #00ff6a' }}
-                                itemStyle={{ color: '#00FF00' }}
+                                contentStyle={{ backgroundColor: '#0b0f14', border: '1px solid #00ff6a', borderRadius: '8px' }}
+                                itemStyle={{ color: '#00ff6a' }}
                                 labelStyle={{ color: '#fff' }}
                                 formatter={(value) => [`${value} BPM`, "Frequência"]}
                             />
                             <Line
                                 type="monotone"
                                 dataKey="valor"
-                                stroke="#00FF00"
+                                stroke="#00ff6a"
                                 strokeWidth={3}
-                                dot={{ r: 4, fill: "#00FF00", strokeWidth: 2 }}
-                                activeDot={{ r: 6 }}
+                                dot={{ r: 3, fill: "#00ff6a", strokeWidth: 0 }}
+                                activeDot={{ r: 5, strokeWidth: 0 }}
                                 isAnimationActive={false}
                             />
                         </LineChart>
@@ -93,27 +103,30 @@ export default function Eletrocardiograma() {
                 </div>
 
                 <div className="ecg-info-footer">
-                    <div className="ecg-valor-grande">
+                    <div className={`ecg-valor-grande ${batimentoAtual > 100 || batimentoAtual < 60 ? 'alerta' : ''}`}>
                         {batimentoAtual ?? "--"} <span className="unidade">BPM</span>
                     </div>
                     <div className="ecg-atualizacao">
-                        ÚLTIMA ATUALIZAÇÃO: {ultimaAtualizacao ?? "--"}
+                        SINAL ATIVO: {ultimaAtualizacao ?? "AGUARDANDO..."}
                     </div>
                 </div>
             </div>
 
-            <div className="ecg-historico">
-                <h2>ÚLTIMAS MEDIÇÕES</h2>
+            <aside className="ecg-historico">
+                <h2>HISTÓRICO RECENTE</h2>
                 <div className="historico-lista">
-                    {historico.length === 0 && <p className="waiting">Aguardando sinal...</p>}
-                    {historico.map((item) => (
-                        <div key={item.id} className="historico-item">
-                            <span className="timestamp">{item.hora}</span>
-                            <span className="valor">{item.valor} BPM</span>
-                        </div>
-                    ))}
+                    {historico.length === 0 ? (
+                        <p className="waiting">Buscando telemetria...</p>
+                    ) : (
+                        historico.map((item) => (
+                            <div key={item.id} className="historico-item">
+                                <span className="timestamp">{item.hora}</span>
+                                <span className="valor">{item.valor} BPM</span>
+                            </div>
+                        ))
+                    )}
                 </div>
-            </div>
+            </aside>
         </div>
     );
 }

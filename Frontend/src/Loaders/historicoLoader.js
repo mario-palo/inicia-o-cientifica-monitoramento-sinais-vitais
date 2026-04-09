@@ -2,36 +2,31 @@ export default async function historicoLoader() {
     const userId = localStorage.getItem("selected_user_id");
 
     if (!userId) {
-        console.warn("Loader: Nenhum userId encontrado no localStorage");
-        return []; 
+        return [];
     }
 
     const agora = new Date();
-    const ontem = new Date();
-    ontem.setHours(ontem.getHours() - 24);
+    const ontem = new Date(agora);
+    ontem.setDate(ontem.getDate() - 1);
 
     const formatarParaSQL = (data) => data.toISOString().slice(0, 19).replace('T', ' ');
-    
+
     const inicio = formatarParaSQL(ontem);
     const fim = formatarParaSQL(agora);
 
     try {
-        const url = `http://localhost:8080/historico/geral/${userId}?inicio=${inicio}&fim=${fim}`;
-        console.log("Buscando histórico na URL:", url);
+        const params = new URLSearchParams({ inicio, fim });
+        const url = `http://localhost:8080/historico/geral/${userId}?${params.toString()}`;
 
         const response = await fetch(url);
-        
-        if (!response.ok) {
-            console.error(`Erro na API: Status ${response.status}`);
-            return []; 
-        }
-        
-        const dados = await response.json();
-        console.log("Dados recebidos do histórico:", dados.length, "pontos");
-        return dados;
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
     } catch (error) {
-        console.error("Erro de conexão com o servidor:", error);
-        return []; 
+        console.error("Erro ao carregar histórico:", error);
+        return [];
     }
 }

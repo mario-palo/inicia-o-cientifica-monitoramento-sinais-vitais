@@ -1,177 +1,283 @@
 .historico-page {
     width: 100%;
     min-height: 100vh;
-    background-color: #080808;
-    padding: 110px 20px 40px 20px; 
+    background-color: #06090c;
+    padding: 100px 30px 40px;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     box-sizing: border-box;
-    overflow-x: hidden;
+    font-family: 'Inter', sans-serif;
 }
 
 .historico-container-full {
     width: 100%;
-    max-width: 1200px;
-    background: #121212;
-    border-radius: 24px;
-    padding: 30px;
+    max-width: 1400px;
+    background: #000;
+    border-radius: 16px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 25px; 
-    border: 1px solid #1f1f1f;
+    gap: 30px;
+    border: 1px solid #1f2937;
     box-sizing: border-box;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 .historico-header {
     display: flex;
     justify-content: space-between;
-    align-items: center; 
+    align-items: flex-end;
     flex-wrap: wrap;
-    gap: 20px;
-    width: 100%;
+    gap: 30px;
 }
 
 .sinal-navigation {
     display: flex;
     align-items: center;
-    gap: 15px; 
+    gap: 25px;
 }
 
-.sinal-info-main {
+.nav-btn-circle {
+    background: #000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #1f2937;
+    color: #fff;
+    cursor: pointer;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.nav-btn-circle:hover {
+    border-color: #4b5563;
+    background: #111;
+}
+
+.sinal-info-main .label-top {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #4b5563;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .sinal-info-main h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: 900;
     color: #fff;
-    line-height: 1.2;
+    letter-spacing: -1px;
 }
 
 .display-valor {
     display: flex;
     align-items: baseline;
-    gap: 5px;
+    gap: 8px;
+    margin-top: 5px;
 }
 
 .display-valor .numero {
-    font-size: 3rem;
-    font-weight: 800;
-    line-height: 1;
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -3px;
 }
 
 .display-valor .unidade {
     font-size: 1.2rem;
-    color: #777;
-    font-weight: 600;
+    color: #4b5563;
+    font-weight: 800;
 }
 
 .date-picker-group {
     display: flex;
     align-items: flex-end;
-    gap: 12px;
-    background: #1a1a1a;
-    padding: 12px 18px;
-    border-radius: 18px;
-    border: 1px solid #252525;
-}
-
-.input-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    gap: 15px;
+    background: #0a0f14;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #1f2937;
 }
 
 .input-field label {
-    font-size: 0.65rem;
-    color: #888;
+    font-size: 10px;
+    color: #6b7280;
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: block;
 }
 
 .input-field input {
     background: #000;
-    border: 1px solid #333;
+    border: 1px solid #1f2937;
     color: #fff;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 0.85rem;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
     outline: none;
+    transition: border-color 0.2s;
 }
 
 .input-field input:focus {
-    border-color: #00ff6a;
+    border-color: #3b82f6;
 }
 
 .btn-filtrar {
-    background-color: #00ff6a;
+    background-color: #fff;
     color: #000;
     border: none;
-    padding: 11px 20px;
-    border-radius: 10px;
-    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 900;
+    font-size: 11px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    height: 40px; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 42px;
+    transition: 0.2s;
 }
 
 .btn-filtrar:hover {
-    background-color: #00cc55;
+    background-color: #d1d5db;
     transform: translateY(-2px);
 }
 
-.grafico-wrapper {
-    width: 100%;
-    height: 450px; 
-    background: #0a0a0a;
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid #181818;
-    position: relative;
+.conteudo-visual {
     display: flex;
+    gap: 30px;
+    min-height: 500px;
+}
+
+.grafico-wrapper {
+    flex: 3;
+    background: #06090c;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #1f2937;
+}
+
+.lista-medicoes-lateral {
+    flex: 1;
+    background: #06090c;
+    border-radius: 12px;
+    border: 1px solid #1f2937;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+}
+
+.lista-header {
+    padding: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    color: #4b5563;
+    border-bottom: 1px solid #1f2937;
+}
+
+.lista-scroll {
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #1f2937 #06090c;
+}
+
+.lista-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lista-scroll::-webkit-scrollbar-track {
+    background: #06090c;
+}
+
+.lista-scroll::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 10px;
+}
+
+.item-medicao {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+    padding: 12px 10px;
+    border-bottom: 1px solid #111827;
+}
+
+.medicao-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-hora {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.item-data {
+    color: #4b5563;
+    font-size: 0.75rem;
+}
+
+.item-valor {
+    font-weight: 900;
+    font-size: 1.1rem;
+}
+
+.item-valor small {
+    font-size: 0.7rem;
+    color: #4b5563;
+}
+
+.btn-carregar-mais {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed #1f2937;
+    color: #6b7280;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
 }
 
 .historico-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-}
-
-.btn-filtrar {
-    background-color: #00ff6a;
-    color: #000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    height: 38px;
+    padding-top: 20px;
+    border-top: 1px solid #1f2937;
 }
 
 .amostras-label {
-    color: #555;
-    font-size: 0.9rem;
+    color: #4b5563;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
 }
 
 .acoes {
     display: flex;
-    gap: 12px;
+    gap: 15px;
 }
 
 .btn-action {
     padding: 12px 24px;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 800;
+    font-size: 11px;
     border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     transition: 0.2s;
 }
 
@@ -180,130 +286,115 @@
     color: #000;
 }
 
-.btn-action.primary:hover {
-    background: #e0e0e0;
-}
-
 .btn-action.secondary {
-    background: #1f1f1f;
+    background: #000;
     color: #fff;
-    border: 1px solid #333;
+    border: 1px solid #1f2937;
 }
 
-.btn-action.secondary:hover {
-    background: #2a2a2a;
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-.nav-btn-large {
-    background: #1f1f1f;
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+@media screen {
+    .print-only-header {
+        display: none !important;
+    }
 }
 
-.nav-btn-large:hover {
-    background: #252525;
-    border-color: #444;
+@media print {
+    @page {
+        size: auto;
+        margin: 10mm;
+    }
+
+    body {
+        background: #fff !important;
+    }
+
+    .historico-page {
+        padding: 0;
+        background: #fff !important;
+        display: block;
+    }
+
+    .historico-container-full {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .print-only-header {
+        display: block !important;
+        margin-bottom: 20px;
+    }
+
+    .nav-btn-circle, 
+    .date-picker-group, 
+    .historico-footer, 
+    .btn-carregar-mais,
+    .recharts-tooltip-wrapper,
+    .no-print {
+        display: none !important;
+    }
+
+    .grafico-wrapper {
+        border: 1px solid #eee;
+        background: #fff !important;
+        min-height: auto;
+        height: 380px !important;
+    }
+
+    .lista-medicoes-lateral {
+        border: 1px solid #eee;
+        background: #fff !important;
+        min-height: auto;
+        max-height: none;
+        display: none !important;
+    }
+
+    .sinal-info-main h1, 
+    .display-valor .numero,
+    .item-hora,
+    .item-valor {
+        color: #000 !important;
+    }
+
+    .unidade, .item-data, .item-valor small, .label-top {
+        color: #666 !important;
+    }
+
+    .conteudo-visual {
+        display: block !important;
+    }
+
+    .recharts-cartesian-grid-horizontal line,
+    .recharts-cartesian-grid-vertical line {
+        stroke: #eee !important;
+    }
+
+    .recharts-text {
+        fill: #333 !important;
+    }
 }
 
-.recharts-responsive-container {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-.conteudo-visual {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-    min-height: 450px;
-}
-
-.grafico-wrapper {
-    flex: 3; 
-    background: #0a0a0a;
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid #181818;
-    position: relative;
-}
-
-
-.lista-medicoes-lateral {
-    flex: 1; 
-    background: #0a0a0a;
-    border-radius: 20px;
-    border: 1px solid #181818;
-    display: flex;
-    flex-direction: column;
-    max-height: 500px; 
-}
-
-.lista-header {
-    padding: 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    color: #888;
-    border-bottom: 1px solid #181818;
-    text-align: center;
-}
-
-.lista-scroll {
-    overflow-y: auto;
-    flex: 1;
-    padding: 10px;
-}
-
-.lista-scroll::-webkit-scrollbar {
-    width: 6px;
-}
-.lista-scroll::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 10px;
-}
-
-.item-medicao {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #151515;
-    font-size: 0.85rem;
-}
-
-.item-data {
-    color: #666;
-}
-
-.item-valor {
-    font-weight: bold;
-}
-
-.btn-carregar-mais {
-    width: 100%;
-    background: transparent;
-    border: 1px dashed #333;
-    color: #888;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-carregar-mais:hover {
-    border-color: #555;
-    color: #fff;
-    background: #111;
-}
-
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     .conteudo-visual {
         flex-direction: column;
+    }
+
+    .historico-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .date-picker-group {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
     }
 }

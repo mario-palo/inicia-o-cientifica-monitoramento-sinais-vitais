@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import Dock from "./Componentes/Base/Dock";
 import { VscHome, VscArchive, VscAccount, VscSettingsGear } from "react-icons/vsc";
+import Dock from "./Componentes/Base/Dock";
 
 export default function LayoutemHeader() {
   const navigate = useNavigate();

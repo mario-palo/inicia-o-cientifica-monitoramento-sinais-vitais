@@ -1,122 +1,173 @@
-.div-toda {
+.auth-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: #000;
+    background-color: #06090c;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Inter', sans-serif;
     color: #fff;
+    z-index: 9999; 
 }
 
-.login-container {
+.auth-card {
     width: 100%;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
+    max-width: 380px;
+    background: #000;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
 }
 
-.acesso {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+.auth-header {
     text-align: center;
-    margin-bottom: 10px;
-    color: #fff;
+    margin-bottom: 35px;
 }
 
-.subtexto {
-    font-size: 0.85rem;
-    color: #666;
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-label {
+.auth-icon-wrapper {
+    color: #00ff6a;
+    margin-bottom: 15px;
     display: flex;
-    flex-direction: column;
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 25px;
-    width: 100%;
+    justify-content: center;
 }
 
-.input-codigo {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #333;
-    color: #fff;
-    font-size: 1.1rem;
-    padding: 10px 0;
-    width: 100%;
-    outline: none;
-    transition: all 0.3s ease;
-    text-align: left;
-}
-
-.input-codigo:focus {
-    border-bottom-color: #fff;
-}
-
-.input-codigo::placeholder {
-    color: #222;
-}
-
-.buttonEnviar {
-    background: #fff;
-    border: 1px solid #fff;
-    color: #000;
-    padding: 12px;
+.auth-header h2 {
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 2px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin: 0 0 10px 0;
+    color: #fff;
+}
+
+.auth-header p {
+    font-size: 0.7rem;
+    color: #4b5563;
+    margin: 0;
     text-transform: uppercase;
+    font-weight: 600;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auth-input-container label {
+    font-size: 9px;
+    font-weight: 800;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 1px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    background: #0a0f14;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.input-wrapper input:focus {
+    border-color: #00ff6a;
+    background: #000;
+}
+
+.btn-confirm {
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.2s;
     margin-top: 10px;
 }
 
-.buttonEnviar:hover {
-    background: transparent;
-    color: #fff;
+.btn-confirm:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
 }
 
-.divisor {
-    margin: 30px 0;
-    border: 0;
-    border-top: 1px solid #222;
-    width: 100%;
+.spinner {
+    animation: spin 1s linear infinite;
 }
 
-.texto-cadastro {
-    font-size: 0.8rem;
-    color: #666;
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.auth-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    font-size: 10px;
+    padding: 10px;
+    border-radius: 6px;
     text-align: center;
-    margin-bottom: 15px;
+    font-weight: 700;
+    border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-.buttonCadastrarProf {
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: #1f2937;
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #1f2937;
+}
+
+.auth-divider span {
+    padding: 0 12px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.btn-register-link {
+    display: block;
     text-align: center;
-    color: #fff;
+    color: #4b5563;
     text-decoration: none;
-    font-size: 0.7rem;
+    font-size: 9px;
+    font-weight: 800;
     letter-spacing: 1px;
-    text-transform: uppercase;
     padding: 12px;
-    border: 1px solid #333;
-    transition: all 0.3s ease;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    transition: 0.2s;
 }
 
-.buttonCadastrarProf:hover {
+.btn-register-link:hover {
     border-color: #fff;
-}
-
-.erro {
-    color: #ff4d4d;
-    font-size: 0.7rem;
-    text-align: center;
-    margin-top: 15px;
+    color: #fff;
 }

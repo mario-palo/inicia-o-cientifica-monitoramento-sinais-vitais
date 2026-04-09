@@ -1,94 +1,109 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import "../../css/VerificadorDeCodigo.css";
 import axios from "axios";
+import { ShieldCheck, User, Key, ArrowRight, Loader2 } from "lucide-react";
+import "../../css/VerificadorDeCodigo.css";
 
 export default function VerificadorDeCodigo({ children }) {
     const [acessoLiberado, setAcessoLiberado] = useState(false);
-    
     const [invalido, setInvalido] = useState(false);
     const [carregando, setCarregando] = useState(false);
     const [codigo, setCodigo] = useState("");
     const [email, setEmail] = useState("");
 
-    async function enviarLogin() {
+    const enviarLogin = async () => {
         if (!codigo || !email) {
-            alert("Por favor, identifique-se para registrar sua ação.");
-            return;
+            return alert("Por favor, identifique-se para registrar sua ação.");
         }
 
         try {
             setInvalido(false);
             setCarregando(true);
 
-            const resposta = await axios.post(
-                "http://localhost:8080/auth/login",
-                {
-                    email: email,
-                    senha: codigo
-                }
-            );
+            const { data } = await axios.post("http://localhost:8080/auth/login", {
+                email,
+                senha: codigo
+            });
 
-            if (resposta.data.autorizacao === true) {
+            if (data.autorizacao) {
                 localStorage.setItem("ultimo_autor_acao", email);
                 setAcessoLiberado(true);
             } else {
                 setInvalido(true);
             }
-
         } catch (erro) {
-            console.error("Erro na verificação:", erro);
             setInvalido(true);
         } finally {
             setCarregando(false);
         }
-    }
+    };
 
-    if (acessoLiberado) {
-        return children;
-    }
+    if (acessoLiberado) return children;
 
     return (
-    <div className="div-toda">
-        <div className="login-container">
-            <h2 className="acesso">Identificação Necessária</h2>
-            <p className="subtexto">Assinatura de autoria para acesso ao prontuário.</p>
+        <div className="auth-screen">
+            <div className="auth-card">
+                <header className="auth-header">
+                    <div className="auth-icon-wrapper">
+                        <ShieldCheck size={32} strokeWidth={1.5} />
+                    </div>
+                    <h2>IDENTIFICAÇÃO NECESSÁRIA</h2>
+                    <p>Assinatura digital obrigatória para acesso</p>
+                </header>
 
-            <label>
-                Email Profissional
-                <input 
-                    className="input-codigo" 
-                    type="email" 
-                    placeholder="exemplo@hospital.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </label>
+                <div className="auth-form">
+                    <div className="auth-input-container">
+                        <label><User size={12} /> EMAIL PROFISSIONAL</label>
+                        <div className="input-wrapper">
+                            <input 
+                                type="email" 
+                                placeholder="nome@hospital.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                disabled={carregando}
+                            />
+                        </div>
+                    </div>
 
-            <label>
-                Código de Acesso
-                <input 
-                    className="input-codigo" 
-                    type="password" 
-                    placeholder="••••"
-                    value={codigo}
-                    onChange={(e) => setCodigo(e.target.value)}
-                />
-            </label>
+                    <div className="auth-input-container">
+                        <label><Key size={12} /> CÓDIGO DE ACESSO</label>
+                        <div className="input-wrapper">
+                            <input 
+                                type="password" 
+                                placeholder="••••••••"
+                                value={codigo}
+                                onChange={(e) => setCodigo(e.target.value)}
+                                disabled={carregando}
+                            />
+                        </div>
+                    </div>
 
-            <button className="buttonEnviar" onClick={enviarLogin}>
-                Confirmar Identidade
-            </button>
+                    <button 
+                        className={`btn-confirm ${carregando ? 'loading' : ''}`}
+                        onClick={enviarLogin}
+                        disabled={carregando}
+                    >
+                        {carregando ? (
+                            <Loader2 className="spinner" size={18} />
+                        ) : (
+                            <>
+                                <span>CONFIRMAR IDENTIDADE</span>
+                                <ArrowRight size={16} />
+                            </>
+                        )}
+                    </button>
 
-            {invalido && <p className="erro">Dados incorretos</p>}
+                    {invalido && <div className="auth-error">Acesso negado. Credenciais inválidas.</div>}
+                </div>
 
-            <hr className="divisor" />
+                <div className="auth-divider">
+                    <span>OU</span>
+                </div>
 
-            <p className="texto-cadastro">Ainda não tem conta?</p>
-            <Link to="/cadastrarProfissional" className="buttonCadastrarProf">
-                Cadastrar Novo Profissional
-            </Link>
+                <Link to="/cadastrarProfissional" className="btn-register-link">
+                    CADASTRAR NOVO PROFISSIONAL
+                </Link>
+            </div>
         </div>
-    </div>
-);
+    );
 }

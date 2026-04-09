@@ -1,21 +1,17 @@
-import { Outlet } from "react-router-dom"
-import Dock from "./Componentes/Base/Dock"
-import Header from "./Componentes/Base/Header";
-import { VscHome, VscArchive, VscAccount, VscSettingsGear } from "react-icons/vsc"
-import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { VscHome, VscArchive, VscAccount, VscSettingsGear } from "react-icons/vsc";
+import Dock from "./Componentes/Base/Dock";
+import Header from "./Componentes/Base/Header";
 
 export default function LayoutHeader() {
-
   const navigate = useNavigate();
 
   const [usuarioAtivo, setUsuarioAtivo] = useState(() => {
     const id = localStorage.getItem("selected_user_id");
     const nome = localStorage.getItem("selected_user_name");
 
-    if (!id) return null;
-
-    return { id: Number(id), nome };
+    return id ? { id: Number(id), nome } : null;
   });
 
   const items = [
@@ -32,7 +28,7 @@ export default function LayoutHeader() {
     {
       icon: <VscAccount size={18} />,
       label: 'Paciente',
-      onClick: () => navigate('/paciente/1'),
+      onClick: () => navigate(`/paciente/${usuarioAtivo?.id || 1}`),
     },
     {
       icon: <VscSettingsGear size={18} />,
@@ -42,11 +38,10 @@ export default function LayoutHeader() {
   ];
 
   return (
-    <div>
+    <>
       <Header paciente={usuarioAtivo} />
       <Dock items={items} />
-
       <Outlet context={{ usuarioAtivo, setUsuarioAtivo }} />
-    </div>
-  )
+    </>
+  );
 }
