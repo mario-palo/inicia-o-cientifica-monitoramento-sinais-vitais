@@ -11,7 +11,6 @@ const pool = mysql.createPool({
 
 module.exports = pool;
 
-// Teste de conexão imediato
 pool.getConnection()
     .then(conn => {
         console.log("✅ Conexão com o banco MySQL estabelecida com sucesso!");

@@ -4,8 +4,6 @@ import "../../css/VerificadorDeCodigo.css";
 import axios from "axios";
 
 export default function VerificadorDeCodigo({ children }) {
-    // IMPORTANTE: Removida a leitura do localStorage no useState.
-    // Assim, toda vez que entrar em um paciente, ele pedirá a identificação novamente.
     const [acessoLiberado, setAcessoLiberado] = useState(false);
     
     const [invalido, setInvalido] = useState(false);
@@ -32,7 +30,6 @@ export default function VerificadorDeCodigo({ children }) {
             );
 
             if (resposta.data.autorizacao === true) {
-                // Mantemos o registro de QUEM assinou para usar em futuras alterações
                 localStorage.setItem("ultimo_autor_acao", email);
                 setAcessoLiberado(true);
             } else {
@@ -47,7 +44,6 @@ export default function VerificadorDeCodigo({ children }) {
         }
     }
 
-    // Se o acesso foi validado nesta navegação específica, libera o componente filho
     if (acessoLiberado) {
         return children;
     }

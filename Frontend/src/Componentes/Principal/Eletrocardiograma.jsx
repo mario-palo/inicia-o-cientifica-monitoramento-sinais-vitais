@@ -41,7 +41,6 @@ export default function Eletrocardiograma() {
 
                 setBatimentoAtual(novoDado.valor);
                 setUltimaAtualizacao(novoDado.hora);
-                // Mantém as últimas 20 medições para o gráfico ficar bonito
                 setHistorico(prev => [novoDado, ...prev].slice(0, 20));
             }
         };
@@ -50,7 +49,6 @@ export default function Eletrocardiograma() {
         return () => socket.close();
     }, []);
 
-    // Inverte o histórico para o gráfico (da esquerda para a direita)
     const dadosGrafico = [...historico].reverse();
 
     return (

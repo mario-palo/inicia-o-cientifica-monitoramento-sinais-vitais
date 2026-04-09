@@ -10,7 +10,6 @@ const VerPacientes = () => {
   useEffect(() => {
     const buscarPacientes = async () => {
       try {
-        // Chamada para a rota que criamos no Backend
         const res = await axios.get('http://localhost:8080/pacientes');
         setPacientes(res.data);
       } catch (err) {
@@ -32,7 +31,6 @@ const VerPacientes = () => {
         {pacientes.map(paciente => (
           <Link to={`/paciente/${paciente.id}`} key={paciente.id} className="card-paciente">
             <div className="foto-perfil">
-              {/* Se não tiver foto no banco, usamos as iniciais ou um placeholder */}
               {paciente.nome.charAt(0)}
             </div>
             <div className="info-resumo">

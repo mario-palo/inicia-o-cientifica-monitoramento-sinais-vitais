@@ -12,7 +12,6 @@ export default function EditarPaciente() {
         async function carregarPaciente() {
             try {
                 const res = await axios.get(`http://localhost:8080/pacientes/${id}`);
-                // Formata a data para o input type="date"
                 if (res.data.data_nascimento) {
                     res.data.data_nascimento = res.data.data_nascimento.split('T')[0];
                 }
@@ -36,7 +35,6 @@ export default function EditarPaciente() {
     const atualizarPaciente = async () => {
         try {
             const token = localStorage.getItem('token');
-            // Enviamos o objeto 'paciente' inteiro, que já contém os campos editados
             await axios.put(`http://localhost:8080/pacientes/${id}`, paciente, {
                 headers: { Authorization: `Bearer ${token}` }
             });

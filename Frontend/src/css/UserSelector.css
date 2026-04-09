@@ -1,4 +1,4 @@
-/* Importação de fonte moderna */
+
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap');
 
 .modal-overlay {
@@ -50,7 +50,7 @@
 .user-avatar {
     width: 120px;
     height: 120px;
-    border-radius: 24px; /* Bordas mais arredondadas e modernas */
+    border-radius: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,7 +63,6 @@
     border: 2px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Cores com gradientes modernos */
 .user-button:nth-child(4n+1) .user-avatar { background: linear-gradient(135deg, #FF6B6B, #EE0979); }
 .user-button:nth-child(4n+2) .user-avatar { background: linear-gradient(135deg, #4facfe, #00f2fe); }
 .user-button:nth-child(4n+3) .user-avatar { background: linear-gradient(135deg, #43e97b, #38f9d7); }
@@ -76,7 +75,6 @@
     transition: all 0.3s ease;
 }
 
-/* Hover Effects */
 .user-button:hover {
     transform: translateY(-10px);
 }
@@ -91,7 +89,6 @@
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Botão Adicionar */
 .add-button .user-avatar {
     background: rgba(255, 255, 255, 0.03);
     border: 2px dashed rgba(255, 255, 255, 0.2);

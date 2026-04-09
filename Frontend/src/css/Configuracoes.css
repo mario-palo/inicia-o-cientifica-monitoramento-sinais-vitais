@@ -41,7 +41,6 @@
     padding-bottom: 10px;
 }
 
-/* Card de Perfil */
 .perfil-card {
     display: flex;
     align-items: center;
@@ -55,7 +54,7 @@
 .perfil-avatar {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #ff5f6d, #ffc371); /* Gradiente similar ao da imagem */
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -81,7 +80,6 @@
     font-size: 0.9rem;
 }
 
-/* Botões */
 .btn-trocar {
     background: #222;
     color: #fff;

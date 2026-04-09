@@ -6,19 +6,16 @@ export default async function historicoLoader() {
         return []; 
     }
 
-    // Criar um intervalo padrão (últimas 24 horas) para a primeira carga
     const agora = new Date();
     const ontem = new Date();
     ontem.setHours(ontem.getHours() - 24);
 
-    // Formatar data: o datetime-local do HTML usa "T", o SQL do seu amigo quer " " (espaço)
     const formatarParaSQL = (data) => data.toISOString().slice(0, 19).replace('T', ' ');
     
     const inicio = formatarParaSQL(ontem);
     const fim = formatarParaSQL(agora);
 
     try {
-        // AJUSTE NA URL: /geral/:idPaciente?inicio=...&fim=...
         const url = `http://localhost:8080/historico/geral/${userId}?inicio=${inicio}&fim=${fim}`;
         console.log("Buscando histórico na URL:", url);
 

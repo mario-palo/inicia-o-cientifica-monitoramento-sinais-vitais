@@ -16,7 +16,7 @@
     margin: 0 0 20px 0;
     font-size: 22px;
     font-weight: bold;
-    color: #00FF00; /* Verde Puro */
+    color: #00FF00; 
     letter-spacing: 1px;
 }
 
@@ -31,7 +31,7 @@
     margin-top: 20px;
     font-size: 96px;
     font-weight: bold;
-    color: #00FF00; /* Verde Puro */
+    color: #00FF00;
 }
 
 .ecg-valor-grande .unidade { font-size: 24px; color: #666; }

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import "../../css/CadastrarProfissional.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // 1. Importe o useNavigate
+import { useNavigate } from "react-router-dom"; 
 
 export default function CadastrarProfissional() {
-    const navigate = useNavigate(); // 2. Inicialize o hook
+    const navigate = useNavigate();
 
     const [profissional, setProfissional] = useState({
         nome: "",
@@ -36,7 +36,7 @@ export default function CadastrarProfissional() {
 
                 if (resposta.data.erro === "Email já cadastrado") {
                     alert("E-mail já cadastrado");
-                    return; // Interrompe a execução
+                    return;
                 }
 
                 if (resposta.data.mensagem === "Usuário criado com sucesso") {
@@ -79,7 +79,7 @@ export default function CadastrarProfissional() {
 
                 <input
                     name="senha"
-                    type="password" // Mudei para password por segurança
+                    type="password"
                     placeholder="Senha"
                     onChange={handleChange}
                 />

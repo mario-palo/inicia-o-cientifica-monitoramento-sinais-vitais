@@ -27,7 +27,6 @@ export default function Principal() {
     const [tempPreview, setTempPreview] = useState([]);
     const [spo2Preview, setSpo2Preview] = useState([]);
     
-    // Mudança: isPaused e isPausedRef para o WebSocket enxergar a mudança
     const [isPaused, setIsPaused] = useState(false);
     const isPausedRef = useRef(isPaused);
 
@@ -69,7 +68,6 @@ export default function Principal() {
 
         socket.onmessage = (event) => {
             try {
-                // Mudança: Verificação do pause usando a Ref
                 if (isPausedRef.current) return;
 
                 const dados = JSON.parse(event.data);

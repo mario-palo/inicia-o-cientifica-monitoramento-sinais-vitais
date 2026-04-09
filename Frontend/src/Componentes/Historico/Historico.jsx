@@ -22,7 +22,7 @@ export default function HistoricoSinais() {
     const dadosBrutos = useLoaderData() || [];
     const [dadosState, setDadosState] = useState(dadosBrutos);
     const [indiceSinal, setIndiceSinal] = useState(0);
-    const [limiteLista, setLimiteLista] = useState(50); // Controle do "Carregar mais"
+    const [limiteLista, setLimiteLista] = useState(50);
 
     useEffect(() => {
         setDadosState(dadosBrutos);
@@ -63,7 +63,7 @@ export default function HistoricoSinais() {
             }));
 
             setDadosState(dadosNormalizados);
-            setLimiteLista(50); // Reseta o limite ao filtrar novamente
+            setLimiteLista(50); 
         } catch (error) {
             console.error("Erro ao buscar intervalo específico:", error);
         }
@@ -81,7 +81,7 @@ export default function HistoricoSinais() {
             .sort((a, b) => a.timestamp - b.timestamp);
     }, [dadosState, sinalAtual]);
 
-    // Dados para a lista lateral (ordenados do mais recente para o mais antigo)
+
     const dadosLista = useMemo(() => {
         return [...dadosFiltrados].reverse().slice(0, limiteLista);
     }, [dadosFiltrados, limiteLista]);
@@ -145,7 +145,6 @@ export default function HistoricoSinais() {
                     </div>
                 </header>
 
-                {/* AREA CENTRAL COM GRÁFICO + LISTA */}
                 <div className="conteudo-visual">
                     <div className="grafico-wrapper">
                         <ResponsiveContainer width="100%" height="100%">

@@ -18,10 +18,8 @@ app.use('/historico', historicoRoutes);
 app.use('/verificacao', verificacaoRoutes)
 app.use('/pacientes', pacienteRoutes);
 
-// 🔹 Criar servidor HTTP
 const server = http.createServer(app);
 
-// 🔹 Importar função que inicia WebSocket
 require("../src/webSocket")(server);
 
 server.listen(process.env.PORT, () => {

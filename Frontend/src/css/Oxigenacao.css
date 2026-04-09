@@ -1,4 +1,4 @@
-/* Página Geral */
+
 .oxigenacao-page {
     height: calc(100vh - 70px);
     padding: 30px 40px;
@@ -10,14 +10,12 @@
     gap: 40px;
 }
 
-/* Lado Esquerdo */
 .oxigenacao-main {
     margin-top: 70px;
     display: grid;
     grid-template-rows: auto 1fr auto;
 }
 
-/* Título */
 .oxigenacao-main h1 {
     margin: 0 0 20px 0;
     font-size: 22px;
@@ -26,12 +24,11 @@
     letter-spacing: 1px;
 }
 
-/* Área do Gráfico */
 .oxigenacao-grafico {
     position: relative;
     display: flex;
     align-items: center;
-    background: #0a0a0a; /* Fundo leve para o gráfico */
+    background: #0a0a0a; 
     border-radius: 8px;
     padding: 10px;
 }
@@ -41,7 +38,6 @@
     opacity: 0.7;
 }
 
-/* Valor em Destaque */
 .oxigenacao-valor {
     margin-top: 20px;
     font-size: 96px;
@@ -55,23 +51,20 @@
     margin-left: 10px;
 }
 
-/* Rodapé/Atualização */
 .oxigenacao-atualizacao {
     font-size: 14px;
     color: #ccc;
     margin-top: 5px;
 }
 
-/* lado direito */
 .oxigenacao-historico {
     margin-top: 70px;
     padding-left: 30px;
-    border-left: 1px solid #222; /* Linha divisória para separar do gráfico */
+    border-left: 1px solid #222; 
     display: flex;
     flex-direction: column;
 }
 
-/* título histórico */
 .oxigenacao-historico h2 {
     margin: 0 0 20px 0;
     font-size: 18px;
@@ -81,17 +74,15 @@
     text-transform: uppercase;
 }
 
-/* cada linha da lista */
 .oxigenacao-historico p {
     margin: 0;
-    padding: 12px 0; /* Aumentei um pouco o respiro */
+    padding: 12px 0; 
     font-size: 14px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #111; /* Linha sutil entre itens */
+    border-bottom: 1px solid #111;
 }
 
-/* valor da oxigenacao no histórico */
 .oxigenacao-historico span {
     color: #2AD4FF;
     font-weight: bold;

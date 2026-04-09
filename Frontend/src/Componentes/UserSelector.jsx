@@ -27,7 +27,6 @@ export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
                     <div className="loading-text">Carregando pacientes...</div>
                 ) : (
                     <div className="user-grid">
-                        {/* Lista de Pacientes */}
                         {pacientes.map(p => (
                             <button 
                                 key={p.id} 

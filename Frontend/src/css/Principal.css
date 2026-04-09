@@ -1,15 +1,12 @@
 .container-principal {
     display: grid;
-    /* Divide a tela em duas colunas e duas linhas exatamente iguais */
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 10px;
 
     padding: 5px;
     padding-top: 70px;
-    /* Espaço para o cabeçalho (Nome do Paciente) */
     padding-bottom: 80px;
-    /* MARGEM SEGURA para a barra de ferramentas inferior */
 
     height: 100vh;
     box-sizing: border-box;
@@ -17,12 +14,10 @@
     background-color: #000;
 }
 
-/* Garante que os links não quebrem o comportamento do Grid */
 .container-principal a {
     display: contents;
 }
 
-/* Estilo padrão para os 4 quadrantes */
 .ecg,
 .bpm,
 .temp,
@@ -31,14 +26,12 @@
     border-radius: 12px;
     padding: 15px;
     display: grid;
-    /* Organiza: 30px para o título e o restante para o valor/gráfico */
     grid-template-rows: 30px 1fr;
     color: #fff;
     background: transparent;
     box-sizing: border-box;
 }
 
-/* Posicionamento explícito na grade 2x2 */
 .ecg {
     grid-column: 1;
     grid-row: 1;
@@ -59,7 +52,6 @@
     grid-row: 2;
 }
 
-/* Títulos dos Sinais */
 .titulo-ecg,
 .titulo-bpm,
 .titulo-temp,
@@ -88,7 +80,6 @@
     color: #2AD4FF;
 }
 
-/* Áreas de conteúdo (Gráficos e Valores) */
 .grafico-ecg,
 .grafico-bpm,
 .grafico-temp,
@@ -99,7 +90,6 @@
     overflow: hidden;
 }
 
-/* Padronização dos valores numéricos grandes */
 .grafico-bpm,
 .temp-valor,
 .spo2-valor {
@@ -120,15 +110,13 @@
     color: #2AD4FF;
 }
 
-/* Remove margens desnecessárias que podem quebrar o alinhamento */
 .linha-inferior {
     display: none;
-    /* Se você não estiver mais usando essa div no HTML, pode remover */
+    
 }
 
 .controles-flutuantes {
     grid-column: 1 / -1;
-    /* Ocupa a largura toda no seu grid */
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
@@ -151,6 +139,5 @@
 
 .btn-pause.pausado {
     background-color: #ff9800;
-    /* Laranja quando pausado */
     color: #000;
 }
