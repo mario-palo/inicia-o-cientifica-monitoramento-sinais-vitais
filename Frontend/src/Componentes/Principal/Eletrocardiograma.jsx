@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import "../../css/Eletrocardiograma.css";
-
 import {
     LineChart,
     Line,
     XAxis,
     YAxis,
-    ResponsiveContainer
+    Tooltip,
+    ResponsiveContainer,
+    CartesianGrid
 } from "recharts";
+import "../../css/Eletrocardiograma.css";
 
 export default function Eletrocardiograma() {
     const [batimentoAtual, setBatimentoAtual] = useState(null);
     const [ultimaAtualizacao, setUltimaAtualizacao] = useState(null);
     const [historico, setHistorico] = useState([]);
-    const [ecgData, setEcgData] = useState([]);
 
     useEffect(() => {
         const socket = new WebSocket('ws://localhost:8080/ws');
@@ -41,47 +41,80 @@ export default function Eletrocardiograma() {
 
                 setBatimentoAtual(novoDado.valor);
                 setUltimaAtualizacao(novoDado.hora);
-                setHistorico(prev => [novoDado, ...prev].slice(0, 12));
+                // Mantém as últimas 20 medições para o gráfico ficar bonito
+                setHistorico(prev => [novoDado, ...prev].slice(0, 20));
             }
         };
 
         socket.onerror = (error) => console.error("Erro WebSocket ECG:", error);
-
-        return () => {
-            socket.close();
-        };
+        return () => socket.close();
     }, []);
 
+    // Inverte o histórico para o gráfico (da esquerda para a direita)
+    const dadosGrafico = [...historico].reverse();
+
     return (
-        <div className="Eletrocardiograma-page">
-            <div className="Eletrocardiograma-main">
+        <div className="ecg-page">
+            <div className="ecg-main">
                 <h1>ELETROCARDIOGRAMA</h1>
 
-                <div className="monitor-footer">
-                    <div className="batimento-valor-container">
-                        <div className="titulo-bpm">BATIMENTOS CARDÍACOS</div>
+                <div className="ecg-grafico-container">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={dadosGrafico}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
+                            <XAxis 
+                                dataKey="hora" 
+                                stroke="#666" 
+                                fontSize={12}
+                                tickLine={false}
+                            />
+                            <YAxis 
+                                domain={['dataMin - 10', 'dataMax + 10']} 
+                                stroke="#666" 
+                                fontSize={12}
+                                tickLine={false}
+                                allowDecimals={false}
+                            />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: '#111', border: '1px solid #00ff6a' }}
+                                itemStyle={{ color: '#00FF00' }}
+                                labelStyle={{ color: '#fff' }}
+                                formatter={(value) => [`${value} BPM`, "Frequência"]}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="valor"
+                                stroke="#00FF00"
+                                strokeWidth={3}
+                                dot={{ r: 4, fill: "#00FF00", strokeWidth: 2 }}
+                                activeDot={{ r: 6 }}
+                                isAnimationActive={false}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
 
-                        <div className="batimento-valor">
-                            {batimentoAtual ?? "--"} <span className="unidade">BPM</span>
-                        </div>
+                <div className="ecg-info-footer">
+                    <div className="ecg-valor-grande">
+                        {batimentoAtual ?? "--"} <span className="unidade">BPM</span>
                     </div>
-
-                    <div className="batimento-atualizacao">
+                    <div className="ecg-atualizacao">
                         ÚLTIMA ATUALIZAÇÃO: {ultimaAtualizacao ?? "--"}
                     </div>
                 </div>
             </div>
 
-            <div className="batimento-historico">
+            <div className="ecg-historico">
                 <h2>ÚLTIMAS MEDIÇÕES</h2>
-                {historico.length === 0 && <p>Aguardando sinal cardíaco...</p>}
-
-                {historico.map((item) => (
-                    <p key={item.id} className="historico-item">
-                        {item.data} - {item.hora}
-                        <span className="valor-destaque"> {item.valor} BPM</span>
-                    </p>
-                ))}
+                <div className="historico-lista">
+                    {historico.length === 0 && <p className="waiting">Aguardando sinal...</p>}
+                    {historico.map((item) => (
+                        <div key={item.id} className="historico-item">
+                            <span className="timestamp">{item.hora}</span>
+                            <span className="valor">{item.valor} BPM</span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -69,27 +69,12 @@ export default function Temperatura() {
                 <div className="temperatura-grafico">
                     <ResponsiveContainer width="100%" height={240}>
                         <LineChart data={dadosGrafico}>
-                            <XAxis
-                                dataKey="id"
-                                tickFormatter={(id) => {
-                                    const item = dadosGrafico.find(d => d.id === id);
-                                    return item ? item.hora : "";
-                                }}
+                            <XAxis dataKey="hora" stroke="#666" fontSize={12} tickLine={false} />
+                            <YAxis domain={[35, 42]} stroke="#666" fontSize={12} tickLine={false} />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: '#111', border: '1px solid #ff9f0a' }}
+                                formatter={(value) => [`${value}°C`, "Temperatura"]}
                             />
-                            <YAxis
-                                domain={[33, 42]}
-                                tickCount={10}
-                                allowDecimals={true} 
-                            />
-                                
-                            <Tooltip
-                                labelFormatter={(label) => {
-                                    const item = dadosGrafico.find(d => d.id === label);
-                                    return item ? `Hora: ${item.hora}` : "";
-                                }}
-                                formatter={(value) => [`${value} °C`, "Temperatura"]}
-                            />
-
                             <Line
                                 type="monotone"
                                 dataKey="temperatura"
@@ -102,13 +87,10 @@ export default function Temperatura() {
                     </ResponsiveContainer>
                 </div>
 
-                <div>
+                <div className="temperatura-info-footer">
                     <div className="temperatura-valor">
-                        {temperaturaAtual !== null
-                            ? `${temperaturaAtual}°C`
-                            : "--"}
+                        {temperaturaAtual ?? "--"}<span className="unidade">°C</span>
                     </div>
-
                     <div className="temperatura-atualizacao">
                         ÚLTIMA ATUALIZAÇÃO: {ultimaAtualizacao ?? "--"}
                     </div>
@@ -117,16 +99,13 @@ export default function Temperatura() {
 
             <div className="temperatura-historico">
                 <h2>ÚLTIMAS MEDIÇÕES</h2>
-
-                {historico.length === 0 && (
-                    <p>Aguardando dados do sensor...</p>
-                )}
+                {historico.length === 0 && <p className="waiting">Aguardando sensor...</p>}
 
                 {historico.map((item) => (
-                    <p key={item.id}>
-                        {item.data} - {item.hora}
-                        <span> {item.valor}°C</span>
-                    </p>
+                    <div key={item.id} className="historico-item">
+                        <span className="timestamp">{item.hora}</span>
+                        <span className="valor">{item.valor}°C</span>
+                    </div>
                 ))}
             </div>
         </div>

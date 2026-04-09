@@ -9,14 +9,8 @@
     gap: 40px;
 }
 
-/* lado esquerdo */
-.temperatura-main {
-    margin-top: 70px;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-}
+.temperatura-main { margin-top: 70px; display: grid; grid-template-rows: auto 1fr auto; }
 
-/* título */
 .temperatura-main h1 {
     margin: 0 0 20px 0;
     font-size: 22px;
@@ -25,20 +19,14 @@
     letter-spacing: 1px;
 }
 
-/* área do gráfico */
 .temperatura-grafico {
-    position: relative;
+    background: #0a0a0a;
+    border-radius: 8px;
+    padding: 10px;
     display: flex;
     align-items: center;
 }
 
-/* placeholder do gráfico */
-.temperatura-grafico p {
-    color: #ff9f0a;
-    opacity: 0.7;
-}
-
-/* valor grande */
 .temperatura-valor {
     margin-top: 20px;
     font-size: 96px;
@@ -46,39 +34,30 @@
     color: #ff9f0a;
 }
 
-/* atualização */
-.temperatura-atualizacao {
-    font-size: 14px;
-    color: #ccc;
-    margin-top: 5px;
-}
+.temperatura-atualizacao { font-size: 14px; color: #ccc; margin-top: 5px; }
 
-/* lado direito */
 .temperatura-historico {
     margin-top: 70px;
     padding-left: 30px;
+    border-left: 1px solid #222;
     display: flex;
     flex-direction: column;
 }
 
-/* título histórico */
-.temperatura-historico h2 {
-    margin: 0 0 20px 0;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: right;
-}
+.temperatura-historico h2 { margin: 0 0 20px 0; font-size: 18px; font-weight: bold; text-align: right; }
 
-/* lista */
-.temperatura-historico p {
-    margin: 6px 0;
-    font-size: 14px;
+.historico-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #111;
     display: flex;
     justify-content: space-between;
+    font-size: 14px;
 }
 
-/* valor da temperatura no histórico */
-.temperatura-historico span {
-    color: #ff9f0a;
+.historico-item .valor { color: #ff9f0a; font-weight: bold; }
+.historico-item .timestamp { color: #888; }
+
+.temperatura-historico .historico-item .valor {
+    color: #ff9f0a !important;
     font-weight: bold;
 }

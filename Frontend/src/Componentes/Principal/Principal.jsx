@@ -170,7 +170,7 @@ export default function Principal() {
                                 <Line
                                     type="monotone"
                                     dataKey="value"
-                                    stroke="#00ff6a"
+                                    stroke="#00FF00"
                                     strokeWidth={2}
                                     dot={false}
                                     isAnimationActive={false}

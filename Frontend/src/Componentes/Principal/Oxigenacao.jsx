@@ -69,44 +69,28 @@ export default function Oxigenacao() {
                 <div className="oxigenacao-grafico">
                     <ResponsiveContainer width="100%" height={240}>
                         <LineChart data={dadosGrafico}>
-                            <XAxis
-                                dataKey="id"
-                                tickFormatter={(id) => {
-                                    const item = dadosGrafico.find(d => d.id === id);
-                                    return item ? item.hora : "";
-                                }}
-                            />
-                            <YAxis
-                                domain={[85, 100]} 
-                                tickCount={8}
-                                allowDecimals={false}
-                            />
-                            <Tooltip
-                                labelFormatter={(label) => {
-                                    const item = dadosGrafico.find(d => d.id === label);
-                                    return item ? `Hora: ${item.hora}` : "";
-                                }}
+                            <XAxis dataKey="hora" stroke="#666" fontSize={12} tickLine={false} />
+                            <YAxis domain={[85, 100]} stroke="#666" fontSize={12} tickLine={false} />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: '#111', border: '1px solid #2AD4FF' }}
                                 formatter={(value) => [`${value}%`, "Saturação"]}
                             />
                             <Line
                                 type="monotone"
                                 dataKey="spo2"
-                                stroke="#00bcd4"
+                                stroke="#2AD4FF"
                                 strokeWidth={3}
-                                dot={{ r: 4, fill: "#00bcd4" }}
+                                dot={{ r: 4, fill: "#2AD4FF" }}
                                 isAnimationActive={false} 
                             />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
 
-                <div>
+                <div className="oxigenacao-info-footer">
                     <div className="oxigenacao-valor">
-                        {oxigenacaoAtual !== null
-                            ? `${oxigenacaoAtual}%`
-                            : "--"}
+                        {oxigenacaoAtual ?? "--"}<span className="unidade">%</span>
                     </div>
-
                     <div className="oxigenacao-atualizacao">
                         ÚLTIMA ATUALIZAÇÃO: {ultimaAtualizacao ?? "--"}
                     </div>
@@ -115,18 +99,15 @@ export default function Oxigenacao() {
 
             <div className="oxigenacao-historico">
                 <h2>ÚLTIMAS MEDIÇÕES</h2>
-
-                {historico.length === 0 && (
-                    <p>Aguardando sinal do oxímetro...</p>
-                )}
+                {historico.length === 0 && <p className="waiting">Aguardando sinal...</p>}
 
                 {historico.map((item) => (
-                    <p key={item.id} className="historico-item">
-                        {item.data} - {item.hora}
-                        <span style={{ color: item.valor < 92 ? '#ff4d4d' : '#00bcd4' }}> 
+                    <div key={item.id} className="historico-item">
+                        <span className="timestamp">{item.hora}</span>
+                        <span className="valor" style={{ color: item.valor < 92 ? '#ff4d4d' : '#2AD4FF' }}>
                             {item.valor}%
                         </span>
-                    </p>
+                    </div>
                 ))}
             </div>
         </div>
