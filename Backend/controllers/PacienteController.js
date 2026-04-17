@@ -23,29 +23,11 @@ module.exports = {
       console.error("Erro no Controller:", error);
       return res.status(500).json({ error: "Erro ao cadastrar paciente" });
     }
-  }
-
-  /*async criar(req, res) {
-    try {
-      if (!validarObrigatorios(req.body)) {
-        return res.status(400).json({ error: "Campos obrigatórios ausentes" });
-      }
-      const id = await Paciente.criar({
-        ...req.body,
-        criado_por: req.usuario.id
-      });
-      return res.status(201).json({ id, message: "Paciente cadastrado com sucesso" });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Erro ao cadastrar paciente" });
-    }
-  }*/,
+  },
 
   async atualizar(req, res) {
     try {
       const { id } = req.params;
-
-      console.log(`Atualizando paciente ${id}:`, req.body);
 
       if (!validarObrigatorios(req.body)) {
         return res.status(400).json({ error: "Campos obrigatórios ausentes" });

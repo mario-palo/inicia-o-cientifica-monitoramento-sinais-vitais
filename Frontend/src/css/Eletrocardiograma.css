@@ -75,6 +75,7 @@
 }
 
 .ecg-historico {
+    margin-top: 40px;
     background: rgba(255, 255, 255, 0.02);
     border-radius: 16px;
     border: 1px solid #1f2937;
@@ -82,6 +83,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-bottom: 30px;
 }
 
 .ecg-historico h2 {

@@ -53,7 +53,8 @@ const router = createBrowserRouter([
       },
       { path: "cadastrarProfissional", element: <CadastrarProfissional /> },
       { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
-      { path: "config", element: <Configuracoes /> }
+      { path: "config", element: <Configuracoes /> },
+      { path: "verificadordecodigo", element: <VerificadorDeCodigo /> }
     ],
   }
 ]);

@@ -53,6 +53,7 @@
     line-height: 1;
     letter-spacing: -4px;
     transition: color 0.3s ease;
+    margin-top: 50px;
 }
 
 .temperatura-valor.febre {
@@ -82,6 +83,8 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .temperatura-historico h2 {
