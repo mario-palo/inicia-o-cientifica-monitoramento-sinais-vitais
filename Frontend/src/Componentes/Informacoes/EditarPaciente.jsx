@@ -22,7 +22,7 @@ export default function EditarPaciente() {
             });
         } catch (err) {
             alert("Erro ao carregar os dados do paciente.");
-            navigate("/verPacientes");
+            navigate("/config/verPacientes");
         }
     }, [id, navigate]);
 
@@ -71,7 +71,7 @@ export default function EditarPaciente() {
             });
 
             alert("Prontuário atualizado com sucesso!");
-            navigate(`/paciente/${id}`);
+            navigate(`/config/paciente/${id}`);
         } catch (error) {
             alert("Erro ao atualizar o registro.");
         }

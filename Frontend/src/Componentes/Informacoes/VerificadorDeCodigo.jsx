@@ -1,19 +1,38 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 import { ShieldCheck, User, Key, ArrowRight, Loader2 } from "lucide-react";
 import "../../css/VerificadorDeCodigo.css";
 
-export default function VerificadorDeCodigo({ children }) {
-    const [acessoLiberado, setAcessoLiberado] = useState(false);
+export default function VerificadorDeCodigo() {
+    const navigate = useNavigate();
     const [invalido, setInvalido] = useState(false);
     const [carregando, setCarregando] = useState(false);
     const [codigo, setCodigo] = useState("");
     const [email, setEmail] = useState("");
 
+    useEffect(() => {
+        let cancelado = false;
+        (async () => {
+            try {
+                const { data } = await axios.get("http://localhost:8080/auth/setup-status");
+                if (cancelado) return;
+                if (data?.cadastroProfissionalNecessario) {
+                    navigate("/registro-inicial", { replace: true });
+                }
+            } catch {
+                /* permanece no login se o servidor não responder */
+            }
+        })();
+        return () => {
+            cancelado = true;
+        };
+    }, [navigate]);
+
     const enviarLogin = async () => {
         if (!codigo || !email) {
-            return alert("Por favor, identifique-se para registrar sua ação.");
+            alert("Preencha todos os campos.");
+            return;
         }
 
         try {
@@ -26,8 +45,9 @@ export default function VerificadorDeCodigo({ children }) {
             });
 
             if (data.autorizacao) {
+                localStorage.setItem("token", data.token);
                 localStorage.setItem("ultimo_autor_acao", email);
-                setAcessoLiberado(true);
+                navigate("/userSelector");
             } else {
                 setInvalido(true);
             }
@@ -38,8 +58,6 @@ export default function VerificadorDeCodigo({ children }) {
         }
     };
 
-    if (acessoLiberado) return children;
-
     return (
         <div className="auth-screen">
             <div className="auth-card">
@@ -48,7 +66,7 @@ export default function VerificadorDeCodigo({ children }) {
                         <ShieldCheck size={32} strokeWidth={1.5} />
                     </div>
                     <h2>IDENTIFICAÇÃO NECESSÁRIA</h2>
-                    <p>Assinatura digital obrigatória para acesso</p>
+                    <p>Assinatura digital profissional</p>
                 </header>
 
                 <div className="auth-form">
@@ -94,15 +112,12 @@ export default function VerificadorDeCodigo({ children }) {
                     </button>
 
                     {invalido && <div className="auth-error">Acesso negado. Credenciais inválidas.</div>}
-                </div>
 
-                <div className="auth-divider">
-                    <span>OU</span>
+                    <p className="auth-footer-hint">
+                        Primeiro uso do sistema?{' '}
+                        <Link to="/registro-inicial" className="auth-inline-link">Cadastrar um profissional</Link>
+                    </p>
                 </div>
-
-                <Link to="/cadastrarProfissional" className="btn-register-link">
-                    CADASTRAR NOVO PROFISSIONAL
-                </Link>
             </div>
         </div>
     );

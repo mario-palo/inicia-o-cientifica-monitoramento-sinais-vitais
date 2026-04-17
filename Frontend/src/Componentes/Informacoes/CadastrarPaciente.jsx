@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { 
-    UserPlus, Users, ShieldPlus, Menu, X, Save, FileText, 
-    ClipboardList, HeartPulse, MapPinned, Search, Info 
+import {
+    UserPlus, Users, ShieldPlus, Menu, X, Save, FileText,
+    ClipboardList, HeartPulse, MapPinned, Info
 } from "lucide-react";
 import "../../css/CadastrarPaciente.css";
 
 export default function CadastrarPaciente() {
     const navigate = useNavigate();
     const [menuAberto, setMenuAberto] = useState(false);
-    
+
     const [paciente, setPaciente] = useState({
         nome: "", leito: "", genero: "M", dataNascimento: "", nomeMae: "",
         cpf: "", cartaoSus: "", estadoCivil: "", nacionalidade: "", naturalidade: "", nomePai: "",
@@ -49,9 +49,20 @@ export default function CadastrarPaciente() {
     };
 
     const salvarPaciente = async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert("Sessão expirada. Faça login novamente.");
+            navigate("/");
+            return;
+        }
+
+        if (!paciente.nome || !paciente.leito || !paciente.dataNascimento || !paciente.nomeMae) {
+            alert("Preencha todos os campos obrigatórios");
+            return;
+        }
+
         try {
-            const token = localStorage.getItem('token');
-            
             const mapeamentoCampos = {
                 dataNascimento: "data_nascimento",
                 nomeMae: "nome_mae",
@@ -69,19 +80,21 @@ export default function CadastrarPaciente() {
             };
 
             const dadosParaEnviar = {};
+
             Object.keys(paciente).forEach(key => {
                 const apiKey = mapeamentoCampos[key] || key;
-                dadosParaEnviar[apiKey] = paciente[key] === "" ? null : paciente[key];
+                dadosParaEnviar[apiKey] = paciente[key];
             });
 
-            const { data } = await axios.post("http://localhost:8080/pacientes", dadosParaEnviar, {
+            await axios.post("http://localhost:8080/pacientes", dadosParaEnviar, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
             alert("Prontuário gerado com sucesso!");
-            navigate(`/paciente/${data.id}`);
+            navigate("/userSelector");
         } catch (error) {
-            alert(`Erro: ${error.response?.data?.error || "Verifique os campos obrigatórios"}`);
+            console.error(error);
+            alert(error.response?.data?.error || "Erro ao cadastrar paciente");
         }
     };
 
@@ -93,9 +106,9 @@ export default function CadastrarPaciente() {
                 </button>
                 {menuAberto && (
                     <div className="floating-menu">
-                        <Link to="/verPacientes" className="menu-item"><Users size={18} /><span>Ver Pacientes</span></Link>
-                        <Link to="/cadastrarPaciente" className="menu-item active"><UserPlus size={18} /><span>Cadastrar Paciente</span></Link>
-                        <Link to="/cadastrarProfissional" className="menu-item"><ShieldPlus size={18} /><span>Cadastrar Profissional</span></Link>
+                        <Link to="/config/verPacientes" className="menu-item"><Users size={18} /><span>Ver Pacientes</span></Link>
+                        <Link to="/config/cadastrarPaciente" className="menu-item active"><UserPlus size={18} /><span>Cadastrar Paciente</span></Link>
+                        <Link to="/config/cadastrarProfissional" className="menu-item"><ShieldPlus size={18} /><span>Cadastrar Profissional</span></Link>
                     </div>
                 )}
             </div>
@@ -110,25 +123,23 @@ export default function CadastrarPaciente() {
                     <fieldset className="cadastro-section">
                         <legend><FileText size={16} /> IDENTIFICAÇÃO BÁSICA</legend>
                         <div className="input-group">
-                            <input name="nome" placeholder="NOME COMPLETO *" onChange={handleChange} required />
-                            <input name="leito" placeholder="LEITO *" onChange={handleChange} required />
+                            <input name="nome" placeholder="NOME COMPLETO *" value={paciente.nome} onChange={handleChange} required />
+                            <input name="leito" placeholder="LEITO *" value={paciente.leito} onChange={handleChange} required />
                             <select name="genero" onChange={handleChange} value={paciente.genero}>
                                 <option value="M">MASCULINO</option>
                                 <option value="F">FEMININO</option>
                                 <option value="O">OUTRO</option>
                             </select>
-                            <input type="date" name="dataNascimento" title="Data de Nascimento" onChange={handleChange} required />
+                            <input type="date" name="dataNascimento" value={paciente.dataNascimento} onChange={handleChange} required />
                         </div>
                     </fieldset>
 
                     <fieldset className="cadastro-section">
                         <legend><MapPinned size={16} /> LOCALIZAÇÃO</legend>
                         <div className="input-group">
-                            <div className="cep-container" style={{ position: 'relative' }}>
-                                <input name="cep" placeholder="CEP" value={paciente.cep} onChange={(e) => buscarCep(e.target.value)} maxLength="8" />
-                            </div>
+                            <input name="cep" placeholder="CEP" value={paciente.cep} onChange={(e) => buscarCep(e.target.value)} maxLength="8" />
                             <input name="logradouro" placeholder="RUA" value={paciente.logradouro} onChange={handleChange} />
-                            <input name="numero" placeholder="Nº" onChange={handleChange} />
+                            <input name="numero" placeholder="Nº" value={paciente.numero} onChange={handleChange} />
                             <input name="bairro" placeholder="BAIRRO" value={paciente.bairro} onChange={handleChange} />
                             <input name="cidade" placeholder="CIDADE" value={paciente.cidade} onChange={handleChange} />
                             <input name="estado" placeholder="UF" value={paciente.estado} onChange={handleChange} maxLength="2" />
@@ -139,46 +150,45 @@ export default function CadastrarPaciente() {
                     <fieldset className="cadastro-section full-width">
                         <legend><ClipboardList size={16} /> DOCUMENTOS E ESTADO CIVIL</legend>
                         <div className="input-group triple">
-                            <input name="cpf" placeholder="CPF" onChange={handleChange} />
-                            <input name="cartaoSus" placeholder="CARTÃO SUS" onChange={handleChange} />
-                            <input name="estadoCivil" placeholder="ESTADO CIVIL" onChange={handleChange} />
-                            <input name="nacionalidade" placeholder="NACIONALIDADE" onChange={handleChange} />
-                            <input name="naturalidade" placeholder="NATURALIDADE" onChange={handleChange} />
+                            <input name="cpf" placeholder="CPF" value={paciente.cpf} onChange={handleChange} />
+                            <input name="cartaoSus" placeholder="CARTÃO SUS" value={paciente.cartaoSus} onChange={handleChange} />
+                            <input name="estadoCivil" placeholder="ESTADO CIVIL" value={paciente.estadoCivil} onChange={handleChange} />
+                            <input name="nacionalidade" placeholder="NACIONALIDADE" value={paciente.nacionalidade} onChange={handleChange} />
+                            <input name="naturalidade" placeholder="NATURALIDADE" value={paciente.naturalidade} onChange={handleChange} />
                         </div>
                     </fieldset>
 
                     <fieldset className="cadastro-section full-width">
                         <legend><Users size={16} /> FILIAÇÃO E CONTATO</legend>
                         <div className="input-group triple">
-                            <input name="nomeMae" placeholder="NOME DA MÃE *" onChange={handleChange} required />
-                            <input name="nomePai" placeholder="NOME DO PAI" onChange={handleChange} />
-                            <input name="telefone" placeholder="TELEFONE PRINCIPAL" onChange={handleChange} />
-                            <input name="telefone2" placeholder="TELEFONE SECUNDÁRIO" onChange={handleChange} />
-                            <input name="email" type="email" placeholder="E-MAIL" onChange={handleChange} />
-                            <input name="contatoEmergencia" placeholder="CONTATO EMERGÊNCIA (NOME)" onChange={handleChange} />
-                            <input name="parentescoEmergencia" placeholder="PARENTESCO" onChange={handleChange} />
+                            <input name="nomeMae" placeholder="NOME DA MÃE *" value={paciente.nomeMae} onChange={handleChange} required />
+                            <input name="nomePai" placeholder="NOME DO PAI" value={paciente.nomePai} onChange={handleChange} />
+                            <input name="telefone" placeholder="TELEFONE PRINCIPAL" value={paciente.telefone} onChange={handleChange} />
+                            <input name="telefone2" placeholder="TELEFONE SECUNDÁRIO" value={paciente.telefone2} onChange={handleChange} />
+                            <input name="email" type="email" placeholder="E-MAIL" value={paciente.email} onChange={handleChange} />
+                            <input name="contatoEmergencia" placeholder="CONTATO EMERGÊNCIA (NOME)" value={paciente.contatoEmergencia} onChange={handleChange} />
+                            <input name="parentescoEmergencia" placeholder="PARENTESCO" value={paciente.parentescoEmergencia} onChange={handleChange} />
                         </div>
                     </fieldset>
 
                     <fieldset className="cadastro-section full-width">
                         <legend><Info size={16} /> DADOS COMPLEMENTARES</legend>
                         <div className="input-group triple">
-                            <input name="tipoSanguineo" placeholder="TIPO SANGUÍNEO (EX: A+)" onChange={handleChange} />
-                            <input name="convenio" placeholder="CONVÊNIO" onChange={handleChange} />
-                            <input name="numeroCarteirinha" placeholder="Nº CARTEIRINHA" onChange={handleChange} />
+                            <input name="tipoSanguineo" placeholder="TIPO SANGUÍNEO (EX: A+)" value={paciente.tipoSanguineo} onChange={handleChange} />
+                            <input name="convenio" placeholder="CONVÊNIO" value={paciente.convenio} onChange={handleChange} />
+                            <input name="numeroCarteirinha" placeholder="Nº CARTEIRINHA" value={paciente.numeroCarteirinha} onChange={handleChange} />
                         </div>
                     </fieldset>
-
 
                     <fieldset className="cadastro-section full-width destaque-clinico">
                         <legend><HeartPulse size={16} /> AVALIAÇÃO CLÍNICA INICIAL</legend>
                         <div className="clinical-inputs">
-                            <textarea name="queixaPrincipal" placeholder="QUEIXA PRINCIPAL" onChange={handleChange} />
-                            <textarea name="sintomas" placeholder="SINTOMAS OBSERVADOS" onChange={handleChange} />
+                            <textarea name="queixaPrincipal" placeholder="QUEIXA PRINCIPAL" value={paciente.queixaPrincipal} onChange={handleChange} />
+                            <textarea name="sintomas" placeholder="SINTOMAS OBSERVADOS" value={paciente.sintomas} onChange={handleChange} />
                             <div className="clinica-footer">
                                 <div className="date-input">
                                     <label>INÍCIO DOS SINTOMAS</label>
-                                    <input type="date" name="inicioSintomas" onChange={handleChange} />
+                                    <input type="date" name="inicioSintomas" value={paciente.inicioSintomas} onChange={handleChange} />
                                 </div>
                                 <div className="escala-dor-box">
                                     <div className="dor-label">

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import './index.css';
 
 import LayoutHeader from "./LayoutHeader.jsx";
@@ -15,46 +15,48 @@ import CadastrarProfissional from './Componentes/Informacoes/CadastrarProfission
 import Paciente from './Componentes/Informacoes/Paciente.jsx';
 import VerPacientes from './Componentes/Informacoes/VerPacientes.jsx';
 import VerificadorDeCodigo from './Componentes/Informacoes/VerificadorDeCodigo.jsx';
+import RegistroInicialProfissional from './Componentes/Informacoes/RegistroInicialProfissional.jsx';
 import EditarPaciente from './Componentes/Informacoes/EditarPaciente.jsx';
 import Configuracoes from './Componentes/Configurações/Configuracoes.jsx';
+import UserSelector from './Componentes/UserSelector.jsx';
 import historicoLoader from "./Loaders/historicoLoader";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <LayoutHeader />,
-    children: [
-      { index: true, element: <Principal /> },
-      { path: "ecg", element: <Eletrocardio /> },
-      { path: "temperatura", element: <Temperatura /> },
-      { path: "oxigenacao", element: <Oxigenacao /> },
-      { 
-        path: "historico", 
-        loader: historicoLoader, 
-        element: <VerificadorDeCodigo><Historico /></VerificadorDeCodigo> 
-      },
-    ],
+    path: "/registro-inicial",
+    element: <RegistroInicialProfissional />
   },
   {
     path: "/",
+    element: <VerificadorDeCodigo />
+  },
+  {
+    path: "/userSelector",
+    element: <UserSelector />
+  },
+  {
+    path: "/app",
+    element: <LayoutHeader />,
+    children: [
+      { index: true, element: <Navigate to="home" replace /> },
+      { path: "home", element: <Principal /> },
+      { path: "ecg", element: <Eletrocardio /> },
+      { path: "temperatura", element: <Temperatura /> },
+      { path: "oxigenacao", element: <Oxigenacao /> },
+      { path: "historico", loader: historicoLoader, element: <Historico /> },
+    ],
+  },
+  {
+    path: "/config",
     element: <LayoutSemHeader />,
     children: [
-      { 
-        path: "paciente/:id", 
-        element: <VerificadorDeCodigo><Paciente /></VerificadorDeCodigo> 
-      },
-      { 
-        path: "editarPaciente/:id", 
-        element: <VerificadorDeCodigo><EditarPaciente /></VerificadorDeCodigo> 
-      },
-      { 
-        path: "verPacientes", 
-        element: <VerificadorDeCodigo><VerPacientes /></VerificadorDeCodigo> 
-      },
+      { index: true, element: <Navigate to="configuracoes" replace /> },
+      { path: "paciente/:id", element: <Paciente /> },
+      { path: "editarPaciente/:id", element: <EditarPaciente /> },
+      { path: "verPacientes", element: <VerPacientes /> },
       { path: "cadastrarProfissional", element: <CadastrarProfissional /> },
       { path: "cadastrarPaciente", element: <CadastrarPaciente /> },
-      { path: "config", element: <Configuracoes /> },
-      { path: "verificadordecodigo", element: <VerificadorDeCodigo /> }
+      { path: "configuracoes", element: <Configuracoes /> }
     ],
   }
 ]);

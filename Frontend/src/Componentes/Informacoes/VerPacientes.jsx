@@ -48,15 +48,15 @@ const VerPacientes = () => {
         
         {menuAberto && (
           <div className="floating-menu">
-            <Link to="/verPacientes" className="menu-item active">
+            <Link to="/config/verPacientes" className="menu-item active">
               <Users size={18} />
               <span>Ver Pacientes</span>
             </Link>
-            <Link to="/cadastrarPaciente" className="menu-item">
+            <Link to="/config/cadastrarPaciente" className="menu-item">
               <UserPlus size={18} />
               <span>Cadastrar Paciente</span>
             </Link>
-            <Link to="/cadastrarProfissional" className="menu-item">
+            <Link to="/config/cadastrarProfissional" className="menu-item">
               <ShieldPlus size={18} />
               <span>Cadastrar Profissional</span>
             </Link>
@@ -85,7 +85,7 @@ const VerPacientes = () => {
         <div className="grid-pacientes">
           {pacientesFiltrados.length > 0 ? (
             pacientesFiltrados.map(paciente => (
-              <Link to={`/paciente/${paciente.id}`} key={paciente.id} className="card-paciente">
+              <Link to={`/config/paciente/${paciente.id}`} key={paciente.id} className="card-paciente">
                 <div className="card-visual">
                   <div className="foto-avatar">
                     {paciente.nome.charAt(0).toUpperCase()}

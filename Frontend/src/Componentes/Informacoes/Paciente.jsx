@@ -59,9 +59,9 @@ export default function PaginaPaciente() {
                 </button>
                 {menuAberto && (
                     <div className="floating-menu">
-                        <Link to="/verPacientes" className="menu-item"><Users size={18} /><span>Ver Pacientes</span></Link>
-                        <Link to="/cadastrarPaciente" className="menu-item"><UserPlus size={18} /><span>Cadastrar Paciente</span></Link>
-                        <Link to="/cadastrarProfissional" className="menu-item"><ShieldPlus size={18} /><span>Cadastrar Profissional</span></Link>
+                        <Link to="/config/verPacientes" className="menu-item"><Users size={18} /><span>Ver Pacientes</span></Link>
+                        <Link to="/config/cadastrarPaciente" className="menu-item"><UserPlus size={18} /><span>Cadastrar Paciente</span></Link>
+                        <Link to="/config/cadastrarProfissional" className="menu-item"><ShieldPlus size={18} /><span>Cadastrar Profissional</span></Link>
                     </div>
                 )}
             </div>
@@ -157,7 +157,7 @@ export default function PaginaPaciente() {
                     <button onClick={excluirPaciente} className="btn-action danger">
                         <Trash2 size={16} /> EXCLUIR PRONTUÁRIO
                     </button>
-                    <Link to={`/editarPaciente/${paciente.id}`}>
+                    <Link to={`/config/editarPaciente/${paciente.id}`}>
                         <button className="btn-action primary">
                             <Edit3 size={16} /> EDITAR INFORMAÇÕES
                         </button>

@@ -30,6 +30,8 @@ export default function Principal() {
         setMostrarCadastro(false);
     }, [setUsuarioAtivo]);
 
+    const handleNavigateToRegister = useCallback(() => setMostrarCadastro(true), []);
+
     useEffect(() => {
         if (!usuarioAtivo?.id) return;
 
@@ -77,12 +79,12 @@ export default function Principal() {
     if (!usuarioAtivo?.id) {
         return mostrarCadastro 
             ? <CadastroPaciente onRegister={handleRegisterSuccess} />
-            : <UserSelector onUserSelect={handleUserSelect} onNavigateToRegister={() => setMostrarCadastro(true)} />;
+            : <UserSelector onUserSelect={handleUserSelect} onNavigateToRegister={handleNavigateToRegister} />;
     }
 
     return (
         <div className="container-principal">
-            <Link to="/ecg" className="card-vital card-ecg-full">
+            <Link to="/app/ecg" className="card-vital card-ecg-full">
                 <div className="vital-header">
                     <span className="label">ELETROCARDIOGRAMA</span>
                 </div>
@@ -102,7 +104,7 @@ export default function Principal() {
             </Link>
 
             <div className="grid-secundario">
-                <Link to="/oxigenacao" className="card-vital">
+                <Link to="/app/oxigenacao" className="card-vital">
                     <div className="vital-header">
                         <span className="label">OXIGENAÇÃO</span>
                         <span className="unit">SpO₂</span>
@@ -122,7 +124,7 @@ export default function Principal() {
                     </div>
                 </Link>
 
-                <Link to="/temperatura" className="card-vital">
+                <Link to="/app/temperatura" className="card-vital">
                     <div className="vital-header">
                         <span className="label">TEMPERATURA</span>
                         <span className="unit">°C</span>

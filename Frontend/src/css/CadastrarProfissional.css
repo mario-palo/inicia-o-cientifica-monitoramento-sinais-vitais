@@ -32,6 +32,14 @@
     letter-spacing: -1px;
 }
 
+.cadastro-subtitulo-primeiro-acesso {
+    margin: 12px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
 .badge-system {
     font-size: 9px;
     font-weight: 900;

@@ -1,6 +1,13 @@
 const db = require('../database/banco');
 
 module.exports = {
+     async contarUsuarios() {
+        const sql = "SELECT COUNT(*) AS total FROM usuarios";
+        const [rows] = await db.query(sql);
+        const n = rows[0]?.total;
+        return Number(n) || 0;
+     },
+
      async BuscarCadastro(email){
         const sql = "SELECT id FROM usuarios WHERE email = ?"
         const result = await db.query(sql,[email])

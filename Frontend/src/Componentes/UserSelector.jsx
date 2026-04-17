@@ -1,22 +1,37 @@
 import { useEffect, useState } from "react";
-import { UserPlus, Activity, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { UserPlus, Loader2 } from "lucide-react";
+import axios from "axios";
 import "../css/UserSelector.css";
 
-export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
+export default function UserSelector({ onUserSelect, onNavigateToRegister } = {}) {
+    const navigate = useNavigate();
     const [pacientes, setPacientes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const controller = new AbortController();
-        
         const fetchPacientes = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate("/");
+                return;
+            }
+
             try {
-                const response = await fetch("http://localhost:8080/pacientes", { signal: controller.signal });
-                const data = await response.json();
+                const { data } = await axios.get("http://localhost:8080/pacientes", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setPacientes(data);
+                if (data.length === 0) {
+                    if (onNavigateToRegister) {
+                        onNavigateToRegister();
+                    } else {
+                        navigate("/config/cadastrarPaciente");
+                    }
+                }
             } catch (err) {
-                if (err.name !== 'AbortError') {
-                    console.error("Erro ao carregar pacientes:", err);
+                if (err.response?.status === 401 || err.response?.status === 403) {
+                    navigate("/");
                 }
             } finally {
                 setLoading(false);
@@ -24,8 +39,26 @@ export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
         };
 
         fetchPacientes();
-        return () => controller.abort();
-    }, []);
+    }, [navigate, onNavigateToRegister, onUserSelect]);
+
+    const selecionarPaciente = (paciente) => {
+        if (!paciente) return;
+        localStorage.setItem("selected_user_id", String(paciente.id));
+        localStorage.setItem("selected_user_name", paciente.nome ?? "");
+        if (onUserSelect) {
+            onUserSelect(paciente);
+        } else {
+            navigate("/app/home");
+        }
+    };
+
+    const irParaCadastro = () => {
+        if (onNavigateToRegister) {
+            onNavigateToRegister();
+        } else {
+            navigate("/config/cadastrarPaciente");
+        }
+    };
 
     return (
         <div className="modal-overlay">
@@ -48,17 +81,22 @@ export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
                                 <button 
                                     key={p.id} 
                                     className="user-button" 
-                                    onClick={() => onUserSelect(p)}
+                                    onClick={() => selecionarPaciente(p)}
+                                    type="button"
                                 >
                                     <div className="user-avatar">
-                                        {p.nome ? p.nome[0].toUpperCase() : "?"}
+                                        {p.nome?.trim()?.[0] ? p.nome.trim()[0].toUpperCase() : "?"}
                                         <div className="avatar-status-pulse"></div>
                                     </div>
                                     <span className="user-name">{p.nome}</span>
                                 </button>
                             ))}
 
-                            <button className="user-button add-button" onClick={onNavigateToRegister}>
+                            <button 
+                                className="user-button add-button" 
+                                onClick={irParaCadastro}
+                                type="button"
+                            >
                                 <div className="user-avatar empty">
                                     <UserPlus size={32} />
                                 </div>
@@ -67,7 +105,6 @@ export default function UserSelector({ onUserSelect, onNavigateToRegister }) {
                         </div>
                     </div>
                 )}
-                
             </div>
         </div>
     );

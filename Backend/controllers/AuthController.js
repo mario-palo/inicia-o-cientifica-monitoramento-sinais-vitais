@@ -1,6 +1,15 @@
 const CriarModel = require('../models/CriarModel')
 
 module.exports = {
+  async setupStatus(req, res) {
+    try {
+      const total = await CriarModel.contarUsuarios();
+      return res.json({ cadastroProfissionalNecessario: total === 0 });
+    } catch {
+      return res.status(500).json({ erro: "Erro ao consultar usuários" });
+    }
+  },
+
   async registrar(req, res) {
     const { nome, email, senha, tipo } = req.body;
 

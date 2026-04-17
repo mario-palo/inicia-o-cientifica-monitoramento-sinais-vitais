@@ -4,7 +4,13 @@ import axios from "axios";
 import { ShieldPlus, Users, UserPlus, Menu, X, Save, Fingerprint, Mail, Lock, UserCog } from "lucide-react";
 import "../../css/CadastrarProfissional.css";
 
-export default function CadastrarProfissional() {
+export default function CadastrarProfissional({
+    redirectAposSalvar,
+    ocultarMenuNavegacao = false,
+    tituloBadge = "ACESSO RESTRITO",
+    tituloPrincipal = "GERENCIAMENTO DE PROFISSIONAIS",
+    subtitulo = null,
+}) {
     const navigate = useNavigate();
     const [menuAberto, setMenuAberto] = useState(false);
     const [profissional, setProfissional] = useState({
@@ -36,8 +42,12 @@ export default function CadastrarProfissional() {
             }
 
             if (data.mensagem === "Usuário criado com sucesso") {
-                alert("Acesso profissional liberado!");
-                navigate(-1); 
+                alert("Acesso profissional liberado! Faça login com o e-mail e a senha cadastrados.");
+                if (redirectAposSalvar) {
+                    navigate(redirectAposSalvar, { replace: true });
+                } else {
+                    navigate(-1);
+                }
             } else {
                 alert("Erro ao criar credenciais.");
             }
@@ -48,32 +58,35 @@ export default function CadastrarProfissional() {
 
     return (
         <div className="cadastro-screen">
-            <div className="side-menu-container">
-                <button className="menu-toggle-btn" onClick={() => setMenuAberto(!menuAberto)}>
-                    {menuAberto ? <X size={24} /> : <Menu size={24} />}
-                </button>
-                {menuAberto && (
-                    <div className="floating-menu">
-                        <Link to="/verPacientes" className="menu-item">
-                            <Users size={18} />
-                            <span>Ver Pacientes</span>
-                        </Link>
-                        <Link to="/cadastrarPaciente" className="menu-item">
-                            <UserPlus size={18} />
-                            <span>Cadastrar Paciente</span>
-                        </Link>
-                        <Link to="/cadastrarProfissional" className="menu-item active">
-                            <ShieldPlus size={18} />
-                            <span>Cadastrar Profissional</span>
-                        </Link>
-                    </div>
-                )}
-            </div>
+            {!ocultarMenuNavegacao && (
+                <div className="side-menu-container">
+                    <button className="menu-toggle-btn" onClick={() => setMenuAberto(!menuAberto)}>
+                        {menuAberto ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                    {menuAberto && (
+                        <div className="floating-menu">
+                            <Link to="/config/verPacientes" className="menu-item">
+                                <Users size={18} />
+                                <span>Ver Pacientes</span>
+                            </Link>
+                            <Link to="/config/cadastrarPaciente" className="menu-item">
+                                <UserPlus size={18} />
+                                <span>Cadastrar Paciente</span>
+                            </Link>
+                            <Link to="/config/cadastrarProfissional" className="menu-item active">
+                                <ShieldPlus size={18} />
+                                <span>Cadastrar Profissional</span>
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <div className="cadastro-content narrow">
                 <header className="cadastro-header">
-                    <div className="badge-system">ACESSO RESTRITO</div>
-                    <h1>GERENCIAMENTO DE PROFISSIONAIS</h1>
+                    <div className="badge-system">{tituloBadge}</div>
+                    <h1>{tituloPrincipal}</h1>
+                    {subtitulo && <p className="cadastro-subtitulo-primeiro-acesso">{subtitulo}</p>}
                 </header>
 
                 <div className="form-container-pro">

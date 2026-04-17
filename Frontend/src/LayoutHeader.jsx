@@ -18,22 +18,22 @@ export default function LayoutHeader() {
     {
       icon: <VscHome size={18} />,
       label: 'Principal',
-      onClick: () => navigate('/'),
+      onClick: () => navigate('/app/home'),
     },
     {
       icon: <VscArchive size={18} />,
       label: 'Histórico',
-      onClick: () => navigate('/historico'),
+      onClick: () => navigate('/app/historico'),
     },
     {
       icon: <VscAccount size={18} />,
       label: 'Paciente',
-      onClick: () => navigate(`/paciente/${usuarioAtivo?.id || 1}`),
+      onClick: () => navigate(`/config/paciente/${usuarioAtivo?.id || 1}`),
     },
     {
       icon: <VscSettingsGear size={18} />,
       label: 'Configurações',
-      onClick: () => navigate('/config'),
+      onClick: () => navigate('/config/configuracoes'),
     },
   ];
 

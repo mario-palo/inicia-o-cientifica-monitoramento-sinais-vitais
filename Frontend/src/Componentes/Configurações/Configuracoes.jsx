@@ -29,15 +29,15 @@ export default function Configuracoes() {
                 </button>
                 {menuAberto && (
                     <div className="floating-menu">
-                        <Link to="/verPacientes" className="menu-item">
+                        <Link to="/config/verPacientes" className="menu-item">
                             <Users size={18} />
                             <span>Ver Pacientes</span>
                         </Link>
-                        <Link to="/cadastrarPaciente" className="menu-item">
+                        <Link to="/config/cadastrarPaciente" className="menu-item">
                             <UserPlus size={18} />
                             <span>Cadastrar Paciente</span>
                         </Link>
-                        <Link to="/cadastrarProfissional" className="menu-item">
+                        <Link to="/config/cadastrarProfissional" className="menu-item">
                             <ShieldPlus size={18} />
                             <span>Cadastrar Profissional</span>
                         </Link>
