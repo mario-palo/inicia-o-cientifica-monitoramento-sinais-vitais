@@ -2,49 +2,113 @@ const WebSocket = require("ws");
 const db = require('../database/banco');
 
 module.exports = function (server) {
+
   const wss = new WebSocket.Server({ server, path: "/ws" });
 
   wss.on('connection', (ws) => {
     console.log("Nova conexão estabelecida");
-
+    ws.lastSensorTime = 0;
     ws.on('message', async (message) => {
+
       try {
         const dados = JSON.parse(message);
 
+        // =====================================================
+        // FRONTEND (dashboard)
+        // =====================================================
         if (dados.tipo === "frontend") {
           ws.tipo = "frontend";
-          console.log("Monitorando paciente:", dados.paciente_id);
 
-          wss.clients.forEach((client) => {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-              client.send(JSON.stringify({ paciente_id: dados.paciente_id }));
-            }
-          });
-          return; 
+          console.log("Frontend conectado ao monitoramento");
+
+          return;
         }
 
-        if (dados.paciente_id && dados.batimento_cardiaco) {
-          
-          const [rows] = await db.query("SELECT id FROM pacientes WHERE id = ?", [dados.paciente_id]);
+        // =====================================================
+        // SENSOR BLE (PYTHON)
+        // =====================================================
+        if (
+          dados.temp !== undefined &&
+          dados.red !== undefined &&
+          dados.ir !== undefined
+        ) {
 
-          if (rows.length === 0) {
-            console.log("Erro: Paciente", dados.paciente_id, "não existe no banco.");
+          const now = Date.now();
+
+          // 🔥 bloqueia se passou menos de 1 segundo
+          if (now - ws.lastSensorTime < 1000) {
             return;
           }
 
-          const sql = `INSERT INTO sinais_vitais (paciente_id, dispositivo_id, batimento_cardiaco, oxigenacao, temperatura, ecg) VALUES (?, ?, ?, ?, ?, ?)`;
-          const values = [dados.paciente_id, dados.dispositivo_id, dados.batimento_cardiaco, dados.oxigenacao, dados.temperatura, dados.ecg_valor];
-          await db.execute(sql, values);
+          ws.lastSensorTime = now;
+
+          ws.tipo = "sensor_ble";
+
+          const spo2 = calculateSpO2(dados.red, dados.ir);
+
+          const payload = {
+            tipo: "sensor",
+            timestamp: dados.timestamp,
+            temperatura: parseInt(dados.temp),
+            red: dados.red, 
+            ir: dados.ir,
+            oxigenacao: parseInt(spo2),
+            batimento_cardiaco: 1,
+            dispositivo_id: "ESP32_TEMP"
+          };
+
+          console.log("📡 Sensor:", payload);
 
           wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN && client.tipo === "frontend") {
-              client.send(JSON.stringify(dados));
+              client.send(JSON.stringify(payload));
             }
           });
+
+          const sql = `
+    INSERT INTO sinais_vitais
+    (paciente_id, dispositivo_id, batimento_cardiaco, oxigenacao, temperatura)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+          const values = [
+            1,
+            payload.dispositivo_id,
+            payload.batimento_cardiaco,
+            payload.oxigenacao,
+            payload.temperatura
+          ];
+
+          await db.execute(sql, values);
+
+          return;
         }
+
+        console.log("⚠ Formato desconhecido:", dados);
+
       } catch (error) {
         console.log("Erro no processamento:", error.message);
       }
     });
   });
 };
+
+// =====================================================
+// FUNÇÃO SPO2 (BÁSICA - ESTIMATIVA)
+// =====================================================
+function calculateSpO2(red, ir) {
+
+  if (!red || !ir) return null;
+
+  // Evita divisão inválida
+  const ratio = red / ir;
+
+  // Fórmula simplificada (não clínica)
+  let spo2 = 110 - (25 * ratio);
+
+  // Limites fisiológicos
+  if (spo2 > 100) spo2 = 100;
+  if (spo2 < 70) spo2 = 70;
+
+  return parseFloat(spo2.toFixed(2));
+}

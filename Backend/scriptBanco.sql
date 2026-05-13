@@ -93,7 +93,6 @@ CREATE TABLE sinais_vitais (
     batimento_cardiaco   SMALLINT UNSIGNED NOT NULL,
     oxigenacao           TINYINT UNSIGNED NOT NULL,
     temperatura          DECIMAL(4,1) NOT NULL,
-    ecg                  INT NOT NULL,
 
     -- TEMPO
     data_hora_coleta     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,3 +101,59 @@ CREATE TABLE sinais_vitais (
     -- RELACIONAMENTOS
     FOREIGN KEY (paciente_id) REFERENCES pacientes(id) ON DELETE CASCADE
 );
+
+INSERT INTO usuarios (
+    nome,
+    email,
+    senha,
+    tipo
+)
+VALUES (
+    'Dr. Carlos Mendes',
+    'carlos.mendes@hospital.com',
+    '123456',
+    'MEDICO'
+);
+
+INSERT INTO pacientes (
+    nome,
+    leito,
+    genero,
+    data_nascimento,
+    nome_mae,
+    cpf,
+    cartao_sus,
+    estado_civil,
+    nacionalidade,
+    naturalidade,
+    nome_pai,
+    telefone,
+    telefone2,
+    email,
+    contato_emergencia,
+    parentesco_emergencia,
+    endereco, 
+    criado_por
+)
+VALUES (
+    'João da Silva',
+    'Leito 12A',
+    'M',
+    '1990-05-20',
+    'Maria da Silva',
+    '123.456.789-10',
+    '898 1234 5678 0000',
+    'Solteiro',
+    'Brasileiro',
+    'São Paulo',
+    'Carlos da Silva',
+    '+55 11 91234-5678',
+    '+55 11 99876-5432',
+    'joao.silva@email.com',
+    'Ana da Silva',
+    'Irmã',
+    'Rua das Flores, 123 - São Paulo - SP',
+    1
+);
+
+select * from sinais_vitais;
