@@ -18,7 +18,7 @@ export default function CadastrarPaciente() {
         contatoEmergencia: "", parentescoEmergencia: "",
         cep: "", logradouro: "", numero: "", bairro: "", cidade: "São Carlos", estado: "SP", pais: "Brasil",
         tipoSanguineo: "", convenio: "", numeroCarteirinha: "",
-        queixaPrincipal: "", sintomas: "", inicioSintomas: "", intensidadeDor: 0
+        queixaPrincipal: "", sintomas: "", inicioSintomas: "", intensidadeDor: 0, criado_por: 1
     });
 
     const buscarCep = async (valor) => {
@@ -76,7 +76,8 @@ export default function CadastrarPaciente() {
                 numeroCarteirinha: "numero_carteirinha",
                 queixaPrincipal: "queixa_principal",
                 inicioSintomas: "inicio_sintomas",
-                intensidadeDor: "dor_escala"
+                intensidadeDor: "dor_escala",
+                criado_por: "criado_por"
             };
 
             const dadosParaEnviar = {};
